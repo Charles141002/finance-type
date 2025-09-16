@@ -1,0 +1,40 @@
+{
+    "name": "Charles Pelong",
+    "title": "Data Scientist",
+    "contact": {
+      "email": "charlespelong@gmail.com",
+      "phone": "+33 7 83 28 54 92",
+      "address": "31 Avenue de Verdun, 78290 Croissy-sur-Seine",
+      "linkedin": "https://fr.linkedin.com/in/charles-pelong-a68212246"
+    },
+    "summary": "Étudiant à IMT Atlantique à la recherche d’un stage de fin d’études ...Étudiant à IMT Atlantique à la recherche d’un stage de fin d’études ...",
+    "education": [
+      {
+        "institution": "IMT Atlantique",
+        "degree": "Master : Data Science et Recherche Opérationnelle",
+        "period": "09/2022 -- 06/2025",
+        "details": [
+          "#3 école d’ingénieurs française",
+          "Cours : Mathématiques appliquées, Statistiques, Probabilités, Machine Learning..."
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "company": "JCDecaux",
+        "role": "Data Scientist",
+        "period": "11/2024 -- 05/2025",
+        "details": [
+          "Développement de solutions RAG (Python, AWS, Langchain)"
+        ]
+      }
+    ],
+    "skills": [
+      "Python (Pandas, Scikit-learn)", 
+      "SQL", 
+      "GitHub", 
+      "JavaScript", 
+      "Machine Learning"
+    ]
+  }
+  
