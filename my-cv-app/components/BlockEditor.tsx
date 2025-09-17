@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import { v4 as uuid } from "uuid";
-import { Block, BlockType } from "../utils/types";
+import { Block, BlockType, DragContext, canMoveBlock, findBlockById, getAllChildBlocks } from "../utils/types";
 
 interface Props {
   blocks: Block[];
@@ -70,167 +70,530 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
   };
 
   // -------------------
-  // Drag & Drop racine
+  // Drag & Drop avec règles
   // -------------------
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
-    const reordered = Array.from(blocks);
-    const [moved] = reordered.splice(result.source.index, 1);
-    reordered.splice(result.destination.index, 0, moved);
-    setBlocks(reordered);
+
+    const { source, destination } = result;
+    
+    // Trouver le bloc source
+    let sourceBlock: Block | undefined;
+    if (source.droppableId === "root") {
+      sourceBlock = blocks[source.index];
+    } else {
+      const parentBlock = findBlockById(blocks, source.droppableId);
+      if (parentBlock && parentBlock.children) {
+        sourceBlock = parentBlock.children[source.index];
+      }
+    }
+    
+    if (!sourceBlock) return;
+    
+    // Trouver le parent de destination
+    const destinationParent = destination.droppableId !== "root" ? findBlockById(blocks, destination.droppableId) : undefined;
+    
+    // Créer le contexte de déplacement
+    const dragContext: DragContext = {
+      source: {
+        blockId: sourceBlock.id,
+        parentId: source.droppableId !== "root" ? source.droppableId : undefined,
+        blockType: sourceBlock.type,
+        index: source.index
+      },
+      destination: {
+        parentId: destination.droppableId !== "root" ? destination.droppableId : undefined,
+        index: destination.index
+      }
+    };
+
+    // Tous les déplacements sont autorisés - aucune restriction
+
+    // Effectuer le déplacement selon les règles
+    setBlocks(moveBlockWithRules(blocks, result));
+  };
+
+  // Fonction pour déplacer un bloc en respectant les règles
+  const moveBlockWithRules = (blocks: Block[], result: DropResult): Block[] => {
+    const { source, destination } = result;
+    
+    if (!destination) return blocks;
+    
+    // Si c'est un déplacement au niveau racine
+    if (source.droppableId === "root" && destination.droppableId === "root") {
+      return moveBlockAtRoot(blocks, source.index, destination.index);
+    }
+    
+    // Si c'est un déplacement dans le même conteneur
+    if (source.droppableId === destination.droppableId) {
+      return moveBlockInContainer(blocks, source.droppableId, source.index, destination.index);
+    }
+    
+    // Si c'est un déplacement entre conteneurs
+    return moveBlockBetweenContainers(blocks, source, destination);
+  };
+
+  // Déplacer un bloc au niveau racine
+  const moveBlockAtRoot = (blocks: Block[], sourceIndex: number, destIndex: number): Block[] => {
+    const newBlocks = [...blocks];
+    const [movedBlock] = newBlocks.splice(sourceIndex, 1);
+    newBlocks.splice(destIndex, 0, movedBlock);
+    return newBlocks;
+  };
+
+  // Déplacer un bloc dans le même conteneur
+  const moveBlockInContainer = (blocks: Block[], containerId: string, sourceIndex: number, destIndex: number): Block[] => {
+    if (containerId === "root") {
+      return moveBlockAtRoot(blocks, sourceIndex, destIndex);
+    }
+    
+    return blocks.map(block => {
+      if (block.id === containerId && block.children) {
+        const newChildren = [...block.children];
+        const [movedChild] = newChildren.splice(sourceIndex, 1);
+        newChildren.splice(destIndex, 0, movedChild);
+        return { ...block, children: newChildren };
+      }
+      if (block.children) {
+        return { ...block, children: moveBlockInContainer(block.children, containerId, sourceIndex, destIndex) };
+      }
+      return block;
+    });
+  };
+
+  // Déplacer un bloc entre conteneurs
+  const moveBlockBetweenContainers = (blocks: Block[], source: any, destination: any): Block[] => {
+    // Trouver le bloc à déplacer
+    let blockToMove: Block | undefined;
+    
+    if (source.droppableId === "root") {
+      blockToMove = blocks[source.index];
+    } else {
+      const sourceBlock = findBlockById(blocks, source.droppableId);
+      if (sourceBlock && sourceBlock.children) {
+        blockToMove = sourceBlock.children[source.index];
+      }
+    }
+    
+    if (!blockToMove) return blocks;
+    
+    // Supprimer le bloc de la source
+    const blocksWithoutSource = removeBlockFromContainer(blocks, source.droppableId, source.index);
+    
+    // Ajouter le bloc à la destination
+    return addBlockToContainer(blocksWithoutSource, destination.droppableId, destination.index, blockToMove);
+  };
+
+  // Supprimer un bloc d'un conteneur
+  const removeBlockFromContainer = (blocks: Block[], containerId: string, index: number): Block[] => {
+    if (containerId === "root") {
+      return blocks.filter((_, i) => i !== index);
+    }
+    
+    return blocks.map(block => {
+      if (block.id === containerId && block.children) {
+        const newChildren = block.children.filter((_, i) => i !== index);
+        return { ...block, children: newChildren };
+      }
+      if (block.children) {
+        return { ...block, children: removeBlockFromContainer(block.children, containerId, index) };
+      }
+      return block;
+    });
+  };
+
+  // Ajouter un bloc à un conteneur
+  const addBlockToContainer = (blocks: Block[], containerId: string, index: number, blockToAdd: Block): Block[] => {
+    if (containerId === "root") {
+      const newBlocks = [...blocks];
+      newBlocks.splice(index, 0, blockToAdd);
+      return newBlocks;
+    }
+    
+    return blocks.map(block => {
+      if (block.id === containerId) {
+        const newChildren = [...(block.children || [])];
+        newChildren.splice(index, 0, blockToAdd);
+        return { ...block, children: newChildren };
+      }
+      if (block.children) {
+        return { ...block, children: addBlockToContainer(block.children, containerId, index, blockToAdd) };
+      }
+      return block;
+    });
   };
 
   // -------------------
-  // Rendu récursif d'un bloc
+  // Rendu d'un bloc (sans Draggable, géré par le parent)
   // -------------------
-  const renderBlock = (block: Block) => (
-    <>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <strong>{block.type.toUpperCase()}</strong>
-        <div>
-          {block.type !== "divider" && block.type !== "header" && block.type !== "contact" && (
-            <>
-              <select
-                value={subBlockTypes[block.id] || "text"}
-                onChange={(e) =>
-                  setSubBlockTypes({
-                    ...subBlockTypes,
-                    [block.id]: e.target.value as BlockType,
-                  })
-                }
-                style={{ marginRight: 8 }}
-              >
-                <option value="header">Header</option>
-                <option value="subsection">Sous-section</option>
-                <option value="section">Section</option>
-                <option value="text">Texte</option>
-                <option value="contact">Contact</option>
-                <option value="divider">Séparateur</option>
-              </select>
-              <button onClick={() => handleAddBlock(block.id)} style={{ marginRight: 8 }}>
-                + sous-bloc
-              </button>
-            </>
-          )}
-          <button onClick={() => handleDeleteBlock(block.id)} style={{ color: "red" }}>
-            ✕
-          </button>
-        </div>
-      </div>
+  const renderBlock = (block: Block, parentId?: string, handleProps?: any) => {
+    const canHaveChildren = block.type === "section" || block.type === "subsection";
 
-      <div style={{ marginTop: 8 }}>
-        {block.type === "divider" ? (
-          <hr />
-        ) : block.type === "contact" ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            <input
-              placeholder="Email"
-              value={block.content.email}
-              onChange={(e) => updateBlockContent(block.id, { ...block.content, email: e.target.value })}
-            />
-            <input
-              placeholder="Téléphone"
-              value={block.content.phone}
-              onChange={(e) => updateBlockContent(block.id, { ...block.content, phone: e.target.value })}
-            />
-            <input
-              placeholder="Adresse"
-              value={block.content.address}
-              onChange={(e) => updateBlockContent(block.id, { ...block.content, address: e.target.value })}
-            />
-            <input
-              placeholder="LinkedIn"
-              value={block.content.linkedin}
-              onChange={(e) => updateBlockContent(block.id, { ...block.content, linkedin: e.target.value })}
-            />
+    return (
+      <div
+        style={{
+          border: "1px solid #e1e5e9",
+          borderRadius: "8px",
+          padding: "12px",
+          marginBottom: "8px",
+          backgroundColor: "#fff",
+          boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+          transition: "all 0.2s ease",
+        }}
+      >
+        {/* Header du bloc (le handle est fourni par le parent Draggable) */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div
+              {...handleProps}
+              style={{
+                cursor: "grab",
+                padding: "4px",
+                borderRadius: "4px",
+                backgroundColor: "#f5f5f5",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                minWidth: "20px",
+                height: "20px",
+              }}
+            >
+              ⋮⋮
+            </div>
+            <strong style={{ 
+              color: block.type === "header" ? "#2563eb" : 
+                     block.type === "section" ? "#059669" :
+                     block.type === "subsection" ? "#7c3aed" : "#6b7280"
+            }}>
+              {block.type.toUpperCase()}
+            </strong>
           </div>
-        ) : block.type === "subsection" ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            <input
-              placeholder="Titre (ex: JCDecaux)"
-              value={block.content?.title || ""}
-              onChange={(e) => updateBlockContent(block.id, { ...block.content, title: e.target.value })}
-            />
-            <input
-              placeholder="Sous-titre (ex: Data Scientist)"
-              value={block.content?.subtitle || ""}
-              onChange={(e) => updateBlockContent(block.id, { ...block.content, subtitle: e.target.value })}
-            />
-            <input
-              placeholder="Période (ex: 11/2024 -- 05/2025)"
-              value={block.content?.period || ""}
-              onChange={(e) => updateBlockContent(block.id, { ...block.content, period: e.target.value })}
-            />
+          
+          <div style={{ display: "flex", gap: "4px" }}>
+            {canHaveChildren && (
+              <>
+                <select
+                  value={subBlockTypes[block.id] || "text"}
+                  onChange={(e) =>
+                    setSubBlockTypes({
+                      ...subBlockTypes,
+                      [block.id]: e.target.value as BlockType,
+                    })
+                  }
+                  style={{ 
+                    marginRight: 8, 
+                    padding: "4px 8px",
+                    borderRadius: "4px",
+                    border: "1px solid #d1d5db",
+                    fontSize: "12px"
+                  }}
+                >
+                  <option value="text">Texte</option>
+                  <option value="subsection">Sous-section</option>
+                </select>
+                <button 
+                  onClick={() => handleAddBlock(block.id)} 
+                  style={{ 
+                    marginRight: 8,
+                    padding: "4px 8px",
+                    backgroundColor: "#3b82f6",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    fontSize: "12px",
+                    cursor: "pointer"
+                  }}
+                >
+                  + sous-bloc
+                </button>
+              </>
+            )}
+            <button 
+              onClick={() => handleDeleteBlock(block.id)} 
+              style={{ 
+                color: "#ef4444",
+                backgroundColor: "transparent",
+                border: "none",
+                cursor: "pointer",
+                padding: "4px",
+                borderRadius: "4px"
+              }}
+            >
+              ✕
+            </button>
           </div>
-        ) : (
-          <textarea
-            value={typeof block.content === "string" ? block.content : block.content?.title || ""}
-            onChange={(e) => {
-              let newContent = e.target.value;
-              if (block.type === "header" || block.type === "section") {
-                newContent = { ...block.content, title: e.target.value };
-              }
-              updateBlockContent(block.id, newContent);
-            }}
-            rows={3}
-            style={{ width: "100%" }}
-          />
+        </div>
+
+        {/* Contenu du bloc */}
+        <div style={{ marginTop: 8 }}>
+          {block.type === "divider" ? (
+            <hr style={{ border: "none", borderTop: "2px solid #e5e7eb", margin: "8px 0" }} />
+          ) : block.type === "contact" ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <input
+                placeholder="Email"
+                value={block.content?.email || ""}
+                onChange={(e) => updateBlockContent(block.id, { ...block.content, email: e.target.value })}
+                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px" }}
+              />
+              <input
+                placeholder="Téléphone"
+                value={block.content?.phone || ""}
+                onChange={(e) => updateBlockContent(block.id, { ...block.content, phone: e.target.value })}
+                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px" }}
+              />
+              <input
+                placeholder="Adresse"
+                value={block.content?.address || ""}
+                onChange={(e) => updateBlockContent(block.id, { ...block.content, address: e.target.value })}
+                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px" }}
+              />
+              <input
+                placeholder="LinkedIn"
+                value={block.content?.linkedin || ""}
+                onChange={(e) => updateBlockContent(block.id, { ...block.content, linkedin: e.target.value })}
+                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px" }}
+              />
+            </div>
+          ) : block.type === "subsection" ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <input
+                placeholder="Titre (ex: JCDecaux)"
+                value={block.content?.title || ""}
+                onChange={(e) => updateBlockContent(block.id, { ...block.content, title: e.target.value })}
+                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px", fontWeight: "bold" }}
+              />
+              <input
+                placeholder="Sous-titre (ex: Data Scientist)"
+                value={block.content?.subtitle || ""}
+                onChange={(e) => updateBlockContent(block.id, { ...block.content, subtitle: e.target.value })}
+                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px" }}
+              />
+              <input
+                placeholder="Période (ex: 11/2024 -- 05/2025)"
+                value={block.content?.period || ""}
+                onChange={(e) => updateBlockContent(block.id, { ...block.content, period: e.target.value })}
+                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px", fontStyle: "italic" }}
+              />
+            </div>
+          ) : (
+            <textarea
+              value={typeof block.content === "string" ? block.content : block.content?.title || ""}
+              onChange={(e) => {
+                let newContent = e.target.value;
+                if (block.type === "header" || block.type === "section") {
+                  newContent = { ...block.content, title: e.target.value };
+                }
+                updateBlockContent(block.id, newContent);
+              }}
+              rows={block.type === "header" ? 1 : 3}
+              style={{ 
+                width: "100%", 
+                padding: "8px", 
+                border: "1px solid #d1d5db", 
+                borderRadius: "4px",
+                fontSize: block.type === "header" ? "18px" : "14px",
+                fontWeight: block.type === "header" ? "bold" : "normal"
+              }}
+              placeholder={block.type === "header" ? "Nom complet" : 
+                         block.type === "section" ? "Titre de section" : 
+                         "Contenu du texte..."}
+            />
+          )}
+        </div>
+
+        {/* Zone de drop pour les enfants (toujours visible pour permettre d'y entrer) */}
+        {canHaveChildren && (
+          <Droppable droppableId={block.id} type="CHILD" renderClone={(provided, snapshot, rubric) => {
+            const parent = findBlockById(blocks, block.id);
+            const dragged = parent?.children?.[rubric.source.index];
+            if (!dragged) return <div />;
+            return (
+              <div
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                style={{
+                  ...provided.draggableProps.style,
+                  pointerEvents: "none",
+                  userSelect: "none",
+                  border: "1px solid #93c5fd",
+                  background: "#dbeafe",
+                  borderRadius: 8,
+                  padding: 8,
+                }}
+              >
+                {dragged.type.toUpperCase()}
+              </div>
+            );
+          }}>
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={{
+                  marginLeft: 16,
+                  marginTop: 12,
+                  paddingLeft: 12,
+                  borderLeft: "2px solid #e5e7eb",
+                  backgroundColor: snapshot.isDraggingOver ? "#f0f9ff" : "transparent",
+                  borderRadius: "4px",
+                  minHeight: "28px",
+                  transition: "background-color 0.2s ease"
+                }}
+              >
+                {block.children?.map((child, index) => (
+                  <Draggable key={child.id} draggableId={child.id} index={index}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                      >
+                        {renderBlock(child, block.id, provided.dragHandleProps)}
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
         )}
       </div>
-
-      {block.children && block.children.length > 0 && (
-        <div style={{ marginLeft: 12, marginTop: 8, borderLeft: "2px solid #eee", paddingLeft: 8 }}>
-          {block.children.map((child) => renderBlock(child))}
-        </div>
-      )}
-    </>
-  );
+    );
+  };
 
   // -------------------
   // Rendu principal
   // -------------------
   return (
-    <div>
-      <div style={{ marginBottom: 16 }}>
-        <select value={newBlockType} onChange={(e) => setNewBlockType(e.target.value as BlockType)}>
-          <option value="header">Header</option>
-          <option value="subsection">Sous-section</option>
-          <option value="section">Section</option>
-          <option value="text">Texte</option>
-          <option value="contact">Contact</option>
-          <option value="divider">Séparateur</option>
-        </select>
-        <button onClick={() => handleAddBlock()} style={{ marginLeft: 8 }}>
-          Ajouter bloc
-        </button>
+    <div style={{ padding: "20px", backgroundColor: "#f8fafc" }}>
+      {/* Header avec instructions */}
+      <div style={{ 
+        marginBottom: "24px", 
+        padding: "16px", 
+        backgroundColor: "#fff", 
+        borderRadius: "8px",
+        border: "1px solid #e1e5e9"
+      }}>
+        <h2 style={{ margin: "0 0 8px 0", color: "#1f2937" }}>Éditeur de CV</h2>
+        <p style={{ margin: "0 0 16px 0", color: "#6b7280", fontSize: "14px" }}>
+          Glissez-déposez les blocs pour réorganiser votre CV. Les règles de déplacement sont appliquées automatiquement.
+        </p>
+        
+        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+          <select 
+            value={newBlockType} 
+            onChange={(e) => setNewBlockType(e.target.value as BlockType)}
+            style={{
+              padding: "8px 12px",
+              border: "1px solid #d1d5db",
+              borderRadius: "6px",
+              backgroundColor: "#fff",
+              fontSize: "14px"
+            }}
+          >
+            <option value="header">En-tête</option>
+            <option value="contact">Contact</option>
+            <option value="section">Section</option>
+            <option value="subsection">Sous-section</option>
+            <option value="text">Texte</option>
+            <option value="divider">Séparateur</option>
+          </select>
+          <button 
+            onClick={() => handleAddBlock()} 
+            style={{ 
+              padding: "8px 16px",
+              backgroundColor: "#3b82f6",
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              cursor: "pointer",
+              fontSize: "14px",
+              fontWeight: "500"
+            }}
+          >
+            + Ajouter bloc
+          </button>
+        </div>
       </div>
 
+      {/* Zone de drop principale */}
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="blocks">
-          {(provided) => (
-            <div ref={provided.innerRef} {...provided.droppableProps}>
-              {blocks.map((block, index) => (
-                <Draggable key={block.id} draggableId={block.id} index={index}>
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      style={{
-                        padding: 8,
-                        border: "1px solid #ddd",
-                        marginBottom: 8,
-                        borderRadius: 8,
-                        background: "#fff",
-                        ...provided.draggableProps.style,
-                      }}
-                    >
-                      {renderBlock(block)}
-                    </div>
-                  )}
-                </Draggable>
-              ))}
+        <Droppable droppableId="root" type="ROOT" renderClone={(provided, snapshot, rubric) => {
+          const dragged = blocks[rubric.source.index];
+          return (
+            <div
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              style={{
+                ...provided.draggableProps.style,
+                pointerEvents: "none",
+                userSelect: "none",
+                border: "1px solid #93c5fd",
+                background: "#dbeafe",
+                borderRadius: 8,
+                padding: 8,
+              }}
+            >
+              {dragged?.type.toUpperCase()}
+            </div>
+          );
+        }}>
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              style={{
+                minHeight: "400px",
+                backgroundColor: snapshot.isDraggingOver ? "#f0f9ff" : "transparent",
+                borderRadius: "8px",
+                padding: snapshot.isDraggingOver ? "16px" : "0",
+                border: snapshot.isDraggingOver ? "2px dashed #3b82f6" : "none",
+                transition: "all 0.2s ease"
+              }}
+            >
+              {blocks.length === 0 ? (
+                <div style={{
+                  textAlign: "center",
+                  padding: "40px",
+                  color: "#9ca3af",
+                  fontSize: "16px"
+                }}>
+                  Aucun bloc. Ajoutez votre premier bloc pour commencer.
+                </div>
+              ) : (
+                blocks.map((block, index) => (
+                  <Draggable key={block.id} draggableId={block.id} index={index}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        style={{
+                          ...provided.draggableProps.style,
+                          opacity: snapshot.isDragging ? 0.8 : 1,
+                        }}
+                      >
+                        {renderBlock(block, undefined, provided.dragHandleProps)}
+                      </div>
+                    )}
+                  </Draggable>
+                ))
+              )}
               {provided.placeholder}
+              
+              {snapshot.isDraggingOver && (
+                <div style={{
+                  textAlign: "center",
+                  padding: "20px",
+                  color: "#3b82f6",
+                  fontSize: "14px",
+                  fontWeight: "500"
+                }}>
+                  Déposez le bloc ici
+                </div>
+              )}
             </div>
           )}
         </Droppable>
