@@ -1,23 +1,77 @@
 "use client";
-import { useState } from "react";
-import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
+import { useEffect, useRef, useState } from "react";
+import { DragDropContext, Droppable, Draggable, DropResult, DragStart } from "@hello-pangea/dnd";
 import { v4 as uuid } from "uuid";
-import { Block, BlockType, DragContext, canMoveBlock, findBlockById, getAllChildBlocks } from "../utils/types";
+import { Block, BlockType, DragContext, canMoveBlock, findBlockById, getAllowedChildTypesForParent } from "../utils/types";
 
 interface Props {
   blocks: Block[];
   setBlocks: (blocks: Block[]) => void;
+  scrollContainerRef?: React.RefObject<HTMLDivElement | null>;
 }
 
-const BlockEditor = ({ blocks, setBlocks }: Props) => {
+const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
   const [newBlockType, setNewBlockType] = useState<BlockType>("text");
   const [subBlockTypes, setSubBlockTypes] = useState<Record<string, BlockType>>({});
+  const [dragError, setDragError] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const mouseYRef = useRef<number>(0);
+  const autoScrollTimerRef = useRef<number | null>(null);
+  const [draggingBlockId, setDraggingBlockId] = useState<string | null>(null);
+  const [draggingBlockType, setDraggingBlockType] = useState<BlockType | null>(null);
+
+  // Gestion auto-scroll pendant le drag dans le conteneur scrollable gauche
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseYRef.current = e.clientY;
+    };
+    if (isDragging) {
+      window.addEventListener("mousemove", handleMouseMove);
+      if (autoScrollTimerRef.current == null) {
+        autoScrollTimerRef.current = window.setInterval(() => {
+          const container = scrollContainerRef?.current;
+          if (!container) return;
+          const rect = container.getBoundingClientRect();
+          const y = mouseYRef.current;
+          const threshold = 80; // px
+          const scrollStep = 16; // px per tick
+          if (y > rect.bottom - threshold) {
+            container.scrollTop += scrollStep;
+          } else if (y < rect.top + threshold) {
+            container.scrollTop -= scrollStep;
+          }
+        }, 16);
+      }
+    } else {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (autoScrollTimerRef.current != null) {
+        window.clearInterval(autoScrollTimerRef.current);
+        autoScrollTimerRef.current = null;
+      }
+    }
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (autoScrollTimerRef.current != null) {
+        window.clearInterval(autoScrollTimerRef.current);
+        autoScrollTimerRef.current = null;
+      }
+    };
+  }, [isDragging, scrollContainerRef]);
 
   // -------------------
   // Ajouter un bloc
   // -------------------
   const handleAddBlock = (parentId?: string) => {
     const typeToUse = parentId ? (subBlockTypes[parentId] || "text") : newBlockType;
+
+    // Règles: vérifier que le type est autorisé pour ce parent
+    const parentType = parentId ? findBlockById(blocks, parentId)?.type : undefined;
+    const allowed = getAllowedChildTypesForParent(parentType);
+    if (!allowed.includes(typeToUse)) {
+      setDragError("Type de bloc non autorisé ici");
+      setTimeout(() => setDragError(null), 1800);
+      return;
+    }
     const newBlock: Block = {
       id: uuid(),
       type: typeToUse,
@@ -73,6 +127,9 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
   // Drag & Drop avec règles
   // -------------------
   const handleDragEnd = (result: DropResult) => {
+    setIsDragging(false);
+    setDraggingBlockId(null);
+    setDraggingBlockType(null);
     if (!result.destination) return;
 
     const { source, destination } = result;
@@ -107,10 +164,24 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
       }
     };
 
-    // Tous les déplacements sont autorisés - aucune restriction
+    // Vérifier les règles de déplacement
+    if (!canMoveBlock(dragContext, blocks)) {
+      setDragError("Déplacement non autorisé à cet endroit");
+      setTimeout(() => setDragError(null), 1800);
+      setIsDragging(false);
+      return;
+    }
 
-    // Effectuer le déplacement selon les règles
+    // Effectuer le déplacement
     setBlocks(moveBlockWithRules(blocks, result));
+    setIsDragging(false);
+  };
+
+  const handleDragStart = (start: DragStart) => {
+    setIsDragging(true);
+    setDraggingBlockId(start.draggableId);
+    const b = findBlockById(blocks, start.draggableId);
+    setDraggingBlockType(b?.type || null);
   };
 
   // Fonction pour déplacer un bloc en respectant les règles
@@ -226,8 +297,9 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
   // -------------------
   // Rendu d'un bloc (sans Draggable, géré par le parent)
   // -------------------
-  const renderBlock = (block: Block, parentId?: string, handleProps?: any) => {
-    const canHaveChildren = block.type === "section" || block.type === "subsection";
+  const renderBlock = (block: Block, parentId?: string, handleProps?: any, isSelfDragging?: boolean) => {
+    const allowedChildTypes = getAllowedChildTypesForParent(block.type);
+    const canHaveChildren = allowedChildTypes.length > 0;
     const parentBlock = parentId ? findBlockById(blocks, parentId) : undefined;
     const isChildOfSubsection = parentBlock?.type === "subsection";
 
@@ -262,20 +334,21 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
             >
               ⋮⋮
             </div>
-            <strong style={{ 
-              color: block.type === "header" ? "#2563eb" : 
-                     block.type === "section" ? "#059669" :
-                     block.type === "subsection" ? "#7c3aed" : "#6b7280"
+            <span style={{
+              fontSize: "12px",
+              color: "#6b7280",
+              textTransform: "uppercase",
+              letterSpacing: "0.04em"
             }}>
-              {block.type.toUpperCase()}
-            </strong>
+              {block.type}
+            </span>
           </div>
           
           <div style={{ display: "flex", gap: "4px" }}>
             {canHaveChildren && (
               <>
                 <select
-                  value={subBlockTypes[block.id] || "text"}
+                  value={subBlockTypes[block.id] || allowedChildTypes[0] || "text"}
                   onChange={(e) =>
                     setSubBlockTypes({
                       ...subBlockTypes,
@@ -290,8 +363,11 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
                     fontSize: "12px"
                   }}
                 >
-                  <option value="text">Texte</option>
-                  <option value="subsection">Sous-section</option>
+                  {allowedChildTypes.map((t) => (
+                    <option key={t} value={t}>
+                      {t === "text" ? "Texte" : t === "subsection" ? "Sous-section" : t === "section" ? "Section" : t === "header" ? "En-tête" : t === "contact" ? "Contact" : t === "divider" ? "Séparateur" : t}
+                    </option>
+                  ))}
                 </select>
                 <button 
                   onClick={() => handleAddBlock(block.id)} 
@@ -408,29 +484,13 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
 
         {/* Zone de drop pour les enfants (toujours visible pour permettre d'y entrer) */}
         {canHaveChildren && (
-          <Droppable droppableId={block.id} type="CHILD" renderClone={(provided, snapshot, rubric) => {
-            const parent = findBlockById(blocks, block.id);
-            const dragged = parent?.children?.[rubric.source.index];
-            if (!dragged) return <div />;
-            return (
-              <div
-                ref={provided.innerRef}
-                {...provided.draggableProps}
-                {...provided.dragHandleProps}
-                style={{
-                  ...provided.draggableProps.style,
-                  pointerEvents: "none",
-                  userSelect: "none",
-                  border: "1px solid #93c5fd",
-                  background: "#dbeafe",
-                  borderRadius: 8,
-                  padding: 8,
-                }}
-              >
-                {dragged.type.toUpperCase()}
-              </div>
-            );
-          }}>
+          <Droppable 
+            droppableId={block.id} 
+            type="CHILD" 
+            isDropDisabled={
+              !!isSelfDragging || (draggingBlockType === "subsection" && block.type === "subsection")
+            }
+          >
             {(provided, snapshot) => (
               <div
                 ref={provided.innerRef}
@@ -448,12 +508,12 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
               >
                 {block.children?.map((child, index) => (
                   <Draggable key={child.id} draggableId={child.id} index={index}>
-                    {(provided) => (
+                    {(provided, snapshotChild) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                       >
-                        {renderBlock(child, block.id, provided.dragHandleProps)}
+                        {renderBlock(child, block.id, provided.dragHandleProps, snapshotChild.isDragging)}
                       </div>
                     )}
                   </Draggable>
@@ -472,6 +532,19 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
   // -------------------
   return (
     <div style={{ padding: "20px", backgroundColor: "#f8fafc" }}>
+      {dragError && (
+        <div style={{
+          marginBottom: "12px",
+          padding: "8px 12px",
+          backgroundColor: "#fef2f2",
+          border: "1px solid #fecaca",
+          color: "#b91c1c",
+          borderRadius: 6,
+          fontSize: "13px"
+        }}>
+          {dragError}
+        </div>
+      )}
       {/* Header avec instructions */}
       <div style={{ 
         marginBottom: "24px", 
@@ -482,7 +555,7 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
       }}>
         <h2 style={{ margin: "0 0 8px 0", color: "#1f2937" }}>Éditeur de CV</h2>
         <p style={{ margin: "0 0 16px 0", color: "#6b7280", fontSize: "14px" }}>
-          Glissez-déposez les blocs pour réorganiser votre CV. Les règles de déplacement sont appliquées automatiquement.
+          Glissez-déposez les blocs pour réorganiser votre CV. Les règles empêchent les placements incohérents.
         </p>
         
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
@@ -497,12 +570,11 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
               fontSize: "14px"
             }}
           >
-            <option value="header">En-tête</option>
-            <option value="contact">Contact</option>
-            <option value="section">Section</option>
-            <option value="subsection">Sous-section</option>
-            <option value="text">Texte</option>
-            <option value="divider">Séparateur</option>
+            {getAllowedChildTypesForParent(undefined).map((t) => (
+              <option key={t} value={t}>
+                {t === "header" ? "En-tête" : t === "contact" ? "Contact" : t === "section" ? "Section" : t === "subsection" ? "Sous-section" : t === "divider" ? "Séparateur" : t === "text" ? "Texte" : t}
+              </option>
+            ))}
           </select>
           <button 
             onClick={() => handleAddBlock()} 
@@ -523,28 +595,8 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
       </div>
 
       {/* Zone de drop principale */}
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="root" type="ROOT" renderClone={(provided, snapshot, rubric) => {
-          const dragged = blocks[rubric.source.index];
-          return (
-            <div
-              ref={provided.innerRef}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
-              style={{
-                ...provided.draggableProps.style,
-                pointerEvents: "none",
-                userSelect: "none",
-                border: "1px solid #93c5fd",
-                background: "#dbeafe",
-                borderRadius: 8,
-                padding: 8,
-              }}
-            >
-              {dragged?.type.toUpperCase()}
-            </div>
-          );
-        }}>
+      <DragDropContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+        <Droppable droppableId="root" type="ROOT" isDropDisabled={draggingBlockType === "subsection"}>
           {(provided, snapshot) => (
             <div
               ref={provided.innerRef}
@@ -579,7 +631,7 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
                           opacity: snapshot.isDragging ? 0.8 : 1,
                         }}
                       >
-                        {renderBlock(block, undefined, provided.dragHandleProps)}
+                        {renderBlock(block, undefined, provided.dragHandleProps, snapshot.isDragging)}
                       </div>
                     )}
                   </Draggable>

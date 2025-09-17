@@ -31,6 +31,7 @@ export default function Home() {
   const [fontScale, setFontScale] = useState<number>(1);
   const [showWarning, setShowWarning] = useState<boolean>(false);
   const previewRef = useRef<HTMLDivElement>(null);
+  const editorScrollRef = useRef<HTMLDivElement>(null);
 
   // Charger/Sauvegarder les blocs pour stabiliser les IDs (éviter HMR qui regénère)
   useEffect(() => {
@@ -135,8 +136,8 @@ export default function Home() {
             height: "100%", 
             padding: "1rem",
             overflow: "auto"
-          }}>
-            <BlockEditor blocks={blocks} setBlocks={setBlocks} />
+          }} ref={editorScrollRef}>
+            <BlockEditor blocks={blocks} setBlocks={setBlocks} scrollContainerRef={editorScrollRef} />
           </div>
         </Panel>
         
