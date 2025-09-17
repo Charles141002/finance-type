@@ -17,6 +17,7 @@
     "puppeteer": "^24.21.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-resizable-panels": "^3.0.6",
     "uuid": "^13.0.0"
   },
   "devDependencies": {

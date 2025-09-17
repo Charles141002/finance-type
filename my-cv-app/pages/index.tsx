@@ -1,66 +1,20 @@
 import { useState, useEffect, useRef } from "react";
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import BlockEditor from "../components/BlockEditor";
-import Resizer from "../components/Resizer";
 import blocksToHTML from "../utils/blocksToHTML";
 import { initialBlocks } from "../data/initialCV";
 import { Block } from "../utils/types";
 
 // Styles CSS pour la responsivité
 const styles = `
-  .main-container {
-    display: flex !important;
-    gap: 0 !important;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  .editor-section {
-    flex-shrink: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-  
-  .preview-section {
-    flex-shrink: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-  
-  .resizer {
-    flex-shrink: 0;
-    position: relative;
-  }
-  
-  /* Améliorer l'apparence du resizer */
-  .resizer:hover {
-    background-color: #9ca3af !important;
+  .preview-cv {
+    transform: scale(0.8);
+    transform-origin: top center;
   }
   
   @media (max-width: 1200px) {
-    .main-container {
-      flex-direction: column !important;
-      gap: 2rem !important;
-      height: auto !important;
-      overflow: visible !important;
-    }
-    .editor-section {
-      width: 100% !important;
-      min-width: auto !important;
-      overflow: visible !important;
-    }
-    .preview-section {
-      position: relative !important;
-      height: auto !important;
-      width: 100% !important;
-      min-width: auto !important;
-      overflow: visible !important;
-    }
     .preview-cv {
       transform: scale(0.6) !important;
-    }
-    .resizer {
-      display: none !important;
     }
   }
   
@@ -77,8 +31,6 @@ export default function Home() {
   const [pdfUrl, setPdfUrl] = useState<string>("");
   const [fontScale, setFontScale] = useState<number>(1);
   const [showWarning, setShowWarning] = useState<boolean>(false);
-  const [leftWidth, setLeftWidth] = useState<number>(60);
-  const [rightWidth, setRightWidth] = useState<number>(40);
   const previewRef = useRef<HTMLDivElement>(null);
 
   // Charger/Sauvegarder les blocs pour stabiliser les IDs (éviter HMR qui regénère)
@@ -165,59 +117,49 @@ export default function Home() {
     setPdfUrl(URL.createObjectURL(blob));
   };
 
-  const handleResize = (newLeftWidth: number, newRightWidth: number) => {
-    setLeftWidth(newLeftWidth);
-    setRightWidth(newRightWidth);
-  };
-
   return (
     <>
       <style>{styles}</style>
-      <div 
-        className="main-container"
-        style={{ 
-          display: "flex", 
-          gap: "0", 
-          minHeight: "100vh",
-          position: "relative"
-        }}
-      >
+      <PanelGroup direction="horizontal" style={{ height: "100vh" }}>
         {/* Partie gauche - Éditeur (scrollable) */}
-        <div 
-          className="editor-section"
-          style={{ 
-            width: `${leftWidth}%`,
-            minWidth: "300px",
-            paddingRight: "1rem"
-          }}
-        >
-          <BlockEditor blocks={blocks} setBlocks={setBlocks} />
-        </div>
+        <Panel defaultSize={60} minSize={30} maxSize={80}>
+          <div style={{ 
+            height: "100%", 
+            padding: "1rem",
+            overflow: "auto"
+          }}>
+            <BlockEditor blocks={blocks} setBlocks={setBlocks} />
+          </div>
+        </Panel>
         
         {/* Séparateur redimensionnable */}
-        <div className="resizer">
-          <Resizer 
-            onResize={handleResize}
-            initialLeftWidth={leftWidth}
-            initialRightWidth={rightWidth}
-          />
-        </div>
+        <PanelResizeHandle 
+          style={{
+            width: "8px",
+            backgroundColor: "#e1e5e9",
+            cursor: "col-resize",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          <div style={{
+            width: "2px",
+            height: "40px",
+            backgroundColor: "#9ca3af",
+            borderRadius: "1px"
+          }} />
+        </PanelResizeHandle>
         
         {/* Partie droite - Aperçu (fixe) */}
-        <div 
-          className="preview-section"
-          style={{ 
-            width: `${rightWidth}%`,
-            minWidth: "300px",
-            position: "sticky",
-            top: "0",
+        <Panel defaultSize={40} minSize={20} maxSize={70}>
+          <div style={{ 
             height: "100vh",
             overflow: "auto",
             backgroundColor: "#f8fafc",
-            padding: "1rem",
+            padding: "0.5rem",
             borderLeft: "1px solid #e1e5e9"
-          }}
-        >
+          }}>
         {showWarning && (
           <div style={{
             backgroundColor: "#fff3cd",
@@ -233,9 +175,7 @@ export default function Home() {
         )}
         
         <div style={{ 
-          display: "flex", 
-          justifyContent: "center",
-          marginBottom: "1rem"
+          marginBottom: "0.5rem"
         }}>
           <div
             ref={previewRef}
@@ -250,7 +190,7 @@ export default function Home() {
               fontSize: `${fontScale}em`,
               lineHeight: `${1.1 * fontScale}`,
               transform: "scale(0.8)",
-              transformOrigin: "top center",
+              transformOrigin: "top left",
               marginBottom: "2rem"
             }}
             dangerouslySetInnerHTML={{ __html: blocksToHTML(blocks, fontScale) }}
@@ -262,7 +202,7 @@ export default function Home() {
           flexDirection: "column",
           gap: "8px",
           position: "sticky",
-          bottom: "1rem",
+          bottom: "0.5rem",
           backgroundColor: "#fff",
           padding: "1rem",
           borderRadius: "8px",
@@ -318,8 +258,9 @@ export default function Home() {
             />
           </div>
         )}
-        </div>
-      </div>
+          </div>
+        </Panel>
+      </PanelGroup>
     </>
   );
 }
