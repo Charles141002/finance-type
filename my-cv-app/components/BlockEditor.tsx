@@ -228,6 +228,8 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
   // -------------------
   const renderBlock = (block: Block, parentId?: string, handleProps?: any) => {
     const canHaveChildren = block.type === "section" || block.type === "subsection";
+    const parentBlock = parentId ? findBlockById(blocks, parentId) : undefined;
+    const isChildOfSubsection = parentBlock?.type === "subsection";
 
     return (
       <div
@@ -334,25 +336,25 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
                 placeholder="Email"
                 value={block.content?.email || ""}
                 onChange={(e) => updateBlockContent(block.id, { ...block.content, email: e.target.value })}
-                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px" }}
+                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px", maxWidth: "640px" }}
               />
               <input
                 placeholder="Téléphone"
                 value={block.content?.phone || ""}
                 onChange={(e) => updateBlockContent(block.id, { ...block.content, phone: e.target.value })}
-                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px" }}
+                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px", maxWidth: "640px" }}
               />
               <input
                 placeholder="Adresse"
                 value={block.content?.address || ""}
                 onChange={(e) => updateBlockContent(block.id, { ...block.content, address: e.target.value })}
-                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px" }}
+                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px", maxWidth: "640px" }}
               />
               <input
                 placeholder="LinkedIn"
                 value={block.content?.linkedin || ""}
                 onChange={(e) => updateBlockContent(block.id, { ...block.content, linkedin: e.target.value })}
-                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px" }}
+                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px", maxWidth: "640px" }}
               />
             </div>
           ) : block.type === "subsection" ? (
@@ -361,19 +363,19 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
                 placeholder="Titre (ex: JCDecaux)"
                 value={block.content?.title || ""}
                 onChange={(e) => updateBlockContent(block.id, { ...block.content, title: e.target.value })}
-                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px", fontWeight: "bold" }}
+                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px", fontWeight: "bold", maxWidth: "600px" }}
               />
               <input
                 placeholder="Sous-titre (ex: Data Scientist)"
                 value={block.content?.subtitle || ""}
                 onChange={(e) => updateBlockContent(block.id, { ...block.content, subtitle: e.target.value })}
-                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px" }}
+                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px", maxWidth: "600px" }}
               />
               <input
                 placeholder="Période (ex: 11/2024 -- 05/2025)"
                 value={block.content?.period || ""}
                 onChange={(e) => updateBlockContent(block.id, { ...block.content, period: e.target.value })}
-                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px", fontStyle: "italic" }}
+                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px", fontStyle: "italic", maxWidth: "600px" }}
               />
             </div>
           ) : (
@@ -393,7 +395,9 @@ const BlockEditor = ({ blocks, setBlocks }: Props) => {
                 border: "1px solid #d1d5db", 
                 borderRadius: "4px",
                 fontSize: block.type === "header" ? "18px" : "14px",
-                fontWeight: block.type === "header" ? "bold" : "normal"
+                fontWeight: block.type === "header" ? "bold" : "normal",
+                resize: "vertical",
+                maxWidth: isChildOfSubsection ? "560px" : "640px"
               }}
               placeholder={block.type === "header" ? "Nom complet" : 
                          block.type === "section" ? "Titre de section" : 

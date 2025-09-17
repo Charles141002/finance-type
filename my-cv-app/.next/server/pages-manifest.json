@@ -2,5 +2,6 @@
   "/": "pages/index.js",
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
-  "/api/generate-pdf": "pages/api/generate-pdf.js"
+  "/_error": "pages/_error.js",
+  "/landing": "pages/landing.js"
 }

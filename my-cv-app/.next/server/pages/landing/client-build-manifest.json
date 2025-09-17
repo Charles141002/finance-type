@@ -1,0 +1,5 @@
+{
+  "/landing": [
+    "./static/chunks/pages/landing.js"
+  ]
+}
