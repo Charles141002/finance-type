@@ -1864,7 +1864,6 @@ function Home() {
     _s();
     // IDs stables: charger depuis localStorage si disponible
     const [blocks, setBlocks] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [pdfUrl, setPdfUrl] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])("");
     const [fontScale, setFontScale] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(1);
     const [showWarning, setShowWarning] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const previewRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useRef"])(null);
@@ -1959,7 +1958,15 @@ function Home() {
             })
         });
         const blob = await res.blob();
-        setPdfUrl(URL.createObjectURL(blob));
+        // Créer un lien de téléchargement
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'mon-cv.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Fragment"], {
         children: [
@@ -1967,7 +1974,7 @@ function Home() {
                 children: styles
             }, void 0, false, {
                 fileName: "[project]/pages/index.tsx",
-                lineNumber: 122,
+                lineNumber: 130,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$resizable$2d$panels$2f$dist$2f$react$2d$resizable$2d$panels$2e$browser$2e$development$2e$js__$5b$client$5d$__$28$ecmascript$29$__["PanelGroup"], {
@@ -1991,17 +1998,17 @@ function Home() {
                                 setBlocks: setBlocks
                             }, void 0, false, {
                                 fileName: "[project]/pages/index.tsx",
-                                lineNumber: 131,
+                                lineNumber: 139,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/pages/index.tsx",
-                            lineNumber: 126,
+                            lineNumber: 134,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/pages/index.tsx",
-                        lineNumber: 125,
+                        lineNumber: 133,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$resizable$2d$panels$2f$dist$2f$react$2d$resizable$2d$panels$2e$browser$2e$development$2e$js__$5b$client$5d$__$28$ecmascript$29$__["PanelResizeHandle"], {
@@ -2022,18 +2029,18 @@ function Home() {
                             }
                         }, void 0, false, {
                             fileName: "[project]/pages/index.tsx",
-                            lineNumber: 146,
+                            lineNumber: 154,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/pages/index.tsx",
-                        lineNumber: 136,
+                        lineNumber: 144,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$resizable$2d$panels$2f$dist$2f$react$2d$resizable$2d$panels$2e$browser$2e$development$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Panel"], {
-                        defaultSize: 40,
-                        minSize: 20,
-                        maxSize: 70,
+                        defaultSize: 45,
+                        minSize: 45,
+                        maxSize: 45,
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             style: {
                                 height: "100vh",
@@ -2060,13 +2067,11 @@ function Home() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/pages/index.tsx",
-                                    lineNumber: 164,
+                                    lineNumber: 172,
                                     columnNumber: 11
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    style: {
-                                        marginBottom: "0.5rem"
-                                    },
+                                    style: {},
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         ref: previewRef,
                                         className: "preview-cv",
@@ -2081,19 +2086,19 @@ function Home() {
                                             lineHeight: "".concat(1.1 * fontScale),
                                             transform: "scale(0.8)",
                                             transformOrigin: "top left",
-                                            marginBottom: "2rem"
+                                            marginBottom: "0.1rem"
                                         },
                                         dangerouslySetInnerHTML: {
                                             __html: (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$blocksToHTML$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["default"])(blocks, fontScale)
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/pages/index.tsx",
-                                        lineNumber: 180,
+                                        lineNumber: 187,
                                         columnNumber: 11
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/pages/index.tsx",
-                                    lineNumber: 177,
+                                    lineNumber: 185,
                                     columnNumber: 9
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2109,96 +2114,50 @@ function Home() {
                                         border: "1px solid #e1e5e9",
                                         boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
                                     },
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                            onClick: handleGeneratePDF,
-                                            style: {
-                                                padding: "12px 16px",
-                                                backgroundColor: "#3b82f6",
-                                                color: "white",
-                                                border: "none",
-                                                borderRadius: "6px",
-                                                cursor: "pointer",
-                                                fontSize: "14px",
-                                                fontWeight: "500"
-                                            },
-                                            children: "Générer PDF"
-                                        }, void 0, false, {
-                                            fileName: "[project]/pages/index.tsx",
-                                            lineNumber: 212,
-                                            columnNumber: 11
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                            onClick: ()=>{
-                                                const scale = calculateOptimalFontScale();
-                                                setFontScale(scale);
-                                                setShowWarning(scale < 1);
-                                            },
-                                            style: {
-                                                fontSize: "12px",
-                                                padding: "8px 12px",
-                                                backgroundColor: "#f3f4f6",
-                                                border: "1px solid #d1d5db",
-                                                borderRadius: "6px",
-                                                cursor: "pointer"
-                                            },
-                                            children: "Recalculer taille"
-                                        }, void 0, false, {
-                                            fileName: "[project]/pages/index.tsx",
-                                            lineNumber: 227,
-                                            columnNumber: 11
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/pages/index.tsx",
-                                    lineNumber: 200,
-                                    columnNumber: 9
-                                }, this),
-                                pdfUrl && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    style: {
-                                        marginTop: "1rem",
-                                        border: "1px solid #e1e5e9",
-                                        borderRadius: "8px",
-                                        overflow: "hidden"
-                                    },
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("iframe", {
-                                        src: pdfUrl,
-                                        width: "100%",
-                                        height: "400px",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: handleGeneratePDF,
                                         style: {
-                                            border: "none"
-                                        }
+                                            padding: "12px 16px",
+                                            backgroundColor: "#3b82f6",
+                                            color: "white",
+                                            border: "none",
+                                            borderRadius: "6px",
+                                            cursor: "pointer",
+                                            fontSize: "14px",
+                                            fontWeight: "500"
+                                        },
+                                        children: "Générer PDF"
                                     }, void 0, false, {
                                         fileName: "[project]/pages/index.tsx",
-                                        lineNumber: 253,
-                                        columnNumber: 13
+                                        lineNumber: 219,
+                                        columnNumber: 11
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/pages/index.tsx",
-                                    lineNumber: 247,
-                                    columnNumber: 11
+                                    lineNumber: 207,
+                                    columnNumber: 9
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/pages/index.tsx",
-                            lineNumber: 156,
+                            lineNumber: 164,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/pages/index.tsx",
-                        lineNumber: 155,
+                        lineNumber: 163,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/pages/index.tsx",
-                lineNumber: 123,
+                lineNumber: 131,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true);
 }
-_s(Home, "3fRUYmEZ3WKiffKbADXSZyLog4M=");
+_s(Home, "2rfPQSzJeuewWUGaeGSA2gOImW4=");
 _c = Home;
 var _c;
 __turbopack_context__.k.register(_c, "Home");

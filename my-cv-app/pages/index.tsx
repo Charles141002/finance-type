@@ -28,7 +28,6 @@ const styles = `
 export default function Home() {
   // IDs stables: charger depuis localStorage si disponible
   const [blocks, setBlocks] = useState<Block[]>([]);
-  const [pdfUrl, setPdfUrl] = useState<string>("");
   const [fontScale, setFontScale] = useState<number>(1);
   const [showWarning, setShowWarning] = useState<boolean>(false);
   const previewRef = useRef<HTMLDivElement>(null);
@@ -114,7 +113,16 @@ export default function Home() {
       body: JSON.stringify({ blocks, fontScale }),
     });
     const blob = await res.blob();
-    setPdfUrl(URL.createObjectURL(blob));
+    
+    // Créer un lien de téléchargement
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'mon-cv.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -152,7 +160,7 @@ export default function Home() {
         </PanelResizeHandle>
         
         {/* Partie droite - Aperçu (fixe) */}
-        <Panel defaultSize={40} minSize={20} maxSize={70}>
+        <Panel defaultSize={45} minSize={45} maxSize={45}>
           <div style={{ 
             height: "100vh",
             overflow: "auto",
@@ -175,7 +183,6 @@ export default function Home() {
         )}
         
         <div style={{ 
-          marginBottom: "0.5rem"
         }}>
           <div
             ref={previewRef}
@@ -191,7 +198,7 @@ export default function Home() {
               lineHeight: `${1.1 * fontScale}`,
               transform: "scale(0.8)",
               transformOrigin: "top left",
-              marginBottom: "2rem"
+              marginBottom: "0.1rem"
             }}
             dangerouslySetInnerHTML={{ __html: blocksToHTML(blocks, fontScale) }}
           />
@@ -224,40 +231,8 @@ export default function Home() {
           >
             Générer PDF
           </button>
-          <button 
-            onClick={() => {
-              const scale = calculateOptimalFontScale();
-              setFontScale(scale);
-              setShowWarning(scale < 1);
-            }} 
-            style={{ 
-              fontSize: "12px",
-              padding: "8px 12px",
-              backgroundColor: "#f3f4f6",
-              border: "1px solid #d1d5db",
-              borderRadius: "6px",
-              cursor: "pointer"
-            }}
-          >
-            Recalculer taille
-          </button>
         </div>
         
-        {pdfUrl && (
-          <div style={{ 
-            marginTop: "1rem",
-            border: "1px solid #e1e5e9",
-            borderRadius: "8px",
-            overflow: "hidden"
-          }}>
-            <iframe 
-              src={pdfUrl} 
-              width="100%" 
-              height="400px" 
-              style={{ border: "none" }}
-            />
-          </div>
-        )}
           </div>
         </Panel>
       </PanelGroup>
