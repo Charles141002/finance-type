@@ -1,7 +1,7 @@
 globalThis.__BUILD_MANIFEST = {
   "pages": {
     "/": [
-      "static/chunks/[root-of-the-server]__cdf65713._.js",
+      "static/chunks/[root-of-the-server]__61aec5e5._.js",
       "static/chunks/node_modules_next_dist_compiled_next-devtools_index_5277ebc8.js",
       "static/chunks/node_modules_next_dist_compiled_7e188057._.js",
       "static/chunks/node_modules_next_dist_shared_lib_f041b118._.js",
@@ -11,7 +11,7 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/node_modules_react-dom_4411d9bd._.js",
       "static/chunks/node_modules_7ba63071._.js",
       "static/chunks/pages_index_2da965e7._.js",
-      "static/chunks/turbopack-pages_index_bcc77b14._.js"
+      "static/chunks/turbopack-pages_index_8fed4fb3._.js"
     ],
     "/_app": [
       "static/chunks/node_modules_next_dist_compiled_next-devtools_index_5277ebc8.js",
@@ -42,7 +42,7 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/turbopack-pages__error_18aa0e75._.js"
     ],
     "/a-propos": [
-      "static/chunks/[root-of-the-server]__caebd9b2._.js",
+      "static/chunks/[root-of-the-server]__4065abb8._.js",
       "static/chunks/node_modules_next_dist_compiled_next-devtools_index_5277ebc8.js",
       "static/chunks/node_modules_next_dist_compiled_166120c5._.js",
       "static/chunks/node_modules_next_dist_shared_lib_f041b118._.js",
@@ -52,10 +52,10 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/node_modules_react-dom_4411d9bd._.js",
       "static/chunks/node_modules_db346ff0._.js",
       "static/chunks/pages_a-propos_2da965e7._.js",
-      "static/chunks/turbopack-pages_a-propos_2a29bbe8._.js"
+      "static/chunks/turbopack-pages_a-propos_39e50243._.js"
     ],
     "/cv": [
-      "static/chunks/[root-of-the-server]__1738c8de._.js",
+      "static/chunks/[root-of-the-server]__4aec7cf1._.js",
       "static/chunks/node_modules_next_dist_compiled_next-devtools_index_5277ebc8.js",
       "static/chunks/node_modules_next_dist_compiled_166120c5._.js",
       "static/chunks/node_modules_next_dist_shared_lib_f041b118._.js",
@@ -66,7 +66,7 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/node_modules_@hello-pangea_dnd_dist_dnd_esm_b5f80d02.js",
       "static/chunks/node_modules_14ef5ce7._.js",
       "static/chunks/pages_cv_2da965e7._.js",
-      "static/chunks/turbopack-pages_cv_30ca5dec._.js"
+      "static/chunks/turbopack-pages_cv_52f0579f._.js"
     ]
   },
   "devFiles": [],

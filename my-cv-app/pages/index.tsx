@@ -1,11 +1,11 @@
 import Link from "next/link";
-import Header from "../components/Header";
+import DynamicHeader from "../components/DynamicHeader";
 import Footer from "../components/Footer";
 
 export default function LandingPage() {
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "rgba(2, 6, 23, 0.95)" }}>
-      <Header variant="landing" />
+      <DynamicHeader variant="landing" />
 
       {/* Hero avec image de fond floutée + voile bleu foncé */}
       <section style={{ position: "relative", overflow: "hidden" }}>

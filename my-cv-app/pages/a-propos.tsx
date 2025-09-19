@@ -1,11 +1,11 @@
 import Link from "next/link";
-import Header from "../components/Header";
+import DynamicHeader from "../components/DynamicHeader";
 import Footer from "../components/Footer";
 
 export default function APropos() {
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "rgba(2, 6, 23, 0.95)" }}>
-      <Header />
+      <DynamicHeader />
 
       {/* Hero Section */}
       <section style={{ position: "relative", overflow: "hidden" }}>
@@ -61,7 +61,7 @@ export default function APropos() {
             marginLeft: "auto",
             marginRight: "auto"
           }}>
-            Nous sommes deux étudiants passionnés de finance et de tech. On s'est rendu compte que créer un CV type finance est souvent long, pénible et mal formaté.
+            Nous sommes deux étudiants passionnés de finance et de tech. On s'est rendu compte que créer un CV type finance est souvent long, pénible et mal formaté. Alors on a décidé de vous aider : un CV type finance en quelques clics qui tient sur une page quoiqu'il arrive sans se soucier de la taille de la police ou la taille des marges ! Pas le temps pour les remerciements, allez sharker !
           </p>
         </div>
       </section>
