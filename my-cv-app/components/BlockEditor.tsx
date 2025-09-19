@@ -155,7 +155,6 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style }: Ric
   const execArg = (cmd: string, arg?: string) => {
     restoreSelection();
     ref.current?.focus();
-    // @ts-expect-error: execCommand legacy signature support
     document.execCommand(cmd, false, arg);
     const html = sanitizeHtml(ref.current?.innerHTML || "");
     if (html !== value) onChange(html);
