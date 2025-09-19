@@ -33,7 +33,7 @@ export default function DynamicHeader({ rightActions, variant = "default", scrol
 
       // Utiliser le conteneur de scroll si fourni, sinon la fenêtre
       const scrollElement = scrollContainerRef?.current || window;
-      const currentScrollY = scrollElement === window ? window.scrollY : scrollElement.scrollTop;
+      const currentScrollY = scrollElement === window ? window.scrollY : (scrollElement as HTMLDivElement).scrollTop ?? 0;
       
       // Afficher le header si on remonte (scroll vers le haut) ou si on est en haut
       const newVisibility = currentScrollY < lastScrollY || currentScrollY <= 10;

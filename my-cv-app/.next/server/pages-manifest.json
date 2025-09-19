@@ -1,8 +1,5 @@
 {
-  "/": "pages/index.js",
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
-  "/a-propos": "pages/a-propos.js",
-  "/cv": "pages/cv.js",
   "/login": "pages/login.js"
 }

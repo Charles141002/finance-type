@@ -1,18 +1,5 @@
 globalThis.__BUILD_MANIFEST = {
   "pages": {
-    "/": [
-      "static/chunks/[root-of-the-server]__deb4b2d7._.js",
-      "static/chunks/ebde9_next_dist_compiled_next-devtools_index_bc1d0868.js",
-      "static/chunks/ebde9_next_dist_compiled_98fd5b12._.js",
-      "static/chunks/ebde9_next_dist_shared_lib_1bc3780e._.js",
-      "static/chunks/ebde9_next_dist_client_a628c16f._.js",
-      "static/chunks/ebde9_next_dist_23ca9017._.js",
-      "static/chunks/ebde9_next_c39de508._.js",
-      "static/chunks/ebde9_react-dom_016c41de._.js",
-      "static/chunks/ebde9_55231030._.js",
-      "static/chunks/Desktop_finance-type_my-cv-app_pages_index_2da965e7._.js",
-      "static/chunks/turbopack-Desktop_finance-type_my-cv-app_pages_index_9f4959e7._.js"
-    ],
     "/_app": [
       "static/chunks/ebde9_@supabase_node-fetch_browser_be4ac464.js",
       "static/chunks/ebde9_next_dist_compiled_next-devtools_index_bc1d0868.js",
@@ -27,33 +14,6 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/[root-of-the-server]__ef3ec61e._.js",
       "static/chunks/Desktop_finance-type_my-cv-app_pages__app_2da965e7._.js",
       "static/chunks/turbopack-Desktop_finance-type_my-cv-app_pages__app_eb346626._.js"
-    ],
-    "/a-propos": [
-      "static/chunks/[root-of-the-server]__e5a4a7d5._.js",
-      "static/chunks/ebde9_next_dist_compiled_next-devtools_index_bc1d0868.js",
-      "static/chunks/ebde9_next_dist_compiled_15c78876._.js",
-      "static/chunks/ebde9_next_dist_shared_lib_1bc3780e._.js",
-      "static/chunks/ebde9_next_dist_client_a628c16f._.js",
-      "static/chunks/ebde9_next_dist_23ca9017._.js",
-      "static/chunks/ebde9_next_c39de508._.js",
-      "static/chunks/ebde9_react-dom_016c41de._.js",
-      "static/chunks/ebde9_5e79e3a4._.js",
-      "static/chunks/Desktop_finance-type_my-cv-app_pages_a-propos_2da965e7._.js",
-      "static/chunks/turbopack-Desktop_finance-type_my-cv-app_pages_a-propos_c468f74f._.js"
-    ],
-    "/cv": [
-      "static/chunks/[root-of-the-server]__1f72a2d6._.js",
-      "static/chunks/ebde9_next_dist_compiled_next-devtools_index_bc1d0868.js",
-      "static/chunks/ebde9_next_dist_compiled_15c78876._.js",
-      "static/chunks/ebde9_next_dist_shared_lib_1bc3780e._.js",
-      "static/chunks/ebde9_next_dist_client_a628c16f._.js",
-      "static/chunks/ebde9_next_dist_23ca9017._.js",
-      "static/chunks/ebde9_next_c39de508._.js",
-      "static/chunks/ebde9_react-dom_016c41de._.js",
-      "static/chunks/ebde9_@hello-pangea_dnd_dist_dnd_esm_2fc5bd3e.js",
-      "static/chunks/ebde9_8b37377f._.js",
-      "static/chunks/Desktop_finance-type_my-cv-app_pages_cv_2da965e7._.js",
-      "static/chunks/turbopack-Desktop_finance-type_my-cv-app_pages_cv_084191d9._.js"
     ],
     "/login": [
       "static/chunks/ebde9_next_dist_compiled_next-devtools_index_bc1d0868.js",
