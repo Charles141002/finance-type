@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import type { GetServerSidePropsContext } from "next";
+import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import DynamicHeader from "../components/DynamicHeader";
 import Footer from "../components/Footer";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
@@ -285,3 +287,26 @@ export default function CvGeneratorPage() {
   );
 }
 
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const supabase = createPagesServerClient(context)
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  if (!session) {
+    const redirectDestination = `/login?redirect=${encodeURIComponent(context.resolvedUrl ?? '/cv')}`
+
+    return {
+      redirect: {
+        destination: redirectDestination,
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {
+      initialSession: session,
+    },
+  }
+}

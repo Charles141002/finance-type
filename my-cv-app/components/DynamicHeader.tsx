@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { ReactNode, useState, useEffect, useRef } from "react";
+import { useRouter } from "next/router";
+import { ReactNode, useState, useEffect } from "react";
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 
 type DynamicHeaderProps = {
   rightActions?: ReactNode;
@@ -11,6 +13,9 @@ export default function DynamicHeader({ rightActions, variant = "default", scrol
   const [isVisible, setIsVisible] = useState(true); // Visible par défaut au chargement
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isInitialized, setIsInitialized] = useState(false);
+  const router = useRouter();
+  const session = useSession();
+  const supabase = useSupabaseClient();
 
   // Délai d'initialisation pour laisser le header visible au chargement
   useEffect(() => {
@@ -46,6 +51,11 @@ export default function DynamicHeader({ rightActions, variant = "default", scrol
       scrollElement.removeEventListener('scroll', handleScroll);
     };
   }, [lastScrollY, scrollContainerRef, isInitialized, isVisible]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/login").catch(() => {});
+  };
 
   return (
     <div
@@ -153,24 +163,46 @@ export default function DynamicHeader({ rightActions, variant = "default", scrol
               >
                 Commencer
               </Link>
-              <Link
-                href="/login"
-                style={{
-                  textDecoration: "none",
-                  color: "#e2e8f0",
-                  background: "rgba(255,255,255,0.08)",
-                  border: "1px solid rgba(255,255,255,0.15)",
-                  padding: "12px 20px",
-                  borderRadius: "12px",
-                  fontWeight: 600,
-                  fontSize: "15px",
-                  fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-                  transition: "all 0.2s ease",
-                  backdropFilter: "blur(10px)"
-                }}
-              >
-                Se connecter
-              </Link>
+              {session?.user ? (
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  style={{
+                    color: "#e2e8f0",
+                    background: "rgba(255,255,255,0.08)",
+                    border: "1px solid rgba(255,255,255,0.15)",
+                    padding: "12px 20px",
+                    borderRadius: "12px",
+                    fontWeight: 600,
+                    fontSize: "15px",
+                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                    transition: "all 0.2s ease",
+                    backdropFilter: "blur(10px)",
+                    cursor: "pointer"
+                  }}
+                >
+                  Se déconnecter
+                </button>
+              ) : (
+                <Link
+                  href="/login"
+                  style={{
+                    textDecoration: "none",
+                    color: "#e2e8f0",
+                    background: "rgba(255,255,255,0.08)",
+                    border: "1px solid rgba(255,255,255,0.15)",
+                    padding: "12px 20px",
+                    borderRadius: "12px",
+                    fontWeight: 600,
+                    fontSize: "15px",
+                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                    transition: "all 0.2s ease",
+                    backdropFilter: "blur(10px)"
+                  }}
+                >
+                  Se connecter
+                </Link>
+              )}
             </>
           )}
         </div>

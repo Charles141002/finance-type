@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Finance CV Builder
 
-## Getting Started
+Générateur de CV type finance basé sur Next.js (Pages Router) avec authentification utilisateur alimentée par [Supabase](https://supabase.com/).
 
-First, run the development server:
+## Prérequis
+
+- Node.js ≥ 18.18 recommandé (la version 18.14 accepte mais génère des avertissements)
+- Compte Supabase avec un projet provisionné
+
+## Configuration
+
+1. Copiez le fichier `.env.local.example` vers `.env.local` et remplissez les variables :
+
+   ```bash
+   cp .env.local.example .env.local
+   ```
+
+   | Variable | Description |
+   | --- | --- |
+   | `NEXT_PUBLIC_SUPABASE_URL` | URL du projet Supabase (Settings → API). |
+   | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Clé anonyme publique Supabase. |
+   | `SUPABASE_SERVICE_ROLE_KEY` | **Ne pas exposer côté client**. Utile uniquement pour des scripts serveur (CRON, migrations…). |
+   | `NEXT_PUBLIC_SITE_URL` | URL publique de l'application utilisée pour les redirections d'authentification (dev : `http://localhost:3000`). |
+
+2. Dans Supabase :
+   - Activez l'authentification par email/password (Auth → Providers).
+   - Activez la confirmation d'e-mail obligatoire (Auth → Policies) pour durcir la sécurité.
+   - (Optionnel) Configurez des templates d'emails personnalisés et DKIM.
+
+3. Installez les dépendances :
+
+   ```bash
+   npm install
+   ```
+
+## Démarrage
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Le site est accessible sur [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Authentification Supabase
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- L'initialisation du client Supabase se trouve dans `utils/supabaseClient.ts` et est injectée globalement dans `pages/_app.tsx` via `SessionContextProvider`.
+- L'API `pages/api/auth/callback.ts` échange les codes PKCE envoyés par Supabase et initialise la session côté serveur via `createPagesServerClient`. Pensez à définir `emailRedirectTo` sur `https://votre-domaine/api/auth/callback` dans les appels `signUp`/`signIn`.
+- Les pages protégées (ex. `pages/cv.tsx`) vérifient la session côté serveur et redirigent vers `/login` si nécessaire.
+- Les utilisateurs peuvent :
+  - Créer un compte et confirmer leur email.
+  - Se connecter / se déconnecter depuis l'interface.
+  - Demander un lien de réinitialisation et choisir un nouveau mot de passe sur `/reset-password`.
 
-## Learn More
+## Bonnes pratiques supplémentaires
 
-To learn more about Next.js, take a look at the following resources:
+- Activez la [protection anti-brute force](https://supabase.com/docs/guides/auth/auth-rate-limits) et ajustez les quotas dans le tableau de bord Supabase.
+- Stockez les clés privées (service role) uniquement côté serveur ou dans un gestionnaire de secrets.
+- Utilisez `createPagesServerClient`/`createServerActionClient` sur vos routes sensibles pour vérifier la session avant de procéder à des opérations protégées.
+- Vérifiez régulièrement les logs d'authentification Supabase.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tests
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`npm run lint` permet de vérifier les règles ESLint (actuellement quelques avertissements hérités du projet d'origine subsistent).

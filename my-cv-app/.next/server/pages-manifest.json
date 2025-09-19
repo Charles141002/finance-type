@@ -3,7 +3,8 @@
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
-  "/a-propos": "pages/a-propos.js",
-  "/api/generate-pdf": "pages/api/generate-pdf.js",
-  "/cv": "pages/cv.js"
+  "/api/auth/[...supabase]": "pages/api/auth/[...supabase].js",
+  "/api/auth/callback": "pages/api/auth/callback.js",
+  "/cv": "pages/cv.js",
+  "/login": "pages/login.js"
 }

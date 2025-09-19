@@ -1,7 +1,19 @@
+import { useState } from 'react'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
+import { SessionContextProvider } from '@supabase/auth-helpers-react'
+import type { Session } from '@supabase/supabase-js'
+import { createSupabaseBrowserClient } from '../utils/supabaseClient'
 
-export default function App({ Component, pageProps }: AppProps) {
+interface CustomAppProps extends AppProps {
+  pageProps: AppProps['pageProps'] & {
+    initialSession?: Session
+  }
+}
+
+export default function App({ Component, pageProps }: CustomAppProps) {
+  const [supabaseClient] = useState(() => createSupabaseBrowserClient())
+
   return (
     <>
       <Head>
@@ -55,10 +67,12 @@ export default function App({ Component, pageProps }: AppProps) {
           .container, .wrapper, main, section {
             width: 100%;
             max-width: 100%;
-          }
-        `}</style>
-      </Head>
-      <Component {...pageProps} />
+        }
+      `}</style>
+    </Head>
+      <SessionContextProvider supabaseClient={supabaseClient} initialSession={pageProps.initialSession}>
+        <Component {...pageProps} />
+      </SessionContextProvider>
     </>
   )
 }

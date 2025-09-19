@@ -1,0 +1,3 @@
+{
+  "/api/auth/[...supabase]": "pages/api/auth/[...supabase].js"
+}
