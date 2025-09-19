@@ -486,13 +486,14 @@ function Header(param) {
     let { rightActions, variant = "default" } = param;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
         style: {
-            height: variant === "landing" ? "72px" : "64px",
+            height: "120px",
             display: "flex",
             alignItems: "center",
-            background: variant === "landing" ? "linear-gradient(180deg, rgba(241,245,249,0.6), rgba(255,255,255,0.85))" : "linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.75))",
+            background: "linear-gradient(180deg, rgba(2, 6, 23, 0.95), rgba(2, 6, 23, 0.9))",
             backdropFilter: "saturate(140%) blur(8px)",
             WebkitBackdropFilter: "saturate(140%) blur(8px)",
-            borderBottom: "1px solid rgba(226,232,240,0.8)",
+            borderBottom: "2px solid rgba(255,255,255,0.15)",
+            borderTop: "1px solid rgba(255,255,255,0.1)",
             position: "sticky",
             top: 0,
             zIndex: 30
@@ -500,122 +501,144 @@ function Header(param) {
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             style: {
                 width: "100%",
-                maxWidth: variant === "landing" ? "1200px" : "1120px",
+                maxWidth: "2000px",
                 margin: "0 auto",
-                padding: "0 20px",
+                padding: "0 24px 0 0",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "space-between",
-                gap: "16px"
+                justifyContent: "flex-start",
+                gap: "20px"
             },
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     style: {
                         display: "flex",
-                        alignItems: "center",
-                        gap: "16px"
+                        alignItems: "center"
                     },
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                            href: "/",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                        href: "/",
+                        style: {
+                            textDecoration: "none",
+                            display: "flex",
+                            alignItems: "center"
+                        },
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                            src: "/Logo.png",
+                            alt: "FinanceCV Smart Resume Builder",
                             style: {
-                                color: "#0f172a",
-                                textDecoration: "none",
-                                fontWeight: 800,
-                                letterSpacing: "-0.02em",
-                                fontSize: variant === "landing" ? "20px" : "18px"
-                            },
-                            children: "Finance CV AI"
+                                height: "250px",
+                                width: "auto",
+                                objectFit: "contain"
+                            }
                         }, void 0, false, {
                             fileName: "[project]/components/Header.tsx",
-                            lineNumber: 41,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
-                            style: {
-                                display: "flex",
-                                gap: "8px"
-                            },
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                                    href: "/cv",
-                                    style: {
-                                        textDecoration: "none",
-                                        color: "#0f172a",
-                                        background: "#f1f5f9",
-                                        border: "1px solid #e2e8f0",
-                                        padding: variant === "landing" ? "10px 14px" : "8px 12px",
-                                        borderRadius: "999px",
-                                        fontWeight: 600
-                                    },
-                                    children: "Générateur"
-                                }, void 0, false, {
-                                    fileName: "[project]/components/Header.tsx",
-                                    lineNumber: 54,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                                    href: "/a-propos",
-                                    style: {
-                                        textDecoration: "none",
-                                        color: "#0f172a",
-                                        background: "#f1f5f9",
-                                        border: "1px solid #e2e8f0",
-                                        padding: variant === "landing" ? "10px 14px" : "8px 12px",
-                                        borderRadius: "999px",
-                                        fontWeight: 600
-                                    },
-                                    children: "À propos"
-                                }, void 0, false, {
-                                    fileName: "[project]/components/Header.tsx",
-                                    lineNumber: 68,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/components/Header.tsx",
-                            lineNumber: 53,
-                            columnNumber: 11
+                            lineNumber: 48,
+                            columnNumber: 13
                         }, this)
-                    ]
-                }, void 0, true, {
+                    }, void 0, false, {
+                        fileName: "[project]/components/Header.tsx",
+                        lineNumber: 40,
+                        columnNumber: 11
+                    }, this)
+                }, void 0, false, {
                     fileName: "[project]/components/Header.tsx",
-                    lineNumber: 40,
+                    lineNumber: 39,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     style: {
                         display: "flex",
                         alignItems: "center",
-                        gap: "10px"
+                        gap: "32px",
+                        marginLeft: "auto"
                     },
-                    children: rightActions !== null && rightActions !== void 0 ? rightActions : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                        href: "/cv",
-                        style: {
-                            textDecoration: "none",
-                            background: variant === "landing" ? "linear-gradient(90deg, #0ea5e9, #2563eb)" : "linear-gradient(90deg, #2563eb, #1d4ed8)",
-                            color: "#ffffff",
-                            padding: variant === "landing" ? "12px 16px" : "10px 14px",
-                            borderRadius: "12px",
-                            fontWeight: 700,
-                            boxShadow: variant === "landing" ? "0 8px 22px rgba(37, 99, 235, 0.28)" : "0 6px 18px rgba(37, 99, 235, 0.25)",
-                            border: "1px solid rgba(37,99,235,0.6)"
-                        },
-                        children: "Commencer"
-                    }, void 0, false, {
-                        fileName: "[project]/components/Header.tsx",
-                        lineNumber: 86,
-                        columnNumber: 13
-                    }, this)
+                    children: rightActions !== null && rightActions !== void 0 ? rightActions : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                href: "/cv",
+                                style: {
+                                    textDecoration: "none",
+                                    color: "#e2e8f0",
+                                    fontWeight: 600,
+                                    fontSize: "15px",
+                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                    transition: "all 0.2s ease"
+                                },
+                                children: "Générateur CV"
+                            }, void 0, false, {
+                                fileName: "[project]/components/Header.tsx",
+                                lineNumber: 64,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                href: "/a-propos",
+                                style: {
+                                    textDecoration: "none",
+                                    color: "#e2e8f0",
+                                    fontWeight: 600,
+                                    fontSize: "15px",
+                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                    transition: "all 0.2s ease"
+                                },
+                                children: "À propos"
+                            }, void 0, false, {
+                                fileName: "[project]/components/Header.tsx",
+                                lineNumber: 77,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                href: "/cv",
+                                style: {
+                                    textDecoration: "none",
+                                    background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+                                    color: "#ffffff",
+                                    padding: "14px 24px",
+                                    borderRadius: "12px",
+                                    fontWeight: 700,
+                                    fontSize: "16px",
+                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                    boxShadow: "0 8px 24px rgba(59, 130, 246, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15)",
+                                    border: "2px solid rgba(255, 255, 255, 0.1)",
+                                    transition: "all 0.2s ease"
+                                },
+                                children: "Commencer"
+                            }, void 0, false, {
+                                fileName: "[project]/components/Header.tsx",
+                                lineNumber: 90,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                href: "/login",
+                                style: {
+                                    textDecoration: "none",
+                                    color: "#e2e8f0",
+                                    background: "rgba(255,255,255,0.08)",
+                                    border: "1px solid rgba(255,255,255,0.15)",
+                                    padding: "12px 20px",
+                                    borderRadius: "12px",
+                                    fontWeight: 600,
+                                    fontSize: "15px",
+                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                    transition: "all 0.2s ease",
+                                    backdropFilter: "blur(10px)"
+                                },
+                                children: "Se connecter"
+                            }, void 0, false, {
+                                fileName: "[project]/components/Header.tsx",
+                                lineNumber: 108,
+                                columnNumber: 15
+                            }, this)
+                        ]
+                    }, void 0, true)
                 }, void 0, false, {
                     fileName: "[project]/components/Header.tsx",
-                    lineNumber: 84,
+                    lineNumber: 61,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/Header.tsx",
-            lineNumber: 28,
+            lineNumber: 26,
             columnNumber: 7
         }, this)
     }, void 0, false, {
@@ -1495,7 +1518,8 @@ const BlockEditor = (param)=>{
                                         fontSize: "12px",
                                         color: "#6b7280",
                                         textTransform: "uppercase",
-                                        letterSpacing: "0.04em"
+                                        letterSpacing: "0.04em",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
                                     },
                                     children: block.type
                                 }, void 0, false, {
@@ -1528,19 +1552,20 @@ const BlockEditor = (param)=>{
                                                 padding: "4px 8px",
                                                 borderRadius: "4px",
                                                 border: "1px solid #d1d5db",
-                                                fontSize: "12px"
+                                                fontSize: "12px",
+                                                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
                                             },
                                             children: allowedChildTypes.map((t)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: t,
                                                     children: t === "text" ? "Texte" : t === "subsection" ? "Sous-section" : t === "section" ? "Section" : t === "header" ? "En-tête" : t === "contact" ? "Contact" : t === "divider" ? "Séparateur" : t
                                                 }, t, false, {
                                                     fileName: "[project]/components/BlockEditor.tsx",
-                                                    lineNumber: 597,
+                                                    lineNumber: 599,
                                                     columnNumber: 21
                                                 }, ("TURBOPACK compile-time value", void 0)))
                                         }, void 0, false, {
                                             fileName: "[project]/components/BlockEditor.tsx",
-                                            lineNumber: 580,
+                                            lineNumber: 581,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0)),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1558,7 +1583,7 @@ const BlockEditor = (param)=>{
                                             children: "+ sous-bloc"
                                         }, void 0, false, {
                                             fileName: "[project]/components/BlockEditor.tsx",
-                                            lineNumber: 602,
+                                            lineNumber: 604,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0))
                                     ]
@@ -1576,13 +1601,13 @@ const BlockEditor = (param)=>{
                                     children: "✕"
                                 }, void 0, false, {
                                     fileName: "[project]/components/BlockEditor.tsx",
-                                    lineNumber: 619,
+                                    lineNumber: 621,
                                     columnNumber: 13
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/BlockEditor.tsx",
-                            lineNumber: 577,
+                            lineNumber: 578,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0))
                     ]
@@ -1603,7 +1628,7 @@ const BlockEditor = (param)=>{
                         }
                     }, void 0, false, {
                         fileName: "[project]/components/BlockEditor.tsx",
-                        lineNumber: 638,
+                        lineNumber: 640,
                         columnNumber: 13
                     }, ("TURBOPACK compile-time value", void 0)) : block.type === "contact" ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
@@ -1627,7 +1652,7 @@ const BlockEditor = (param)=>{
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/BlockEditor.tsx",
-                                lineNumber: 641,
+                                lineNumber: 643,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1645,7 +1670,7 @@ const BlockEditor = (param)=>{
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/BlockEditor.tsx",
-                                lineNumber: 647,
+                                lineNumber: 649,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1663,7 +1688,7 @@ const BlockEditor = (param)=>{
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/BlockEditor.tsx",
-                                lineNumber: 653,
+                                lineNumber: 655,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1681,13 +1706,13 @@ const BlockEditor = (param)=>{
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/BlockEditor.tsx",
-                                lineNumber: 659,
+                                lineNumber: 661,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/BlockEditor.tsx",
-                        lineNumber: 640,
+                        lineNumber: 642,
                         columnNumber: 13
                     }, ("TURBOPACK compile-time value", void 0)) : block.type === "subsection" ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
@@ -1709,7 +1734,7 @@ const BlockEditor = (param)=>{
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/BlockEditor.tsx",
-                                lineNumber: 668,
+                                lineNumber: 670,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1736,12 +1761,13 @@ const BlockEditor = (param)=>{
                                             fontSize: 12,
                                             border: "1px solid #d1d5db",
                                             borderRadius: 4,
-                                            background: "#fff"
+                                            background: "#fff",
+                                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
                                         },
                                         children: "Supprimer sous-titre"
                                     }, void 0, false, {
                                         fileName: "[project]/components/BlockEditor.tsx",
-                                        lineNumber: 679,
+                                        lineNumber: 681,
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         type: "button",
@@ -1754,12 +1780,13 @@ const BlockEditor = (param)=>{
                                             fontSize: 12,
                                             border: "1px solid #d1d5db",
                                             borderRadius: 4,
-                                            background: "#fff"
+                                            background: "#fff",
+                                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
                                         },
                                         children: "+ Sous-titre"
                                     }, void 0, false, {
                                         fileName: "[project]/components/BlockEditor.tsx",
-                                        lineNumber: 692,
+                                        lineNumber: 694,
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     hasMeaningfulText((_block_content6 = block.content) === null || _block_content6 === void 0 ? void 0 : _block_content6.period) || periodVisible[block.id] ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1780,12 +1807,13 @@ const BlockEditor = (param)=>{
                                             fontSize: 12,
                                             border: "1px solid #d1d5db",
                                             borderRadius: 4,
-                                            background: "#fff"
+                                            background: "#fff",
+                                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
                                         },
                                         children: "Supprimer date"
                                     }, void 0, false, {
                                         fileName: "[project]/components/BlockEditor.tsx",
-                                        lineNumber: 702,
+                                        lineNumber: 704,
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         type: "button",
@@ -1798,18 +1826,19 @@ const BlockEditor = (param)=>{
                                             fontSize: 12,
                                             border: "1px solid #d1d5db",
                                             borderRadius: 4,
-                                            background: "#fff"
+                                            background: "#fff",
+                                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
                                         },
                                         children: "+ Date"
                                     }, void 0, false, {
                                         fileName: "[project]/components/BlockEditor.tsx",
-                                        lineNumber: 715,
+                                        lineNumber: 717,
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/BlockEditor.tsx",
-                                lineNumber: 677,
+                                lineNumber: 679,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             (hasMeaningfulText((_block_content7 = block.content) === null || _block_content7 === void 0 ? void 0 : _block_content7.subtitle) || subtitleVisible[block.id]) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(RichTextEditor, {
@@ -1825,7 +1854,7 @@ const BlockEditor = (param)=>{
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/BlockEditor.tsx",
-                                lineNumber: 726,
+                                lineNumber: 728,
                                 columnNumber: 17
                             }, ("TURBOPACK compile-time value", void 0)),
                             (hasMeaningfulText((_block_content9 = block.content) === null || _block_content9 === void 0 ? void 0 : _block_content9.period) || periodVisible[block.id]) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(RichTextEditor, {
@@ -1842,13 +1871,13 @@ const BlockEditor = (param)=>{
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/BlockEditor.tsx",
-                                lineNumber: 736,
+                                lineNumber: 738,
                                 columnNumber: 17
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/BlockEditor.tsx",
-                        lineNumber: 667,
+                        lineNumber: 669,
                         columnNumber: 13
                     }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(RichTextEditor, {
                         value: block.type === "header" || block.type === "section" ? ((_block_content11 = block.content) === null || _block_content11 === void 0 ? void 0 : _block_content11.title) || "" : typeof block.content === "string" ? block.content : "",
@@ -1870,12 +1899,12 @@ const BlockEditor = (param)=>{
                         }
                     }, void 0, false, {
                         fileName: "[project]/components/BlockEditor.tsx",
-                        lineNumber: 746,
+                        lineNumber: 748,
                         columnNumber: 13
                     }, ("TURBOPACK compile-time value", void 0))
                 }, void 0, false, {
                     fileName: "[project]/components/BlockEditor.tsx",
-                    lineNumber: 636,
+                    lineNumber: 638,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
                 canHaveChildren && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$hello$2d$pangea$2f$dnd$2f$dist$2f$dnd$2e$esm$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Droppable"], {
@@ -1907,25 +1936,25 @@ const BlockEditor = (param)=>{
                                                 children: renderBlock(child, block.id, provided.dragHandleProps, snapshotChild.isDragging)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/BlockEditor.tsx",
-                                                lineNumber: 796,
+                                                lineNumber: 798,
                                                 columnNumber: 23
                                             }, ("TURBOPACK compile-time value", void 0))
                                     }, child.id, false, {
                                         fileName: "[project]/components/BlockEditor.tsx",
-                                        lineNumber: 794,
+                                        lineNumber: 796,
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0))),
                                 provided.placeholder
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/BlockEditor.tsx",
-                            lineNumber: 779,
+                            lineNumber: 781,
                             columnNumber: 15
                         }, ("TURBOPACK compile-time value", void 0));
                     }
                 }, void 0, false, {
                     fileName: "[project]/components/BlockEditor.tsx",
-                    lineNumber: 771,
+                    lineNumber: 773,
                     columnNumber: 11
                 }, ("TURBOPACK compile-time value", void 0))
             ]
@@ -1952,12 +1981,13 @@ const BlockEditor = (param)=>{
                     border: "1px solid #fecaca",
                     color: "#b91c1c",
                     borderRadius: 6,
-                    fontSize: "13px"
+                    fontSize: "13px",
+                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
                 },
                 children: dragError
             }, void 0, false, {
                 fileName: "[project]/components/BlockEditor.tsx",
-                lineNumber: 820,
+                lineNumber: 822,
                 columnNumber: 9
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1972,24 +2002,26 @@ const BlockEditor = (param)=>{
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                         style: {
                             margin: "0 0 8px 0",
-                            color: "#1f2937"
+                            color: "#1f2937",
+                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
                         },
                         children: "Éditeur de CV"
                     }, void 0, false, {
                         fileName: "[project]/components/BlockEditor.tsx",
-                        lineNumber: 840,
+                        lineNumber: 843,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         style: {
                             margin: "0 0 16px 0",
                             color: "#6b7280",
-                            fontSize: "14px"
+                            fontSize: "14px",
+                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
                         },
                         children: "Glissez-déposez les blocs pour réorganiser votre CV. Les règles empêchent les placements incohérents."
                     }, void 0, false, {
                         fileName: "[project]/components/BlockEditor.tsx",
-                        lineNumber: 841,
+                        lineNumber: 844,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2007,19 +2039,20 @@ const BlockEditor = (param)=>{
                                     border: "1px solid #d1d5db",
                                     borderRadius: "6px",
                                     backgroundColor: "#fff",
-                                    fontSize: "14px"
+                                    fontSize: "14px",
+                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
                                 },
                                 children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["getAllowedChildTypesForParent"])(undefined).map((t)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                         value: t,
                                         children: t === "header" ? "En-tête" : t === "contact" ? "Contact" : t === "section" ? "Section" : t === "subsection" ? "Sous-section" : t === "divider" ? "Séparateur" : t === "text" ? "Texte" : t
                                     }, t, false, {
                                         fileName: "[project]/components/BlockEditor.tsx",
-                                        lineNumber: 858,
+                                        lineNumber: 862,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0)))
                             }, void 0, false, {
                                 fileName: "[project]/components/BlockEditor.tsx",
-                                lineNumber: 846,
+                                lineNumber: 849,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2032,24 +2065,25 @@ const BlockEditor = (param)=>{
                                     borderRadius: "6px",
                                     cursor: "pointer",
                                     fontSize: "14px",
-                                    fontWeight: "500"
+                                    fontWeight: "500",
+                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
                                 },
                                 children: "+ Ajouter bloc"
                             }, void 0, false, {
                                 fileName: "[project]/components/BlockEditor.tsx",
-                                lineNumber: 863,
+                                lineNumber: 867,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/BlockEditor.tsx",
-                        lineNumber: 845,
+                        lineNumber: 848,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/BlockEditor.tsx",
-                lineNumber: 833,
+                lineNumber: 836,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$hello$2d$pangea$2f$dnd$2f$dist$2f$dnd$2e$esm$2e$js__$5b$client$5d$__$28$ecmascript$29$__["DragDropContext"], {
@@ -2081,7 +2115,7 @@ const BlockEditor = (param)=>{
                                     children: "Aucun bloc. Ajoutez votre premier bloc pour commencer."
                                 }, void 0, false, {
                                     fileName: "[project]/components/BlockEditor.tsx",
-                                    lineNumber: 898,
+                                    lineNumber: 903,
                                     columnNumber: 17
                                 }, ("TURBOPACK compile-time value", void 0)) : blocks.map((block, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$hello$2d$pangea$2f$dnd$2f$dist$2f$dnd$2e$esm$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Draggable"], {
                                         draggableId: block.id,
@@ -2096,12 +2130,12 @@ const BlockEditor = (param)=>{
                                                 children: renderBlock(block, undefined, provided.dragHandleProps, snapshot.isDragging)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/BlockEditor.tsx",
-                                                lineNumber: 910,
+                                                lineNumber: 915,
                                                 columnNumber: 23
                                             }, ("TURBOPACK compile-time value", void 0))
                                     }, block.id, false, {
                                         fileName: "[project]/components/BlockEditor.tsx",
-                                        lineNumber: 908,
+                                        lineNumber: 913,
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0))),
                                 provided.placeholder,
@@ -2116,29 +2150,29 @@ const BlockEditor = (param)=>{
                                     children: "Déposez le bloc ici"
                                 }, void 0, false, {
                                     fileName: "[project]/components/BlockEditor.tsx",
-                                    lineNumber: 927,
+                                    lineNumber: 932,
                                     columnNumber: 17
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/BlockEditor.tsx",
-                            lineNumber: 885,
+                            lineNumber: 890,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0))
                 }, void 0, false, {
                     fileName: "[project]/components/BlockEditor.tsx",
-                    lineNumber: 883,
+                    lineNumber: 888,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/components/BlockEditor.tsx",
-                lineNumber: 882,
+                lineNumber: 887,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/components/BlockEditor.tsx",
-        lineNumber: 818,
+        lineNumber: 820,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -2540,6 +2574,7 @@ var _s = __turbopack_context__.k.signature();
 const styles = "\n  .preview-cv {\n    transform: scale(0.8);\n    transform-origin: top center;\n  }\n  \n  @media (max-width: 1200px) {\n    .preview-cv {\n      transform: scale(0.6) !important;\n    }\n  }\n  \n  @media (max-width: 768px) {\n    .preview-cv {\n      transform: scale(0.5) !important;\n    }\n  }\n";
 function CvGeneratorPage() {
     _s();
+    console.log("CvGeneratorPage component rendered");
     // IDs stables: charger depuis localStorage si disponible
     const [blocks, setBlocks] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [fontScale, setFontScale] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(1);
@@ -2621,25 +2656,44 @@ function CvGeneratorPage() {
         blocks
     ]);
     const handleGeneratePDF = async ()=>{
-        const res = await fetch("/api/generate-pdf", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                blocks,
-                fontScale
-            })
+        console.log("Generating PDF...", {
+            blocks,
+            fontScale
         });
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'mon-cv.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
+        try {
+            console.log("Making fetch request to /api/generate-pdf");
+            const res = await fetch("/api/generate-pdf", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    blocks,
+                    fontScale
+                })
+            });
+            console.log("Response received:", res.status, res.statusText);
+            if (!res.ok) {
+                const errorData = await res.json();
+                console.error("API Error:", errorData);
+                throw new Error(errorData.error || "HTTP error! status: ".concat(res.status));
+            }
+            console.log("Converting response to blob");
+            const blob = await res.blob();
+            console.log("Blob created:", blob.size, "bytes");
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'mon-cv.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            console.log("PDF download initiated");
+        } catch (error) {
+            console.error("Erreur lors de la génération du PDF:", error);
+            alert("Erreur lors de la génération du PDF: ".concat(error instanceof Error ? error.message : "Erreur inconnue"));
+        }
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Fragment"], {
         children: [
@@ -2647,38 +2701,21 @@ function CvGeneratorPage() {
                 children: styles
             }, void 0, false, {
                 fileName: "[project]/pages/cv.tsx",
-                lineNumber: 127,
+                lineNumber: 149,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("style", {
                 children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$cvStyles$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["default"])(fontScale)
             }, void 0, false, {
                 fileName: "[project]/pages/cv.tsx",
-                lineNumber: 128,
+                lineNumber: 150,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Header$2e$tsx__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                rightActions: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                    onClick: handleGeneratePDF,
-                    style: {
-                        padding: "8px 12px",
-                        backgroundColor: "#111827",
-                        color: "#fff",
-                        border: "1px solid #111827",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                        fontSize: "14px",
-                        fontWeight: 600
-                    },
-                    children: "Télécharger PDF"
-                }, void 0, false, {
-                    fileName: "[project]/pages/cv.tsx",
-                    lineNumber: 131,
-                    columnNumber: 9
-                }, void 0)
+                variant: "landing"
             }, void 0, false, {
                 fileName: "[project]/pages/cv.tsx",
-                lineNumber: 130,
+                lineNumber: 152,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$resizable$2d$panels$2f$dist$2f$react$2d$resizable$2d$panels$2e$browser$2e$development$2e$js__$5b$client$5d$__$28$ecmascript$29$__["PanelGroup"], {
@@ -2704,17 +2741,17 @@ function CvGeneratorPage() {
                                 scrollContainerRef: editorScrollRef
                             }, void 0, false, {
                                 fileName: "[project]/pages/cv.tsx",
-                                lineNumber: 156,
+                                lineNumber: 162,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/pages/cv.tsx",
-                            lineNumber: 151,
+                            lineNumber: 157,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/pages/cv.tsx",
-                        lineNumber: 150,
+                        lineNumber: 156,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$resizable$2d$panels$2f$dist$2f$react$2d$resizable$2d$panels$2e$browser$2e$development$2e$js__$5b$client$5d$__$28$ecmascript$29$__["PanelResizeHandle"], {
@@ -2735,127 +2772,154 @@ function CvGeneratorPage() {
                             }
                         }, void 0, false, {
                             fileName: "[project]/pages/cv.tsx",
-                            lineNumber: 171,
+                            lineNumber: 177,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/pages/cv.tsx",
-                        lineNumber: 161,
+                        lineNumber: 167,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$resizable$2d$panels$2f$dist$2f$react$2d$resizable$2d$panels$2e$browser$2e$development$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Panel"], {
-                        defaultSize: 45,
+                        defaultSize: 50,
                         minSize: 45,
-                        maxSize: 45,
+                        maxSize: 60,
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             style: {
                                 height: "calc(100vh - 64px)",
-                                overflow: "auto",
+                                overflow: "hidden",
                                 backgroundColor: "#f8fafc",
                                 padding: "0.5rem",
-                                borderLeft: "1px solid #e1e5e9"
+                                borderLeft: "1px solid #e1e5e9",
+                                display: "flex",
+                                flexDirection: "column"
                             },
-                            children: [
-                                showWarning && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    style: {
-                                        backgroundColor: "#fff3cd",
-                                        border: "1px solid #ffeaa7",
-                                        borderRadius: "4px",
-                                        padding: "8px 12px",
-                                        margin: "10px 0",
-                                        color: "#856404",
-                                        fontSize: "14px"
-                                    },
-                                    children: [
-                                        "⚠️ Attention : Tu dépasses la première page ! La taille de police a été réduite à ",
-                                        Math.round(fontScale * 100),
-                                        "% pour tenir sur une page."
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/pages/cv.tsx",
-                                    lineNumber: 189,
-                                    columnNumber: 11
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    style: {},
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        ref: previewRef,
-                                        className: "preview-cv",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    flex: 1,
+                                    overflow: "auto",
+                                    marginBottom: "0.5rem"
+                                },
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         style: {
-                                            width: "210mm",
-                                            minHeight: "297mm",
-                                            padding: "15mm",
-                                            border: "1px solid #000",
-                                            boxSizing: "border-box",
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            gap: "8px",
                                             backgroundColor: "#fff",
-                                            transform: "scale(0.8)",
-                                            transformOrigin: "top left",
-                                            marginBottom: "0.1rem"
+                                            padding: "1rem",
+                                            borderRadius: "8px",
+                                            border: "1px solid #e1e5e9",
+                                            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                                            flexShrink: 0,
+                                            marginBottom: "10px",
+                                            position: "relative",
+                                            zIndex: 1000
                                         },
-                                        dangerouslySetInnerHTML: {
-                                            __html: (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$blocksToHTML$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["default"])(blocks, fontScale)
-                                        }
-                                    }, void 0, false, {
+                                        children: [
+                                            console.log("Rendering PDF button"),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                onClick: ()=>{
+                                                    console.log("PDF Button clicked!");
+                                                    handleGeneratePDF();
+                                                },
+                                                style: {
+                                                    padding: "12px 16px",
+                                                    backgroundColor: "#3b82f6",
+                                                    color: "white",
+                                                    border: "none",
+                                                    borderRadius: "6px",
+                                                    cursor: "pointer",
+                                                    fontSize: "14px",
+                                                    fontWeight: "600",
+                                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                                    position: "relative",
+                                                    zIndex: 1001,
+                                                    pointerEvents: "auto"
+                                                },
+                                                children: "Générer PDF"
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/cv.tsx",
+                                                lineNumber: 218,
+                                                columnNumber: 17
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/pages/cv.tsx",
-                                        lineNumber: 204,
-                                        columnNumber: 11
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/pages/cv.tsx",
-                                    lineNumber: 202,
-                                    columnNumber: 9
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    style: {
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        gap: "8px",
-                                        position: "sticky",
-                                        bottom: "0.5rem",
-                                        backgroundColor: "#fff",
-                                        padding: "1rem",
-                                        borderRadius: "8px",
-                                        border: "1px solid #e1e5e9",
-                                        boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-                                    },
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        onClick: handleGeneratePDF,
+                                        lineNumber: 203,
+                                        columnNumber: 15
+                                    }, this),
+                                    showWarning && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         style: {
-                                            padding: "12px 16px",
-                                            backgroundColor: "#3b82f6",
-                                            color: "white",
-                                            border: "none",
-                                            borderRadius: "6px",
-                                            cursor: "pointer",
+                                            backgroundColor: "#fff3cd",
+                                            border: "1px solid #ffeaa7",
+                                            borderRadius: "4px",
+                                            padding: "8px 12px",
+                                            margin: "10px 0",
+                                            color: "#856404",
                                             fontSize: "14px",
+                                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
                                             fontWeight: "500"
                                         },
-                                        children: "Générer PDF"
+                                        children: [
+                                            "⚠️ Attention : Tu dépasses la première page ! La taille de police a été réduite à ",
+                                            Math.round(fontScale * 100),
+                                            "% pour tenir sur une page."
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/pages/cv.tsx",
+                                        lineNumber: 243,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {},
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            ref: previewRef,
+                                            className: "preview-cv",
+                                            style: {
+                                                width: "210mm",
+                                                minHeight: "297mm",
+                                                padding: "15mm",
+                                                border: "1px solid #000",
+                                                boxSizing: "border-box",
+                                                backgroundColor: "#fff",
+                                                transform: "scale(0.8)",
+                                                transformOrigin: "top left",
+                                                marginBottom: "0.1rem"
+                                            },
+                                            dangerouslySetInnerHTML: {
+                                                __html: (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$blocksToHTML$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["default"])(blocks, fontScale)
+                                            }
+                                        }, void 0, false, {
+                                            fileName: "[project]/pages/cv.tsx",
+                                            lineNumber: 260,
+                                            columnNumber: 17
+                                        }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/pages/cv.tsx",
-                                        lineNumber: 234,
-                                        columnNumber: 11
+                                        lineNumber: 258,
+                                        columnNumber: 15
                                     }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/pages/cv.tsx",
-                                    lineNumber: 222,
-                                    columnNumber: 9
-                                }, this)
-                            ]
-                        }, void 0, true, {
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/pages/cv.tsx",
+                                lineNumber: 197,
+                                columnNumber: 13
+                            }, this)
+                        }, void 0, false, {
                             fileName: "[project]/pages/cv.tsx",
-                            lineNumber: 181,
+                            lineNumber: 187,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/pages/cv.tsx",
-                        lineNumber: 180,
+                        lineNumber: 186,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/pages/cv.tsx",
-                lineNumber: 148,
+                lineNumber: 154,
                 columnNumber: 7
             }, this)
         ]

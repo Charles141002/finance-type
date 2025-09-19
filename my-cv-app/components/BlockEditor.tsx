@@ -568,7 +568,8 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
               fontSize: "12px",
               color: "#6b7280",
               textTransform: "uppercase",
-              letterSpacing: "0.04em"
+              letterSpacing: "0.04em",
+              fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
             }}>
               {block.type}
             </span>
@@ -590,7 +591,8 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
                     padding: "4px 8px",
                     borderRadius: "4px",
                     border: "1px solid #d1d5db",
-                    fontSize: "12px"
+                    fontSize: "12px",
+                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
                   }}
                 >
                   {allowedChildTypes.map((t) => (
@@ -684,7 +686,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
                       setSubtitleVisible(map);
                       updateBlockContent(block.id, { ...block.content, subtitle: "" });
                     }}
-                    style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff" }}
+                    style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
                   >
                     Supprimer sous-titre
                   </button>
@@ -692,7 +694,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
                   <button
                     type="button"
                     onClick={() => setSubtitleVisible({ ...subtitleVisible, [block.id]: true })}
-                    style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff" }}
+                    style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
                   >
                     + Sous-titre
                   </button>
@@ -707,7 +709,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
                       setPeriodVisible(map);
                       updateBlockContent(block.id, { ...block.content, period: "" });
                     }}
-                    style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff" }}
+                    style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
                   >
                     Supprimer date
                   </button>
@@ -715,7 +717,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
                   <button
                     type="button"
                     onClick={() => setPeriodVisible({ ...periodVisible, [block.id]: true })}
-                    style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff" }}
+                    style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
                   >
                     + Date
                   </button>
@@ -824,7 +826,8 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
           border: "1px solid #fecaca",
           color: "#b91c1c",
           borderRadius: 6,
-          fontSize: "13px"
+          fontSize: "13px",
+          fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
         }}>
           {dragError}
         </div>
@@ -837,8 +840,8 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
         borderRadius: "8px",
         border: "1px solid #e1e5e9"
       }}>
-        <h2 style={{ margin: "0 0 8px 0", color: "#1f2937" }}>Éditeur de CV</h2>
-        <p style={{ margin: "0 0 16px 0", color: "#6b7280", fontSize: "14px" }}>
+        <h2 style={{ margin: "0 0 8px 0", color: "#1f2937", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}>Éditeur de CV</h2>
+        <p style={{ margin: "0 0 16px 0", color: "#6b7280", fontSize: "14px", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}>
           Glissez-déposez les blocs pour réorganiser votre CV. Les règles empêchent les placements incohérents.
         </p>
         
@@ -851,7 +854,8 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
               border: "1px solid #d1d5db",
               borderRadius: "6px",
               backgroundColor: "#fff",
-              fontSize: "14px"
+              fontSize: "14px",
+              fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
             }}
           >
             {getAllowedChildTypesForParent(undefined).map((t) => (
@@ -870,7 +874,8 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
               borderRadius: "6px",
               cursor: "pointer",
               fontSize: "14px",
-              fontWeight: "500"
+              fontWeight: "500",
+              fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
             }}
           >
             + Ajouter bloc

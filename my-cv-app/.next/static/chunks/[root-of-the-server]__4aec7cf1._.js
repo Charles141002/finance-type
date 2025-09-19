@@ -1,213 +1,708 @@
-module.exports = [
-"[externals]/react/jsx-dev-runtime [external] (react/jsx-dev-runtime, cjs)", ((__turbopack_context__, module, exports) => {
+(globalThis.TURBOPACK || (globalThis.TURBOPACK = [])).push([typeof document === "object" ? document.currentScript : undefined,
+"[turbopack]/browser/dev/hmr-client/hmr-client.ts [client] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
 
-const mod = __turbopack_context__.x("react/jsx-dev-runtime", () => require("react/jsx-dev-runtime"));
-
-module.exports = mod;
+/// <reference path="../../../shared/runtime-types.d.ts" />
+/// <reference path="../../runtime/base/dev-globals.d.ts" />
+/// <reference path="../../runtime/base/dev-protocol.d.ts" />
+/// <reference path="../../runtime/base/dev-extensions.ts" />
+__turbopack_context__.s([
+    "connect",
+    ()=>connect,
+    "setHooks",
+    ()=>setHooks,
+    "subscribeToUpdate",
+    ()=>subscribeToUpdate
+]);
+function connect(param) {
+    let { addMessageListener, sendMessage, onUpdateError = console.error } = param;
+    addMessageListener((msg)=>{
+        switch(msg.type){
+            case 'turbopack-connected':
+                handleSocketConnected(sendMessage);
+                break;
+            default:
+                try {
+                    if (Array.isArray(msg.data)) {
+                        for(let i = 0; i < msg.data.length; i++){
+                            handleSocketMessage(msg.data[i]);
+                        }
+                    } else {
+                        handleSocketMessage(msg.data);
+                    }
+                    applyAggregatedUpdates();
+                } catch (e) {
+                    console.warn('[Fast Refresh] performing full reload\n\n' + "Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.\n" + 'You might have a file which exports a React component but also exports a value that is imported by a non-React component file.\n' + 'Consider migrating the non-React component export to a separate file and importing it into both files.\n\n' + 'It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.\n' + 'Fast Refresh requires at least one parent function component in your React tree.');
+                    onUpdateError(e);
+                    location.reload();
+                }
+                break;
+        }
+    });
+    const queued = globalThis.TURBOPACK_CHUNK_UPDATE_LISTENERS;
+    if (queued != null && !Array.isArray(queued)) {
+        throw new Error('A separate HMR handler was already registered');
+    }
+    globalThis.TURBOPACK_CHUNK_UPDATE_LISTENERS = {
+        push: (param)=>{
+            let [chunkPath, callback] = param;
+            subscribeToChunkUpdate(chunkPath, sendMessage, callback);
+        }
+    };
+    if (Array.isArray(queued)) {
+        for (const [chunkPath, callback] of queued){
+            subscribeToChunkUpdate(chunkPath, sendMessage, callback);
+        }
+    }
+}
+const updateCallbackSets = new Map();
+function sendJSON(sendMessage, message) {
+    sendMessage(JSON.stringify(message));
+}
+function resourceKey(resource) {
+    return JSON.stringify({
+        path: resource.path,
+        headers: resource.headers || null
+    });
+}
+function subscribeToUpdates(sendMessage, resource) {
+    sendJSON(sendMessage, {
+        type: 'turbopack-subscribe',
+        ...resource
+    });
+    return ()=>{
+        sendJSON(sendMessage, {
+            type: 'turbopack-unsubscribe',
+            ...resource
+        });
+    };
+}
+function handleSocketConnected(sendMessage) {
+    for (const key of updateCallbackSets.keys()){
+        subscribeToUpdates(sendMessage, JSON.parse(key));
+    }
+}
+// we aggregate all pending updates until the issues are resolved
+const chunkListsWithPendingUpdates = new Map();
+function aggregateUpdates(msg) {
+    const key = resourceKey(msg.resource);
+    let aggregated = chunkListsWithPendingUpdates.get(key);
+    if (aggregated) {
+        aggregated.instruction = mergeChunkListUpdates(aggregated.instruction, msg.instruction);
+    } else {
+        chunkListsWithPendingUpdates.set(key, msg);
+    }
+}
+function applyAggregatedUpdates() {
+    if (chunkListsWithPendingUpdates.size === 0) return;
+    hooks.beforeRefresh();
+    for (const msg of chunkListsWithPendingUpdates.values()){
+        triggerUpdate(msg);
+    }
+    chunkListsWithPendingUpdates.clear();
+    finalizeUpdate();
+}
+function mergeChunkListUpdates(updateA, updateB) {
+    let chunks;
+    if (updateA.chunks != null) {
+        if (updateB.chunks == null) {
+            chunks = updateA.chunks;
+        } else {
+            chunks = mergeChunkListChunks(updateA.chunks, updateB.chunks);
+        }
+    } else if (updateB.chunks != null) {
+        chunks = updateB.chunks;
+    }
+    let merged;
+    if (updateA.merged != null) {
+        if (updateB.merged == null) {
+            merged = updateA.merged;
+        } else {
+            // Since `merged` is an array of updates, we need to merge them all into
+            // one, consistent update.
+            // Since there can only be `EcmascriptMergeUpdates` in the array, there is
+            // no need to key on the `type` field.
+            let update = updateA.merged[0];
+            for(let i = 1; i < updateA.merged.length; i++){
+                update = mergeChunkListEcmascriptMergedUpdates(update, updateA.merged[i]);
+            }
+            for(let i = 0; i < updateB.merged.length; i++){
+                update = mergeChunkListEcmascriptMergedUpdates(update, updateB.merged[i]);
+            }
+            merged = [
+                update
+            ];
+        }
+    } else if (updateB.merged != null) {
+        merged = updateB.merged;
+    }
+    return {
+        type: 'ChunkListUpdate',
+        chunks,
+        merged
+    };
+}
+function mergeChunkListChunks(chunksA, chunksB) {
+    const chunks = {};
+    for (const [chunkPath, chunkUpdateA] of Object.entries(chunksA)){
+        const chunkUpdateB = chunksB[chunkPath];
+        if (chunkUpdateB != null) {
+            const mergedUpdate = mergeChunkUpdates(chunkUpdateA, chunkUpdateB);
+            if (mergedUpdate != null) {
+                chunks[chunkPath] = mergedUpdate;
+            }
+        } else {
+            chunks[chunkPath] = chunkUpdateA;
+        }
+    }
+    for (const [chunkPath, chunkUpdateB] of Object.entries(chunksB)){
+        if (chunks[chunkPath] == null) {
+            chunks[chunkPath] = chunkUpdateB;
+        }
+    }
+    return chunks;
+}
+function mergeChunkUpdates(updateA, updateB) {
+    if (updateA.type === 'added' && updateB.type === 'deleted' || updateA.type === 'deleted' && updateB.type === 'added') {
+        return undefined;
+    }
+    if (updateA.type === 'partial') {
+        invariant(updateA.instruction, 'Partial updates are unsupported');
+    }
+    if (updateB.type === 'partial') {
+        invariant(updateB.instruction, 'Partial updates are unsupported');
+    }
+    return undefined;
+}
+function mergeChunkListEcmascriptMergedUpdates(mergedA, mergedB) {
+    const entries = mergeEcmascriptChunkEntries(mergedA.entries, mergedB.entries);
+    const chunks = mergeEcmascriptChunksUpdates(mergedA.chunks, mergedB.chunks);
+    return {
+        type: 'EcmascriptMergedUpdate',
+        entries,
+        chunks
+    };
+}
+function mergeEcmascriptChunkEntries(entriesA, entriesB) {
+    return {
+        ...entriesA,
+        ...entriesB
+    };
+}
+function mergeEcmascriptChunksUpdates(chunksA, chunksB) {
+    if (chunksA == null) {
+        return chunksB;
+    }
+    if (chunksB == null) {
+        return chunksA;
+    }
+    const chunks = {};
+    for (const [chunkPath, chunkUpdateA] of Object.entries(chunksA)){
+        const chunkUpdateB = chunksB[chunkPath];
+        if (chunkUpdateB != null) {
+            const mergedUpdate = mergeEcmascriptChunkUpdates(chunkUpdateA, chunkUpdateB);
+            if (mergedUpdate != null) {
+                chunks[chunkPath] = mergedUpdate;
+            }
+        } else {
+            chunks[chunkPath] = chunkUpdateA;
+        }
+    }
+    for (const [chunkPath, chunkUpdateB] of Object.entries(chunksB)){
+        if (chunks[chunkPath] == null) {
+            chunks[chunkPath] = chunkUpdateB;
+        }
+    }
+    if (Object.keys(chunks).length === 0) {
+        return undefined;
+    }
+    return chunks;
+}
+function mergeEcmascriptChunkUpdates(updateA, updateB) {
+    if (updateA.type === 'added' && updateB.type === 'deleted') {
+        // These two completely cancel each other out.
+        return undefined;
+    }
+    if (updateA.type === 'deleted' && updateB.type === 'added') {
+        const added = [];
+        const deleted = [];
+        var _updateA_modules;
+        const deletedModules = new Set((_updateA_modules = updateA.modules) !== null && _updateA_modules !== void 0 ? _updateA_modules : []);
+        var _updateB_modules;
+        const addedModules = new Set((_updateB_modules = updateB.modules) !== null && _updateB_modules !== void 0 ? _updateB_modules : []);
+        for (const moduleId of addedModules){
+            if (!deletedModules.has(moduleId)) {
+                added.push(moduleId);
+            }
+        }
+        for (const moduleId of deletedModules){
+            if (!addedModules.has(moduleId)) {
+                deleted.push(moduleId);
+            }
+        }
+        if (added.length === 0 && deleted.length === 0) {
+            return undefined;
+        }
+        return {
+            type: 'partial',
+            added,
+            deleted
+        };
+    }
+    if (updateA.type === 'partial' && updateB.type === 'partial') {
+        var _updateA_added, _updateB_added;
+        const added = new Set([
+            ...(_updateA_added = updateA.added) !== null && _updateA_added !== void 0 ? _updateA_added : [],
+            ...(_updateB_added = updateB.added) !== null && _updateB_added !== void 0 ? _updateB_added : []
+        ]);
+        var _updateA_deleted, _updateB_deleted;
+        const deleted = new Set([
+            ...(_updateA_deleted = updateA.deleted) !== null && _updateA_deleted !== void 0 ? _updateA_deleted : [],
+            ...(_updateB_deleted = updateB.deleted) !== null && _updateB_deleted !== void 0 ? _updateB_deleted : []
+        ]);
+        if (updateB.added != null) {
+            for (const moduleId of updateB.added){
+                deleted.delete(moduleId);
+            }
+        }
+        if (updateB.deleted != null) {
+            for (const moduleId of updateB.deleted){
+                added.delete(moduleId);
+            }
+        }
+        return {
+            type: 'partial',
+            added: [
+                ...added
+            ],
+            deleted: [
+                ...deleted
+            ]
+        };
+    }
+    if (updateA.type === 'added' && updateB.type === 'partial') {
+        var _updateA_modules1, _updateB_added1;
+        const modules = new Set([
+            ...(_updateA_modules1 = updateA.modules) !== null && _updateA_modules1 !== void 0 ? _updateA_modules1 : [],
+            ...(_updateB_added1 = updateB.added) !== null && _updateB_added1 !== void 0 ? _updateB_added1 : []
+        ]);
+        var _updateB_deleted1;
+        for (const moduleId of (_updateB_deleted1 = updateB.deleted) !== null && _updateB_deleted1 !== void 0 ? _updateB_deleted1 : []){
+            modules.delete(moduleId);
+        }
+        return {
+            type: 'added',
+            modules: [
+                ...modules
+            ]
+        };
+    }
+    if (updateA.type === 'partial' && updateB.type === 'deleted') {
+        var _updateB_modules1;
+        // We could eagerly return `updateB` here, but this would potentially be
+        // incorrect if `updateA` has added modules.
+        const modules = new Set((_updateB_modules1 = updateB.modules) !== null && _updateB_modules1 !== void 0 ? _updateB_modules1 : []);
+        if (updateA.added != null) {
+            for (const moduleId of updateA.added){
+                modules.delete(moduleId);
+            }
+        }
+        return {
+            type: 'deleted',
+            modules: [
+                ...modules
+            ]
+        };
+    }
+    // Any other update combination is invalid.
+    return undefined;
+}
+function invariant(_, message) {
+    throw new Error("Invariant: ".concat(message));
+}
+const CRITICAL = [
+    'bug',
+    'error',
+    'fatal'
+];
+function compareByList(list, a, b) {
+    const aI = list.indexOf(a) + 1 || list.length;
+    const bI = list.indexOf(b) + 1 || list.length;
+    return aI - bI;
+}
+const chunksWithIssues = new Map();
+function emitIssues() {
+    const issues = [];
+    const deduplicationSet = new Set();
+    for (const [_, chunkIssues] of chunksWithIssues){
+        for (const chunkIssue of chunkIssues){
+            if (deduplicationSet.has(chunkIssue.formatted)) continue;
+            issues.push(chunkIssue);
+            deduplicationSet.add(chunkIssue.formatted);
+        }
+    }
+    sortIssues(issues);
+    hooks.issues(issues);
+}
+function handleIssues(msg) {
+    const key = resourceKey(msg.resource);
+    let hasCriticalIssues = false;
+    for (const issue of msg.issues){
+        if (CRITICAL.includes(issue.severity)) {
+            hasCriticalIssues = true;
+        }
+    }
+    if (msg.issues.length > 0) {
+        chunksWithIssues.set(key, msg.issues);
+    } else if (chunksWithIssues.has(key)) {
+        chunksWithIssues.delete(key);
+    }
+    emitIssues();
+    return hasCriticalIssues;
+}
+const SEVERITY_ORDER = [
+    'bug',
+    'fatal',
+    'error',
+    'warning',
+    'info',
+    'log'
+];
+const CATEGORY_ORDER = [
+    'parse',
+    'resolve',
+    'code generation',
+    'rendering',
+    'typescript',
+    'other'
+];
+function sortIssues(issues) {
+    issues.sort((a, b)=>{
+        const first = compareByList(SEVERITY_ORDER, a.severity, b.severity);
+        if (first !== 0) return first;
+        return compareByList(CATEGORY_ORDER, a.category, b.category);
+    });
+}
+const hooks = {
+    beforeRefresh: ()=>{},
+    refresh: ()=>{},
+    buildOk: ()=>{},
+    issues: (_issues)=>{}
+};
+function setHooks(newHooks) {
+    Object.assign(hooks, newHooks);
+}
+function handleSocketMessage(msg) {
+    sortIssues(msg.issues);
+    handleIssues(msg);
+    switch(msg.type){
+        case 'issues':
+            break;
+        case 'partial':
+            // aggregate updates
+            aggregateUpdates(msg);
+            break;
+        default:
+            // run single update
+            const runHooks = chunkListsWithPendingUpdates.size === 0;
+            if (runHooks) hooks.beforeRefresh();
+            triggerUpdate(msg);
+            if (runHooks) finalizeUpdate();
+            break;
+    }
+}
+function finalizeUpdate() {
+    hooks.refresh();
+    hooks.buildOk();
+    // This is used by the Next.js integration test suite to notify it when HMR
+    // updates have been completed.
+    // TODO: Only run this in test environments (gate by `process.env.__NEXT_TEST_MODE`)
+    if (globalThis.__NEXT_HMR_CB) {
+        globalThis.__NEXT_HMR_CB();
+        globalThis.__NEXT_HMR_CB = null;
+    }
+}
+function subscribeToChunkUpdate(chunkListPath, sendMessage, callback) {
+    return subscribeToUpdate({
+        path: chunkListPath
+    }, sendMessage, callback);
+}
+function subscribeToUpdate(resource, sendMessage, callback) {
+    const key = resourceKey(resource);
+    let callbackSet;
+    const existingCallbackSet = updateCallbackSets.get(key);
+    if (!existingCallbackSet) {
+        callbackSet = {
+            callbacks: new Set([
+                callback
+            ]),
+            unsubscribe: subscribeToUpdates(sendMessage, resource)
+        };
+        updateCallbackSets.set(key, callbackSet);
+    } else {
+        existingCallbackSet.callbacks.add(callback);
+        callbackSet = existingCallbackSet;
+    }
+    return ()=>{
+        callbackSet.callbacks.delete(callback);
+        if (callbackSet.callbacks.size === 0) {
+            callbackSet.unsubscribe();
+            updateCallbackSets.delete(key);
+        }
+    };
+}
+function triggerUpdate(msg) {
+    const key = resourceKey(msg.resource);
+    const callbackSet = updateCallbackSets.get(key);
+    if (!callbackSet) {
+        return;
+    }
+    for (const callback of callbackSet.callbacks){
+        callback(msg);
+    }
+    if (msg.type === 'notFound') {
+        // This indicates that the resource which we subscribed to either does not exist or
+        // has been deleted. In either case, we should clear all update callbacks, so if a
+        // new subscription is created for the same resource, it will send a new "subscribe"
+        // message to the server.
+        // No need to send an "unsubscribe" message to the server, it will have already
+        // dropped the update stream before sending the "notFound" message.
+        updateCallbackSets.delete(key);
+    }
+}
 }),
-"[project]/components/Header.tsx [ssr] (ecmascript)", ((__turbopack_context__) => {
+"[project]/components/DynamicHeader.tsx [client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
     "default",
-    ()=>Header
+    ()=>DynamicHeader
 ]);
-var __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/react/jsx-dev-runtime [external] (react/jsx-dev-runtime, cjs)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/link.js [ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react/jsx-dev-runtime.js [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/link.js [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react/index.js [client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
 ;
 ;
-function Header({ rightActions, variant = "default" }) {
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("header", {
+function DynamicHeader(param) {
+    let { rightActions, variant = "default", scrollContainerRef } = param;
+    _s();
+    const [isVisible, setIsVisible] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [lastScrollY, setLastScrollY] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(0);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "DynamicHeader.useEffect": ()=>{
+            const handleScroll = {
+                "DynamicHeader.useEffect.handleScroll": ()=>{
+                    // Utiliser le conteneur de scroll si fourni, sinon la fenêtre
+                    const scrollElement = (scrollContainerRef === null || scrollContainerRef === void 0 ? void 0 : scrollContainerRef.current) || window;
+                    const currentScrollY = scrollElement === window ? window.scrollY : scrollElement.scrollTop;
+                    // Afficher le header si on remonte (scroll vers le haut) ou si on est en haut
+                    const newVisibility = currentScrollY < lastScrollY || currentScrollY <= 10;
+                    if (newVisibility !== isVisible) {
+                        setIsVisible(newVisibility);
+                    }
+                    setLastScrollY(currentScrollY);
+                }
+            }["DynamicHeader.useEffect.handleScroll"];
+            const scrollElement = (scrollContainerRef === null || scrollContainerRef === void 0 ? void 0 : scrollContainerRef.current) || window;
+            scrollElement.addEventListener('scroll', handleScroll, {
+                passive: true
+            });
+            return ({
+                "DynamicHeader.useEffect": ()=>{
+                    scrollElement.removeEventListener('scroll', handleScroll);
+                }
+            })["DynamicHeader.useEffect"];
+        }
+    }["DynamicHeader.useEffect"], [
+        lastScrollY,
+        scrollContainerRef
+    ]);
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         style: {
-            height: "120px",
-            display: "flex",
-            alignItems: "center",
-            background: "linear-gradient(180deg, rgba(2, 6, 23, 0.95), rgba(2, 6, 23, 0.9))",
-            backdropFilter: "saturate(140%) blur(8px)",
-            WebkitBackdropFilter: "saturate(140%) blur(8px)",
-            borderBottom: "2px solid rgba(255,255,255,0.15)",
-            borderTop: "1px solid rgba(255,255,255,0.1)",
-            position: "sticky",
-            top: 0,
+            height: isVisible ? "120px" : "0px",
+            overflow: "hidden",
+            transition: "height 0.3s ease-in-out",
+            position: "relative",
             zIndex: 30
         },
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
             style: {
-                width: "100%",
-                maxWidth: "2000px",
-                margin: "0 auto",
-                padding: "0 24px 0 0",
+                height: "120px",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "flex-start",
-                gap: "20px"
+                background: "linear-gradient(180deg, rgba(2, 6, 23, 0.95), rgba(2, 6, 23, 0.9))",
+                backdropFilter: "saturate(140%) blur(8px)",
+                WebkitBackdropFilter: "saturate(140%) blur(8px)",
+                borderBottom: "2px solid rgba(255,255,255,0.15)",
+                borderTop: "1px solid rgba(255,255,255,0.1)",
+                position: "relative",
+                width: "100%"
             },
-            children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
-                    style: {
-                        display: "flex",
-                        alignItems: "center"
-                    },
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
-                        href: "/",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                style: {
+                    width: "100%",
+                    maxWidth: "2000px",
+                    margin: "0 auto",
+                    padding: "0 24px 0 0",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    gap: "20px"
+                },
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
-                            textDecoration: "none",
                             display: "flex",
                             alignItems: "center"
                         },
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
-                            src: "/Logo.png",
-                            alt: "FinanceCV Smart Resume Builder",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                            href: "/",
                             style: {
-                                height: "250px",
-                                width: "auto",
-                                objectFit: "contain"
-                            }
+                                textDecoration: "none",
+                                display: "flex",
+                                alignItems: "center"
+                            },
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                                src: "/Logo.png",
+                                alt: "FinanceCV Smart Resume Builder",
+                                style: {
+                                    height: "250px",
+                                    width: "auto",
+                                    objectFit: "contain"
+                                }
+                            }, void 0, false, {
+                                fileName: "[project]/components/DynamicHeader.tsx",
+                                lineNumber: 83,
+                                columnNumber: 13
+                            }, this)
                         }, void 0, false, {
-                            fileName: "[project]/components/Header.tsx",
-                            lineNumber: 48,
-                            columnNumber: 13
+                            fileName: "[project]/components/DynamicHeader.tsx",
+                            lineNumber: 75,
+                            columnNumber: 11
                         }, this)
                     }, void 0, false, {
-                        fileName: "[project]/components/Header.tsx",
-                        lineNumber: 40,
-                        columnNumber: 11
+                        fileName: "[project]/components/DynamicHeader.tsx",
+                        lineNumber: 74,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "32px",
+                            marginLeft: "auto"
+                        },
+                        children: rightActions !== null && rightActions !== void 0 ? rightActions : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "/cv",
+                                    style: {
+                                        textDecoration: "none",
+                                        color: "#e2e8f0",
+                                        fontWeight: 600,
+                                        fontSize: "15px",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                        transition: "all 0.2s ease"
+                                    },
+                                    children: "Générateur CV"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/DynamicHeader.tsx",
+                                    lineNumber: 99,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "/a-propos",
+                                    style: {
+                                        textDecoration: "none",
+                                        color: "#e2e8f0",
+                                        fontWeight: 600,
+                                        fontSize: "15px",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                        transition: "all 0.2s ease"
+                                    },
+                                    children: "À propos"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/DynamicHeader.tsx",
+                                    lineNumber: 112,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "/cv",
+                                    style: {
+                                        textDecoration: "none",
+                                        background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+                                        color: "#ffffff",
+                                        padding: "14px 24px",
+                                        borderRadius: "12px",
+                                        fontWeight: 700,
+                                        fontSize: "16px",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                        boxShadow: "0 8px 24px rgba(59, 130, 246, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15)",
+                                        border: "2px solid rgba(255, 255, 255, 0.1)",
+                                        transition: "all 0.2s ease"
+                                    },
+                                    children: "Commencer"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/DynamicHeader.tsx",
+                                    lineNumber: 125,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "/login",
+                                    style: {
+                                        textDecoration: "none",
+                                        color: "#e2e8f0",
+                                        background: "rgba(255,255,255,0.08)",
+                                        border: "1px solid rgba(255,255,255,0.15)",
+                                        padding: "12px 20px",
+                                        borderRadius: "12px",
+                                        fontWeight: 600,
+                                        fontSize: "15px",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                        transition: "all 0.2s ease",
+                                        backdropFilter: "blur(10px)"
+                                    },
+                                    children: "Se connecter"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/DynamicHeader.tsx",
+                                    lineNumber: 143,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true)
+                    }, void 0, false, {
+                        fileName: "[project]/components/DynamicHeader.tsx",
+                        lineNumber: 96,
+                        columnNumber: 9
                     }, this)
-                }, void 0, false, {
-                    fileName: "[project]/components/Header.tsx",
-                    lineNumber: 39,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
-                    style: {
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "32px",
-                        marginLeft: "auto"
-                    },
-                    children: rightActions ?? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["Fragment"], {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                href: "/cv",
-                                style: {
-                                    textDecoration: "none",
-                                    color: "#e2e8f0",
-                                    fontWeight: 600,
-                                    fontSize: "15px",
-                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-                                    transition: "all 0.2s ease"
-                                },
-                                children: "Générateur CV"
-                            }, void 0, false, {
-                                fileName: "[project]/components/Header.tsx",
-                                lineNumber: 64,
-                                columnNumber: 15
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                href: "/a-propos",
-                                style: {
-                                    textDecoration: "none",
-                                    color: "#e2e8f0",
-                                    fontWeight: 600,
-                                    fontSize: "15px",
-                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-                                    transition: "all 0.2s ease"
-                                },
-                                children: "À propos"
-                            }, void 0, false, {
-                                fileName: "[project]/components/Header.tsx",
-                                lineNumber: 77,
-                                columnNumber: 15
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                href: "/cv",
-                                style: {
-                                    textDecoration: "none",
-                                    background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
-                                    color: "#ffffff",
-                                    padding: "14px 24px",
-                                    borderRadius: "12px",
-                                    fontWeight: 700,
-                                    fontSize: "16px",
-                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-                                    boxShadow: "0 8px 24px rgba(59, 130, 246, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15)",
-                                    border: "2px solid rgba(255, 255, 255, 0.1)",
-                                    transition: "all 0.2s ease"
-                                },
-                                children: "Commencer"
-                            }, void 0, false, {
-                                fileName: "[project]/components/Header.tsx",
-                                lineNumber: 90,
-                                columnNumber: 15
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                href: "/login",
-                                style: {
-                                    textDecoration: "none",
-                                    color: "#e2e8f0",
-                                    background: "rgba(255,255,255,0.08)",
-                                    border: "1px solid rgba(255,255,255,0.15)",
-                                    padding: "12px 20px",
-                                    borderRadius: "12px",
-                                    fontWeight: 600,
-                                    fontSize: "15px",
-                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-                                    transition: "all 0.2s ease",
-                                    backdropFilter: "blur(10px)"
-                                },
-                                children: "Se connecter"
-                            }, void 0, false, {
-                                fileName: "[project]/components/Header.tsx",
-                                lineNumber: 108,
-                                columnNumber: 15
-                            }, this)
-                        ]
-                    }, void 0, true)
-                }, void 0, false, {
-                    fileName: "[project]/components/Header.tsx",
-                    lineNumber: 61,
-                    columnNumber: 9
-                }, this)
-            ]
-        }, void 0, true, {
-            fileName: "[project]/components/Header.tsx",
-            lineNumber: 26,
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/DynamicHeader.tsx",
+                lineNumber: 61,
+                columnNumber: 7
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/components/DynamicHeader.tsx",
+            lineNumber: 47,
             columnNumber: 7
         }, this)
     }, void 0, false, {
-        fileName: "[project]/components/Header.tsx",
-        lineNumber: 11,
+        fileName: "[project]/components/DynamicHeader.tsx",
+        lineNumber: 38,
         columnNumber: 5
     }, this);
 }
+_s(DynamicHeader, "nZPBDYTHSaQKOB73GgblTffssHM=");
+_c = DynamicHeader;
+var _c;
+__turbopack_context__.k.register(_c, "DynamicHeader");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
+}
 }),
-"[externals]/react-resizable-panels [external] (react-resizable-panels, esm_import)", ((__turbopack_context__) => {
-"use strict";
-
-return __turbopack_context__.a(async (__turbopack_handle_async_dependencies__, __turbopack_async_result__) => { try {
-
-const mod = await __turbopack_context__.y("react-resizable-panels");
-
-__turbopack_context__.n(mod);
-__turbopack_async_result__();
-} catch(e) { __turbopack_async_result__(e); } }, true);}),
-"[externals]/@hello-pangea/dnd [external] (@hello-pangea/dnd, cjs)", ((__turbopack_context__, module, exports) => {
-
-const mod = __turbopack_context__.x("@hello-pangea/dnd", () => require("@hello-pangea/dnd"));
-
-module.exports = mod;
-}),
-"[externals]/uuid [external] (uuid, esm_import)", ((__turbopack_context__) => {
-"use strict";
-
-return __turbopack_context__.a(async (__turbopack_handle_async_dependencies__, __turbopack_async_result__) => { try {
-
-const mod = await __turbopack_context__.y("uuid");
-
-__turbopack_context__.n(mod);
-__turbopack_async_result__();
-} catch(e) { __turbopack_async_result__(e); } }, true);}),
-"[project]/utils/types.ts [ssr] (ecmascript)", ((__turbopack_context__) => {
+"[project]/utils/types.ts [client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
@@ -252,7 +747,13 @@ const ALLOWED_PARENTS = {
 };
 const getAllowedChildTypesForParent = (parentType)=>{
     const entries = Object.entries(ALLOWED_PARENTS);
-    return entries.filter(([, allowedParents])=>allowedParents.includes(parentType)).map(([type])=>type);
+    return entries.filter((param)=>{
+        let [, allowedParents] = param;
+        return allowedParents.includes(parentType);
+    }).map((param)=>{
+        let [type] = param;
+        return type;
+    });
 };
 const findParentOfBlock = (blocks, targetId, parent)=>{
     for (const block of blocks){
@@ -338,27 +839,25 @@ const getAllChildBlocks = (block)=>{
     }
     return children;
 };
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
+}
 }),
-"[project]/components/BlockEditor.tsx [ssr] (ecmascript)", ((__turbopack_context__) => {
+"[project]/components/BlockEditor.tsx [client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
-
-return __turbopack_context__.a(async (__turbopack_handle_async_dependencies__, __turbopack_async_result__) => { try {
 
 __turbopack_context__.s([
     "default",
     ()=>__TURBOPACK__default__export__
 ]);
-var __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/react/jsx-dev-runtime [external] (react/jsx-dev-runtime, cjs)");
-var __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/react [external] (react, cjs)");
-var __TURBOPACK__imported__module__$5b$externals$5d2f40$hello$2d$pangea$2f$dnd__$5b$external$5d$__$2840$hello$2d$pangea$2f$dnd$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/@hello-pangea/dnd [external] (@hello-pangea/dnd, cjs)");
-var __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__ = __turbopack_context__.i("[externals]/uuid [external] (uuid, esm_import)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/utils/types.ts [ssr] (ecmascript)");
-var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
-    __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__
-]);
-[__TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__] = __turbopack_async_dependencies__.then ? (await __turbopack_async_dependencies__)() : __turbopack_async_dependencies__;
-"use client";
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react/jsx-dev-runtime.js [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react/index.js [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$hello$2d$pangea$2f$dnd$2f$dist$2f$dnd$2e$esm$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@hello-pangea/dnd/dist/dnd.esm.js [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__ = __turbopack_context__.i("[project]/node_modules/uuid/dist/v4.js [client] (ecmascript) <export default as v4>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/utils/types.ts [client] (ecmascript)");
 ;
+var _s = __turbopack_context__.k.signature(), _s1 = __turbopack_context__.k.signature();
+"use client";
 ;
 ;
 ;
@@ -370,9 +869,10 @@ const sanitizeHtml = (html)=>{
         container.innerHTML = html;
         // Convertir <b>/<i> -> <strong>/<em> et spans soulignés -> <u>
         const replaceTag = (el, newTag)=>{
+            var _el_parentNode;
             const newEl = document.createElement(newTag);
             while(el.firstChild)newEl.appendChild(el.firstChild);
-            el.parentNode?.replaceChild(newEl, el);
+            (_el_parentNode = el.parentNode) === null || _el_parentNode === void 0 ? void 0 : _el_parentNode.replaceChild(newEl, el);
             return newEl;
         };
         container.querySelectorAll("b").forEach((el)=>replaceTag(el, "strong"));
@@ -396,7 +896,8 @@ const sanitizeHtml = (html)=>{
         const walk = (node)=>{
             // Supprimer les <script>, <style> et commentaires
             if (node.nodeType === Node.COMMENT_NODE) {
-                node.parentNode?.removeChild(node);
+                var _node_parentNode;
+                (_node_parentNode = node.parentNode) === null || _node_parentNode === void 0 ? void 0 : _node_parentNode.removeChild(node);
                 return;
             }
             if (node.nodeType === Node.ELEMENT_NODE) {
@@ -421,20 +922,24 @@ const sanitizeHtml = (html)=>{
         };
         walk(container);
         return container.innerHTML;
-    } catch  {
+    } catch (e) {
         return html;
     }
 };
-const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
-    const ref = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useRef"])(null);
-    const lastSelectionRef = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useRef"])(null);
-    (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useEffect"])(()=>{
-        // Mettre à jour le contenu si la valeur externe change (éviter boucle infinie)
-        if (ref.current && ref.current.innerHTML !== value) {
-            ref.current.innerHTML = value || "";
+const RichTextEditor = (param)=>{
+    let { value, onChange, placeholder, singleLine, style } = param;
+    _s();
+    const ref = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const lastSelectionRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "RichTextEditor.useEffect": ()=>{
+            // Mettre à jour le contenu si la valeur externe change (éviter boucle infinie)
+            if (ref.current && ref.current.innerHTML !== value) {
+                ref.current.innerHTML = value || "";
+            }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
+    }["RichTextEditor.useEffect"], [
         value
     ]);
     const saveSelection = ()=>{
@@ -451,20 +956,22 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
         }
     };
     const exec = (cmd)=>{
+        var _ref_current, _ref_current1;
         // Empêcher le bouton de perdre le focus
         restoreSelection();
-        ref.current?.focus();
+        (_ref_current = ref.current) === null || _ref_current === void 0 ? void 0 : _ref_current.focus();
         document.execCommand(cmd);
         // Déclencher onChange
-        const html = sanitizeHtml(ref.current?.innerHTML || "");
+        const html = sanitizeHtml(((_ref_current1 = ref.current) === null || _ref_current1 === void 0 ? void 0 : _ref_current1.innerHTML) || "");
         if (html !== value) onChange(html);
     };
     const execArg = (cmd, arg)=>{
+        var _ref_current, _ref_current1;
         restoreSelection();
-        ref.current?.focus();
+        (_ref_current = ref.current) === null || _ref_current === void 0 ? void 0 : _ref_current.focus();
         // @ts-ignore execCommand third arg
         document.execCommand(cmd, false, arg);
-        const html = sanitizeHtml(ref.current?.innerHTML || "");
+        const html = sanitizeHtml(((_ref_current1 = ref.current) === null || _ref_current1 === void 0 ? void 0 : _ref_current1.innerHTML) || "");
         if (html !== value) onChange(html);
     };
     const insertHTML = (htmlSnippet)=>{
@@ -472,7 +979,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
     };
     const isInsideList = ()=>{
         const sel = window.getSelection();
-        const node = sel?.anchorNode;
+        const node = sel === null || sel === void 0 ? void 0 : sel.anchorNode;
         let current = node;
         while(current){
             if (current.tagName) {
@@ -484,7 +991,8 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
         return false;
     };
     const onInput = ()=>{
-        const html = sanitizeHtml(ref.current?.innerHTML || "");
+        var _ref_current;
+        const html = sanitizeHtml(((_ref_current = ref.current) === null || _ref_current === void 0 ? void 0 : _ref_current.innerHTML) || "");
         if (html !== value) onChange(html);
     };
     const onKeyDown = (e)=>{
@@ -516,9 +1024,9 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
         fontSize: 12,
         cursor: "pointer"
     };
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 style: {
                     display: "flex",
                     gap: 6,
@@ -526,7 +1034,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                     flexWrap: "wrap"
                 },
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         type: "button",
                         style: toolbarBtnStyle,
                         onMouseDown: (e)=>e.preventDefault(),
@@ -537,7 +1045,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         lineNumber: 171,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         type: "button",
                         style: toolbarBtnStyle,
                         onMouseDown: (e)=>e.preventDefault(),
@@ -548,7 +1056,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         lineNumber: 174,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         type: "button",
                         style: toolbarBtnStyle,
                         onMouseDown: (e)=>e.preventDefault(),
@@ -559,7 +1067,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         lineNumber: 177,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("span", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                         style: {
                             width: 8
                         }
@@ -568,7 +1076,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         lineNumber: 180,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         type: "button",
                         title: "Liste à puces",
                         style: toolbarBtnStyle,
@@ -580,7 +1088,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         lineNumber: 181,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         type: "button",
                         title: "Liste numérotée",
                         style: toolbarBtnStyle,
@@ -592,7 +1100,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         lineNumber: 184,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         type: "button",
                         title: "Augmenter le retrait",
                         style: toolbarBtnStyle,
@@ -604,7 +1112,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         lineNumber: 187,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         type: "button",
                         title: "Diminuer le retrait",
                         style: toolbarBtnStyle,
@@ -616,7 +1124,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         lineNumber: 190,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("span", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                         style: {
                             width: 8
                         }
@@ -625,7 +1133,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         lineNumber: 193,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         type: "button",
                         title: "Insérer tiret demi-cadratin",
                         style: toolbarBtnStyle,
@@ -637,7 +1145,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         lineNumber: 194,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         type: "button",
                         title: "Insérer tiret cadratin",
                         style: toolbarBtnStyle,
@@ -655,7 +1163,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                 lineNumber: 170,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 ref: ref,
                 contentEditable: true,
                 suppressContentEditableWarning: true,
@@ -681,13 +1189,8 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                 lineNumber: 197,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("style", {
-                children: `
-        [contenteditable][data-placeholder]:empty:before {
-          content: attr(data-placeholder);
-          color: #9ca3af;
-        }
-      `
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("style", {
+                children: "\n        [contenteditable][data-placeholder]:empty:before {\n          content: attr(data-placeholder);\n          color: #9ca3af;\n        }\n      "
             }, void 0, false, {
                 fileName: "[project]/components/BlockEditor.tsx",
                 lineNumber: 219,
@@ -700,59 +1203,71 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
-const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
-    const [newBlockType, setNewBlockType] = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useState"])("text");
-    const [subBlockTypes, setSubBlockTypes] = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useState"])({});
-    const [dragError, setDragError] = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useState"])(null);
-    const [isDragging, setIsDragging] = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useState"])(false);
-    const mouseYRef = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useRef"])(0);
-    const autoScrollTimerRef = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useRef"])(null);
-    const [draggingBlockId, setDraggingBlockId] = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useState"])(null);
-    const [draggingBlockType, setDraggingBlockType] = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useState"])(null);
-    const [subtitleVisible, setSubtitleVisible] = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useState"])({});
-    const [periodVisible, setPeriodVisible] = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useState"])({});
+_s(RichTextEditor, "MoArn9F69xUcdzkz57buv35rQ5Q=");
+_c = RichTextEditor;
+const BlockEditor = (param)=>{
+    let { blocks, setBlocks, scrollContainerRef } = param;
+    _s1();
+    const [newBlockType, setNewBlockType] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])("text");
+    const [subBlockTypes, setSubBlockTypes] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])({});
+    const [dragError, setDragError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [isDragging, setIsDragging] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const mouseYRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useRef"])(0);
+    const autoScrollTimerRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const [draggingBlockId, setDraggingBlockId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [draggingBlockType, setDraggingBlockType] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [subtitleVisible, setSubtitleVisible] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])({});
+    const [periodVisible, setPeriodVisible] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])({});
     const hasMeaningfulText = (html)=>{
         if (!html) return false;
         const plain = html.replace(/<[^>]*>/g, "").replace(/\u00A0/g, " ").trim();
         return /[A-Za-zÀ-ÖØ-öø-ÿ0-9]/.test(plain);
     };
     // Gestion auto-scroll pendant le drag dans le conteneur scrollable gauche
-    (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useEffect"])(()=>{
-        const handleMouseMove = (e)=>{
-            mouseYRef.current = e.clientY;
-        };
-        if (isDragging) {
-            window.addEventListener("mousemove", handleMouseMove);
-            if (autoScrollTimerRef.current == null) {
-                autoScrollTimerRef.current = window.setInterval(()=>{
-                    const container = scrollContainerRef?.current;
-                    if (!container) return;
-                    const rect = container.getBoundingClientRect();
-                    const y = mouseYRef.current;
-                    const threshold = 80; // px
-                    const scrollStep = 16; // px per tick
-                    if (y > rect.bottom - threshold) {
-                        container.scrollTop += scrollStep;
-                    } else if (y < rect.top + threshold) {
-                        container.scrollTop -= scrollStep;
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "BlockEditor.useEffect": ()=>{
+            const handleMouseMove = {
+                "BlockEditor.useEffect.handleMouseMove": (e)=>{
+                    mouseYRef.current = e.clientY;
+                }
+            }["BlockEditor.useEffect.handleMouseMove"];
+            if (isDragging) {
+                window.addEventListener("mousemove", handleMouseMove);
+                if (autoScrollTimerRef.current == null) {
+                    autoScrollTimerRef.current = window.setInterval({
+                        "BlockEditor.useEffect": ()=>{
+                            const container = scrollContainerRef === null || scrollContainerRef === void 0 ? void 0 : scrollContainerRef.current;
+                            if (!container) return;
+                            const rect = container.getBoundingClientRect();
+                            const y = mouseYRef.current;
+                            const threshold = 80; // px
+                            const scrollStep = 16; // px per tick
+                            if (y > rect.bottom - threshold) {
+                                container.scrollTop += scrollStep;
+                            } else if (y < rect.top + threshold) {
+                                container.scrollTop -= scrollStep;
+                            }
+                        }
+                    }["BlockEditor.useEffect"], 16);
+                }
+            } else {
+                window.removeEventListener("mousemove", handleMouseMove);
+                if (autoScrollTimerRef.current != null) {
+                    window.clearInterval(autoScrollTimerRef.current);
+                    autoScrollTimerRef.current = null;
+                }
+            }
+            return ({
+                "BlockEditor.useEffect": ()=>{
+                    window.removeEventListener("mousemove", handleMouseMove);
+                    if (autoScrollTimerRef.current != null) {
+                        window.clearInterval(autoScrollTimerRef.current);
+                        autoScrollTimerRef.current = null;
                     }
-                }, 16);
-            }
-        } else {
-            window.removeEventListener("mousemove", handleMouseMove);
-            if (autoScrollTimerRef.current != null) {
-                window.clearInterval(autoScrollTimerRef.current);
-                autoScrollTimerRef.current = null;
-            }
+                }
+            })["BlockEditor.useEffect"];
         }
-        return ()=>{
-            window.removeEventListener("mousemove", handleMouseMove);
-            if (autoScrollTimerRef.current != null) {
-                window.clearInterval(autoScrollTimerRef.current);
-                autoScrollTimerRef.current = null;
-            }
-        };
-    }, [
+    }["BlockEditor.useEffect"], [
         isDragging,
         scrollContainerRef
     ]);
@@ -760,17 +1275,18 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
     // Ajouter un bloc
     // -------------------
     const handleAddBlock = (parentId)=>{
+        var _findBlockById;
         const typeToUse = parentId ? subBlockTypes[parentId] || "text" : newBlockType;
         // Règles: vérifier que le type est autorisé pour ce parent
-        const parentType = parentId ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__["findBlockById"])(blocks, parentId)?.type : undefined;
-        const allowed = (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__["getAllowedChildTypesForParent"])(parentType);
+        const parentType = parentId ? (_findBlockById = (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["findBlockById"])(blocks, parentId)) === null || _findBlockById === void 0 ? void 0 : _findBlockById.type : undefined;
+        const allowed = (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["getAllowedChildTypesForParent"])(parentType);
         if (!allowed.includes(typeToUse)) {
             setDragError("Type de bloc non autorisé ici");
             setTimeout(()=>setDragError(null), 1800);
             return;
         }
         const newBlock = {
-            id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+            id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
             type: typeToUse,
             content: typeToUse === "contact" ? {
                 email: "",
@@ -834,14 +1350,14 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
         if (source.droppableId === "root") {
             sourceBlock = blocks[source.index];
         } else {
-            const parentBlock = (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__["findBlockById"])(blocks, source.droppableId);
+            const parentBlock = (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["findBlockById"])(blocks, source.droppableId);
             if (parentBlock && parentBlock.children) {
                 sourceBlock = parentBlock.children[source.index];
             }
         }
         if (!sourceBlock) return;
         // Trouver le parent de destination
-        const destinationParent = destination.droppableId !== "root" ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__["findBlockById"])(blocks, destination.droppableId) : undefined;
+        const destinationParent = destination.droppableId !== "root" ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["findBlockById"])(blocks, destination.droppableId) : undefined;
         // Créer le contexte de déplacement
         const dragContext = {
             source: {
@@ -856,7 +1372,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
             }
         };
         // Vérifier les règles de déplacement
-        if (!(0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__["canMoveBlock"])(dragContext, blocks)) {
+        if (!(0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["canMoveBlock"])(dragContext, blocks)) {
             setDragError("Déplacement non autorisé à cet endroit");
             setTimeout(()=>setDragError(null), 1800);
             setIsDragging(false);
@@ -869,8 +1385,8 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
     const handleDragStart = (start)=>{
         setIsDragging(true);
         setDraggingBlockId(start.draggableId);
-        const b = (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__["findBlockById"])(blocks, start.draggableId);
-        setDraggingBlockType(b?.type || null);
+        const b = (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["findBlockById"])(blocks, start.draggableId);
+        setDraggingBlockType((b === null || b === void 0 ? void 0 : b.type) || null);
     };
     // Fonction pour déplacer un bloc en respectant les règles
     const moveBlockWithRules = (blocks, result)=>{
@@ -929,7 +1445,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
         if (source.droppableId === "root") {
             blockToMove = blocks[source.index];
         } else {
-            const sourceBlock = (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__["findBlockById"])(blocks, source.droppableId);
+            const sourceBlock = (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["findBlockById"])(blocks, source.droppableId);
             if (sourceBlock && sourceBlock.children) {
                 blockToMove = sourceBlock.children[source.index];
             }
@@ -995,11 +1511,12 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
     // Rendu d'un bloc (sans Draggable, géré par le parent)
     // -------------------
     const renderBlock = (block, parentId, handleProps, isSelfDragging)=>{
-        const allowedChildTypes = (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__["getAllowedChildTypesForParent"])(block.type);
+        var _block_content, _block_content1, _block_content2, _block_content3, _block_content4, _block_content5, _block_content6, _block_content7, _block_content8, _block_content9, _block_content10, _block_content11;
+        const allowedChildTypes = (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["getAllowedChildTypesForParent"])(block.type);
         const canHaveChildren = allowedChildTypes.length > 0;
-        const parentBlock = parentId ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__["findBlockById"])(blocks, parentId) : undefined;
-        const isChildOfSubsection = parentBlock?.type === "subsection";
-        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+        const parentBlock = parentId ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["findBlockById"])(blocks, parentId) : undefined;
+        const isChildOfSubsection = (parentBlock === null || parentBlock === void 0 ? void 0 : parentBlock.type) === "subsection";
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             style: {
                 border: "1px solid #e1e5e9",
                 borderRadius: "8px",
@@ -1010,7 +1527,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                 transition: "all 0.2s ease"
             },
             children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     style: {
                         display: "flex",
                         justifyContent: "space-between",
@@ -1018,14 +1535,14 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                         marginBottom: "8px"
                     },
                     children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             style: {
                                 display: "flex",
                                 alignItems: "center",
                                 gap: "8px"
                             },
                             children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     ...handleProps,
                                     style: {
                                         cursor: "grab",
@@ -1044,7 +1561,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                     lineNumber: 551,
                                     columnNumber: 13
                                 }, ("TURBOPACK compile-time value", void 0)),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("span", {
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     style: {
                                         fontSize: "12px",
                                         color: "#6b7280",
@@ -1064,15 +1581,15 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                             lineNumber: 550,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0)),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             style: {
                                 display: "flex",
                                 gap: "4px"
                             },
                             children: [
-                                canHaveChildren && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["Fragment"], {
+                                canHaveChildren && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Fragment"], {
                                     children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("select", {
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
                                             value: subBlockTypes[block.id] || allowedChildTypes[0] || "text",
                                             onChange: (e)=>setSubBlockTypes({
                                                     ...subBlockTypes,
@@ -1086,7 +1603,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                                 fontSize: "12px",
                                                 fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
                                             },
-                                            children: allowedChildTypes.map((t)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("option", {
+                                            children: allowedChildTypes.map((t)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: t,
                                                     children: t === "text" ? "Texte" : t === "subsection" ? "Sous-section" : t === "section" ? "Section" : t === "header" ? "En-tête" : t === "contact" ? "Contact" : t === "divider" ? "Séparateur" : t
                                                 }, t, false, {
@@ -1099,7 +1616,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                             lineNumber: 581,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0)),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                             onClick: ()=>handleAddBlock(block.id),
                                             style: {
                                                 marginRight: 8,
@@ -1119,7 +1636,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                         }, ("TURBOPACK compile-time value", void 0))
                                     ]
                                 }, void 0, true),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: ()=>handleDeleteBlock(block.id),
                                     style: {
                                         color: "#ef4444",
@@ -1147,11 +1664,11 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                     lineNumber: 549,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     style: {
                         marginTop: 8
                     },
-                    children: block.type === "divider" ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("hr", {
+                    children: block.type === "divider" ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("hr", {
                         style: {
                             border: "none",
                             borderTop: "2px solid #e5e7eb",
@@ -1161,16 +1678,16 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                         fileName: "[project]/components/BlockEditor.tsx",
                         lineNumber: 640,
                         columnNumber: 13
-                    }, ("TURBOPACK compile-time value", void 0)) : block.type === "contact" ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                    }, ("TURBOPACK compile-time value", void 0)) : block.type === "contact" ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
                             display: "flex",
                             flexDirection: "column",
                             gap: 8
                         },
                         children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("input", {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                 placeholder: "Email",
-                                value: block.content?.email || "",
+                                value: ((_block_content = block.content) === null || _block_content === void 0 ? void 0 : _block_content.email) || "",
                                 onChange: (e)=>updateBlockContent(block.id, {
                                         ...block.content,
                                         email: e.target.value
@@ -1186,9 +1703,9 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                 lineNumber: 643,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("input", {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                 placeholder: "Téléphone",
-                                value: block.content?.phone || "",
+                                value: ((_block_content1 = block.content) === null || _block_content1 === void 0 ? void 0 : _block_content1.phone) || "",
                                 onChange: (e)=>updateBlockContent(block.id, {
                                         ...block.content,
                                         phone: e.target.value
@@ -1204,9 +1721,9 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                 lineNumber: 649,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("input", {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                 placeholder: "Adresse",
-                                value: block.content?.address || "",
+                                value: ((_block_content2 = block.content) === null || _block_content2 === void 0 ? void 0 : _block_content2.address) || "",
                                 onChange: (e)=>updateBlockContent(block.id, {
                                         ...block.content,
                                         address: e.target.value
@@ -1222,9 +1739,9 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                 lineNumber: 655,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("input", {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                 placeholder: "LinkedIn",
-                                value: block.content?.linkedin || "",
+                                value: ((_block_content3 = block.content) === null || _block_content3 === void 0 ? void 0 : _block_content3.linkedin) || "",
                                 onChange: (e)=>updateBlockContent(block.id, {
                                         ...block.content,
                                         linkedin: e.target.value
@@ -1245,15 +1762,15 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                         fileName: "[project]/components/BlockEditor.tsx",
                         lineNumber: 642,
                         columnNumber: 13
-                    }, ("TURBOPACK compile-time value", void 0)) : block.type === "subsection" ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                    }, ("TURBOPACK compile-time value", void 0)) : block.type === "subsection" ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
                             display: "flex",
                             flexDirection: "column",
                             gap: 8
                         },
                         children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(RichTextEditor, {
-                                value: block.content?.title || "",
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(RichTextEditor, {
+                                value: ((_block_content4 = block.content) === null || _block_content4 === void 0 ? void 0 : _block_content4.title) || "",
                                 onChange: (html)=>updateBlockContent(block.id, {
                                         ...block.content,
                                         title: html
@@ -1268,13 +1785,13 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                 lineNumber: 670,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 style: {
                                     display: "flex",
                                     gap: 8
                                 },
                                 children: [
-                                    hasMeaningfulText(block.content?.subtitle) || subtitleVisible[block.id] ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                                    hasMeaningfulText((_block_content5 = block.content) === null || _block_content5 === void 0 ? void 0 : _block_content5.subtitle) || subtitleVisible[block.id] ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         type: "button",
                                         onClick: ()=>{
                                             const map = {
@@ -1300,7 +1817,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                         fileName: "[project]/components/BlockEditor.tsx",
                                         lineNumber: 681,
                                         columnNumber: 19
-                                    }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                                    }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         type: "button",
                                         onClick: ()=>setSubtitleVisible({
                                                 ...subtitleVisible,
@@ -1320,7 +1837,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                         lineNumber: 694,
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0)),
-                                    hasMeaningfulText(block.content?.period) || periodVisible[block.id] ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                                    hasMeaningfulText((_block_content6 = block.content) === null || _block_content6 === void 0 ? void 0 : _block_content6.period) || periodVisible[block.id] ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         type: "button",
                                         onClick: ()=>{
                                             const map = {
@@ -1346,7 +1863,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                         fileName: "[project]/components/BlockEditor.tsx",
                                         lineNumber: 704,
                                         columnNumber: 19
-                                    }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                                    }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         type: "button",
                                         onClick: ()=>setPeriodVisible({
                                                 ...periodVisible,
@@ -1372,8 +1889,8 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                 lineNumber: 679,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
-                            (hasMeaningfulText(block.content?.subtitle) || subtitleVisible[block.id]) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(RichTextEditor, {
-                                value: block.content?.subtitle || "",
+                            (hasMeaningfulText((_block_content7 = block.content) === null || _block_content7 === void 0 ? void 0 : _block_content7.subtitle) || subtitleVisible[block.id]) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(RichTextEditor, {
+                                value: ((_block_content8 = block.content) === null || _block_content8 === void 0 ? void 0 : _block_content8.subtitle) || "",
                                 onChange: (html)=>updateBlockContent(block.id, {
                                         ...block.content,
                                         subtitle: html
@@ -1388,8 +1905,8 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                 lineNumber: 728,
                                 columnNumber: 17
                             }, ("TURBOPACK compile-time value", void 0)),
-                            (hasMeaningfulText(block.content?.period) || periodVisible[block.id]) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(RichTextEditor, {
-                                value: block.content?.period || "",
+                            (hasMeaningfulText((_block_content9 = block.content) === null || _block_content9 === void 0 ? void 0 : _block_content9.period) || periodVisible[block.id]) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(RichTextEditor, {
+                                value: ((_block_content10 = block.content) === null || _block_content10 === void 0 ? void 0 : _block_content10.period) || "",
                                 onChange: (html)=>updateBlockContent(block.id, {
                                         ...block.content,
                                         period: html
@@ -1410,8 +1927,8 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                         fileName: "[project]/components/BlockEditor.tsx",
                         lineNumber: 669,
                         columnNumber: 13
-                    }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(RichTextEditor, {
-                        value: block.type === "header" || block.type === "section" ? block.content?.title || "" : typeof block.content === "string" ? block.content : "",
+                    }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(RichTextEditor, {
+                        value: block.type === "header" || block.type === "section" ? ((_block_content11 = block.content) === null || _block_content11 === void 0 ? void 0 : _block_content11.title) || "" : typeof block.content === "string" ? block.content : "",
                         onChange: (html)=>{
                             if (block.type === "header" || block.type === "section") {
                                 updateBlockContent(block.id, {
@@ -1438,11 +1955,13 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                     lineNumber: 638,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
-                canHaveChildren && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f40$hello$2d$pangea$2f$dnd__$5b$external$5d$__$2840$hello$2d$pangea$2f$dnd$2c$__cjs$29$__["Droppable"], {
+                canHaveChildren && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$hello$2d$pangea$2f$dnd$2f$dist$2f$dnd$2e$esm$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Droppable"], {
                     droppableId: block.id,
                     type: "CHILD",
                     isDropDisabled: !!isSelfDragging || draggingBlockType === "subsection" && block.type === "subsection",
-                    children: (provided, snapshot)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                    children: (provided, snapshot)=>{
+                        var _block_children;
+                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             ref: provided.innerRef,
                             ...provided.droppableProps,
                             style: {
@@ -1456,10 +1975,10 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                 transition: "background-color 0.2s ease"
                             },
                             children: [
-                                block.children?.map((child, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f40$hello$2d$pangea$2f$dnd__$5b$external$5d$__$2840$hello$2d$pangea$2f$dnd$2c$__cjs$29$__["Draggable"], {
+                                (_block_children = block.children) === null || _block_children === void 0 ? void 0 : _block_children.map((child, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$hello$2d$pangea$2f$dnd$2f$dist$2f$dnd$2e$esm$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Draggable"], {
                                         draggableId: child.id,
                                         index: index,
-                                        children: (provided, snapshotChild)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                                        children: (provided, snapshotChild)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 ref: provided.innerRef,
                                                 ...provided.draggableProps,
                                                 children: renderBlock(child, block.id, provided.dragHandleProps, snapshotChild.isDragging)
@@ -1479,7 +1998,8 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                             fileName: "[project]/components/BlockEditor.tsx",
                             lineNumber: 781,
                             columnNumber: 15
-                        }, ("TURBOPACK compile-time value", void 0))
+                        }, ("TURBOPACK compile-time value", void 0));
+                    }
                 }, void 0, false, {
                     fileName: "[project]/components/BlockEditor.tsx",
                     lineNumber: 773,
@@ -1495,13 +2015,13 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
     // -------------------
     // Rendu principal
     // -------------------
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         style: {
             padding: "20px",
             backgroundColor: "#f8fafc"
         },
         children: [
-            dragError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+            dragError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 style: {
                     marginBottom: "12px",
                     padding: "8px 12px",
@@ -1518,7 +2038,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                 lineNumber: 822,
                 columnNumber: 9
             }, ("TURBOPACK compile-time value", void 0)),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 style: {
                     marginBottom: "24px",
                     padding: "16px",
@@ -1527,7 +2047,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                     border: "1px solid #e1e5e9"
                 },
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("h2", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                         style: {
                             margin: "0 0 8px 0",
                             color: "#1f2937",
@@ -1539,7 +2059,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                         lineNumber: 843,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("p", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         style: {
                             margin: "0 0 16px 0",
                             color: "#6b7280",
@@ -1552,14 +2072,14 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                         lineNumber: 844,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
                             display: "flex",
                             gap: "12px",
                             alignItems: "center"
                         },
                         children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("select", {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
                                 value: newBlockType,
                                 onChange: (e)=>setNewBlockType(e.target.value),
                                 style: {
@@ -1570,7 +2090,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                     fontSize: "14px",
                                     fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
                                 },
-                                children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__["getAllowedChildTypesForParent"])(undefined).map((t)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("option", {
+                                children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$types$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["getAllowedChildTypesForParent"])(undefined).map((t)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                         value: t,
                                         children: t === "header" ? "En-tête" : t === "contact" ? "Contact" : t === "section" ? "Section" : t === "subsection" ? "Sous-section" : t === "divider" ? "Séparateur" : t === "text" ? "Texte" : t
                                     }, t, false, {
@@ -1583,7 +2103,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                 lineNumber: 849,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0)),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 onClick: ()=>handleAddBlock(),
                                 style: {
                                     padding: "8px 16px",
@@ -1614,14 +2134,14 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                 lineNumber: 836,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f40$hello$2d$pangea$2f$dnd__$5b$external$5d$__$2840$hello$2d$pangea$2f$dnd$2c$__cjs$29$__["DragDropContext"], {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$hello$2d$pangea$2f$dnd$2f$dist$2f$dnd$2e$esm$2e$js__$5b$client$5d$__$28$ecmascript$29$__["DragDropContext"], {
                 onDragEnd: handleDragEnd,
                 onDragStart: handleDragStart,
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f40$hello$2d$pangea$2f$dnd__$5b$external$5d$__$2840$hello$2d$pangea$2f$dnd$2c$__cjs$29$__["Droppable"], {
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$hello$2d$pangea$2f$dnd$2f$dist$2f$dnd$2e$esm$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Droppable"], {
                     droppableId: "root",
                     type: "ROOT",
                     isDropDisabled: draggingBlockType === "subsection",
-                    children: (provided, snapshot)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                    children: (provided, snapshot)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             ref: provided.innerRef,
                             ...provided.droppableProps,
                             style: {
@@ -1633,7 +2153,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                 transition: "all 0.2s ease"
                             },
                             children: [
-                                blocks.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                                blocks.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     style: {
                                         textAlign: "center",
                                         padding: "40px",
@@ -1645,10 +2165,10 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                     fileName: "[project]/components/BlockEditor.tsx",
                                     lineNumber: 903,
                                     columnNumber: 17
-                                }, ("TURBOPACK compile-time value", void 0)) : blocks.map((block, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f40$hello$2d$pangea$2f$dnd__$5b$external$5d$__$2840$hello$2d$pangea$2f$dnd$2c$__cjs$29$__["Draggable"], {
+                                }, ("TURBOPACK compile-time value", void 0)) : blocks.map((block, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$hello$2d$pangea$2f$dnd$2f$dist$2f$dnd$2e$esm$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Draggable"], {
                                         draggableId: block.id,
                                         index: index,
-                                        children: (provided, snapshot)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                                        children: (provided, snapshot)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 ref: provided.innerRef,
                                                 ...provided.draggableProps,
                                                 style: {
@@ -1667,7 +2187,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0))),
                                 provided.placeholder,
-                                snapshot.isDraggingOver && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                                snapshot.isDraggingOver && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     style: {
                                         textAlign: "center",
                                         padding: "20px",
@@ -1704,23 +2224,32 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
+_s1(BlockEditor, "hhsLn67SnSdqcj9I6CUtYBhf+X4=");
+_c1 = BlockEditor;
 const __TURBOPACK__default__export__ = BlockEditor;
-__turbopack_async_result__();
-} catch(e) { __turbopack_async_result__(e); } }, false);}),
-"[project]/utils/blocksToHTML.ts [ssr] (ecmascript)", ((__turbopack_context__) => {
+var _c, _c1;
+__turbopack_context__.k.register(_c, "RichTextEditor");
+__turbopack_context__.k.register(_c1, "BlockEditor");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
+}
+}),
+"[project]/utils/blocksToHTML.ts [client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
     "default",
     ()=>blocksToHTML
 ]);
-function blocksToHTML(blocks, fontScale = 1) {
+function blocksToHTML(blocks) {
+    let fontScale = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1;
     const render = (list, depth)=>list.map((block)=>{
             switch(block.type){
                 case "header":
                     {
-                        const text = block.content?.title || "";
-                        return `<div class="cv-header"><div class="cv-name">${text}</div></div>`;
+                        var _block_content;
+                        const text = ((_block_content = block.content) === null || _block_content === void 0 ? void 0 : _block_content.title) || "";
+                        return '<div class="cv-header"><div class="cv-name">'.concat(text, "</div></div>");
                     }
                 case "contact":
                     {
@@ -1731,7 +2260,7 @@ function blocksToHTML(blocks, fontScale = 1) {
                             c.address,
                             c.linkedin
                         ].filter(Boolean).join(" • ");
-                        return `<div class="cv-contact">${parts}</div>`;
+                        return '<div class="cv-contact">'.concat(parts, "</div>");
                     }
                 case "text":
                     {
@@ -1744,14 +2273,14 @@ function blocksToHTML(blocks, fontScale = 1) {
                         const hasLineBreaks = typeof raw === "string" && /<br\s*\/?\s*>/i.test(raw);
                         // Si bloc totalement vide (aucune lettre), ne rien rendre (pas d'espace)
                         if (!hasLetter && !hasListTag) {
-                            return `${render(block.children || [], depth + 1)}`;
+                            return "".concat(render(block.children || [], depth + 1));
                         }
                         if (isIntro) {
-                            return `<div class="cv-intro">${raw}</div>${render(block.children || [], depth + 1)}`;
+                            return '<div class="cv-intro">'.concat(raw, "</div>").concat(render(block.children || [], depth + 1));
                         }
                         // Conserver les listes natives UL/OL si présentes
                         if (hasListTag) {
-                            return `<div class="cv-text">${raw}</div>${render(block.children || [], depth + 1)}`;
+                            return '<div class="cv-text">'.concat(raw, "</div>").concat(render(block.children || [], depth + 1));
                         }
                         // Support multi-lignes dans un seul bloc texte via <br>
                         if (hasLineBreaks) {
@@ -1763,30 +2292,32 @@ function blocksToHTML(blocks, fontScale = 1) {
                                 const cleaned = isBulletLine ? line.replace(/^\s*[•\-–]\s*/, "") : line;
                                 const levelClass = depth >= 2 ? " cv-bullet--level2" : "";
                                 if (isBulletLine) {
-                                    return `<div class=\"cv-text cv-bullet${levelClass}\">${cleaned}</div>`;
+                                    return '<div class="cv-text cv-bullet'.concat(levelClass, '">').concat(cleaned, "</div>");
                                 }
-                                return `<div class=\"cv-text\">${line}</div>`;
+                                return '<div class="cv-text">'.concat(line, "</div>");
                             }).filter(Boolean).join("");
-                            return `${htmlLines}${render(block.children || [], depth + 1)}`;
+                            return "".concat(htmlLines).concat(render(block.children || [], depth + 1));
                         }
                         // Ligne simple
                         const isBullet = /^\s*[•\-–]/.test(plain);
                         const cleaned = isBullet && typeof raw === "string" ? raw.replace(/^\s*[•\-–]\s*/, "") : raw;
                         const levelClass = depth >= 2 ? " cv-bullet--level2" : "";
                         if (isBullet) {
-                            return `<div class="cv-text cv-bullet${levelClass}">${cleaned}</div>${render(block.children || [], depth + 1)}`;
+                            return '<div class="cv-text cv-bullet'.concat(levelClass, '">').concat(cleaned, "</div>").concat(render(block.children || [], depth + 1));
                         }
-                        return `<div class="cv-text">${raw}</div>${render(block.children || [], depth + 1)}`;
+                        return '<div class="cv-text">'.concat(raw, "</div>").concat(render(block.children || [], depth + 1));
                     }
                 case "divider":
-                    return `<hr class="cv-divider"/>`;
+                    return '<hr class="cv-divider"/>';
                 case "section":
-                    return `<div class="cv-section">\n            <div class="cv-section-title">${block.content?.title || ""}</div>\n            ${render(block.children || [], depth + 1)}\n          </div>`;
+                    var _block_content1;
+                    return '<div class="cv-section">\n            <div class="cv-section-title">'.concat(((_block_content1 = block.content) === null || _block_content1 === void 0 ? void 0 : _block_content1.title) || "", "</div>\n            ").concat(render(block.children || [], depth + 1), "\n          </div>");
                 case "subsection":
                     {
-                        const title = block.content?.title || "";
-                        const subtitle = block.content?.subtitle || "";
-                        const period = block.content?.period || "";
+                        var _block_content2, _block_content3, _block_content4;
+                        const title = ((_block_content2 = block.content) === null || _block_content2 === void 0 ? void 0 : _block_content2.title) || "";
+                        const subtitle = ((_block_content3 = block.content) === null || _block_content3 === void 0 ? void 0 : _block_content3.subtitle) || "";
+                        const period = ((_block_content4 = block.content) === null || _block_content4 === void 0 ? void 0 : _block_content4.period) || "";
                         const childrenHtml = render(block.children || [], depth + 1);
                         const childPlain = childrenHtml.replace(/<[^>]*>/g, "").replace(/\u00A0/g, " ").trim();
                         const childrenHasLetters = /[A-Za-zÀ-ÖØ-öø-ÿ]/.test(childPlain);
@@ -1794,17 +2325,20 @@ function blocksToHTML(blocks, fontScale = 1) {
                         if (!childrenHasLetters) {
                             return "";
                         }
-                        return `<div class=\"cv-subsection\">\n            <div class=\"cv-subsection-header\">\n              <div>\n                <div class=\"cv-subsection-title\">${title}</div>\n                ${subtitle ? `<div class=\\\"cv-subsection-subtitle\\\">${subtitle}</div>` : ""}\n              </div>\n              ${period ? `<div class=\\\"cv-subsection-period\\\">${period}</div>` : ""}\n            </div>\n            ${childrenHtml}\n          </div>`;
+                        return '<div class="cv-subsection">\n            <div class="cv-subsection-header">\n              <div>\n                <div class="cv-subsection-title">'.concat(title, "</div>\n                ").concat(subtitle ? '<div class=\\"cv-subsection-subtitle\\">'.concat(subtitle, "</div>") : "", "\n              </div>\n              ").concat(period ? '<div class=\\"cv-subsection-period\\">'.concat(period, "</div>") : "", "\n            </div>\n            ").concat(childrenHtml, "\n          </div>");
                     }
                 default:
                     return "";
             }
         }).join("");
     // envelopper dans un conteneur .cv pour appliquer les styles globaux
-    return `<div class="cv">${render(blocks, 0)}</div>`;
+    return '<div class="cv">'.concat(render(blocks, 0), "</div>");
+}
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
 }),
-"[project]/utils/cvStyles.ts [ssr] (ecmascript)", ((__turbopack_context__) => {
+"[project]/utils/cvStyles.ts [client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
@@ -1813,7 +2347,8 @@ __turbopack_context__.s([
     "getCvCss",
     ()=>getCvCss
 ]);
-function getCvCss(fontScale = 1) {
+function getCvCss() {
+    let fontScale = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : 1;
     const fs10 = 10 * fontScale; // base body font size in pt
     const fs12 = 12 * fontScale;
     const fs18 = 18 * fontScale;
@@ -1822,61 +2357,25 @@ function getCvCss(fontScale = 1) {
     const gap2 = 2 * fontScale;
     const indent1 = 16 * fontScale;
     const indent2 = 22 * fontScale;
-    return `
-  /* Page and typography */
-  @page { size: A4; margin: 15mm; }
-  .cv { font-family: 'Times New Roman', Times, serif; font-size: ${fs10}pt; line-height: 1.25; color: #000; }
-  .cv h1, .cv h2, .cv h3, .cv h4, .cv p { margin: 0; padding: 0; }
-  .cv a { color: inherit; text-decoration: underline; }
-
-  /* Header */
-  .cv .cv-header { text-align: center; margin-bottom: ${gap8}px; }
-  .cv .cv-name { font-size: ${fs18}pt; font-weight: 700; }
-  .cv .cv-contact { text-align: center; font-size: ${fs10}pt; margin-top: ${gap2}px; }
-  .cv .cv-intro { text-align: center; font-style: italic; margin-bottom: ${gap8}px; }
-
-  /* Sections */
-  .cv .cv-section { margin-top: ${gap8}px; }
-  .cv .cv-section-title { font-size: ${fs12}pt; text-transform: uppercase; margin: 0 0 ${gap4}px 0; padding-bottom: ${gap2}px; border-bottom: 0.5pt solid #000; }
-
-  /* Subsections */
-  .cv .cv-subsection { margin-bottom: ${gap4}px; }
-  .cv .cv-subsection-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: ${gap2}px; column-gap: ${gap4}px; }
-  .cv .cv-subsection-title { font-size: ${fs10}pt; font-weight: 600; }
-  .cv .cv-subsection-subtitle { font-size: ${fs10}pt; margin-top: ${Math.max(1 * fontScale, 1)}px; }
-  .cv .cv-subsection-period { font-size: ${fs10}pt; font-style: italic; white-space: nowrap; }
-
-  /* Text and bullets */
-  .cv .cv-text { font-size: ${fs10}pt; margin-bottom: ${gap2}px; }
-  .cv .cv-bullet { position: relative; padding-left: ${indent1}px; }
-  .cv .cv-bullet::before { content: "–"; position: absolute; left: 0; top: 0; }
-  .cv .cv-bullet--level2 { padding-left: ${indent2}px; }
-  .cv .cv-bullet--level2::before { content: "•"; }
-
-  /* Divider */
-  .cv hr.cv-divider { border: 0; border-top: 0.5pt solid #000; margin: ${gap8}px 0; }
-  `;
+    return "\n  /* Page and typography */\n  @page { size: A4; margin: 15mm; }\n  .cv { font-family: 'Times New Roman', Times, serif; font-size: ".concat(fs10, "pt; line-height: 1.25; color: #000; }\n  .cv h1, .cv h2, .cv h3, .cv h4, .cv p { margin: 0; padding: 0; }\n  .cv a { color: inherit; text-decoration: underline; }\n\n  /* Header */\n  .cv .cv-header { text-align: center; margin-bottom: ").concat(gap8, "px; }\n  .cv .cv-name { font-size: ").concat(fs18, "pt; font-weight: 700; }\n  .cv .cv-contact { text-align: center; font-size: ").concat(fs10, "pt; margin-top: ").concat(gap2, "px; }\n  .cv .cv-intro { text-align: center; font-style: italic; margin-bottom: ").concat(gap8, "px; }\n\n  /* Sections */\n  .cv .cv-section { margin-top: ").concat(gap8, "px; }\n  .cv .cv-section-title { font-size: ").concat(fs12, "pt; text-transform: uppercase; margin: 0 0 ").concat(gap4, "px 0; padding-bottom: ").concat(gap2, "px; border-bottom: 0.5pt solid #000; }\n\n  /* Subsections */\n  .cv .cv-subsection { margin-bottom: ").concat(gap4, "px; }\n  .cv .cv-subsection-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: ").concat(gap2, "px; column-gap: ").concat(gap4, "px; }\n  .cv .cv-subsection-title { font-size: ").concat(fs10, "pt; font-weight: 600; }\n  .cv .cv-subsection-subtitle { font-size: ").concat(fs10, "pt; margin-top: ").concat(Math.max(1 * fontScale, 1), "px; }\n  .cv .cv-subsection-period { font-size: ").concat(fs10, "pt; font-style: italic; white-space: nowrap; }\n\n  /* Text and bullets */\n  .cv .cv-text { font-size: ").concat(fs10, "pt; margin-bottom: ").concat(gap2, "px; }\n  .cv .cv-bullet { position: relative; padding-left: ").concat(indent1, 'px; }\n  .cv .cv-bullet::before { content: "–"; position: absolute; left: 0; top: 0; }\n  .cv .cv-bullet--level2 { padding-left: ').concat(indent2, 'px; }\n  .cv .cv-bullet--level2::before { content: "•"; }\n\n  /* Divider */\n  .cv hr.cv-divider { border: 0; border-top: 0.5pt solid #000; margin: ').concat(gap8, "px 0; }\n  ");
 }
 const __TURBOPACK__default__export__ = getCvCss;
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
+}
 }),
-"[project]/data/initialCV.tsx [ssr] (ecmascript)", ((__turbopack_context__) => {
+"[project]/data/initialCV.tsx [client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
-
-return __turbopack_context__.a(async (__turbopack_handle_async_dependencies__, __turbopack_async_result__) => { try {
 
 __turbopack_context__.s([
     "initialBlocks",
     ()=>initialBlocks
 ]);
-var __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__ = __turbopack_context__.i("[externals]/uuid [external] (uuid, esm_import)");
-var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
-    __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__
-]);
-[__TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__] = __turbopack_async_dependencies__.then ? (await __turbopack_async_dependencies__)() : __turbopack_async_dependencies__;
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__ = __turbopack_context__.i("[project]/node_modules/uuid/dist/v4.js [client] (ecmascript) <export default as v4>");
 ;
 const initialBlocks = [
     {
-        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
         type: "header",
         content: {
             title: "Charles Pelong"
@@ -1887,7 +2386,7 @@ const initialBlocks = [
         }
     },
     {
-        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
         type: "contact",
         content: {
             email: "charlespelong@gmail.com",
@@ -1897,23 +2396,23 @@ const initialBlocks = [
         }
     },
     {
-        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
         type: "text",
         content: "<em>Étudiant à IMT Atlantique à la recherche d’un <strong>stage de fin d’études</strong> à partir du <strong>04/2026</strong> dans le domaine de la <strong>science des données</strong> et de l'<strong>apprentissage automatique</strong>.</em>"
     },
     {
-        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
         type: "divider"
     },
     {
-        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
         type: "section",
         content: {
             title: "FORMATIONS"
         },
         children: [
             {
-                id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                 type: "subsection",
                 content: {
                     title: "IMT Atlantique — Master : Data Science et Recherche Opérationnelle",
@@ -1922,14 +2421,14 @@ const initialBlocks = [
                 },
                 children: [
                     {
-                        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                         type: "text",
                         content: "• <strong>#3 école d’ingénieurs française</strong>, d'après le <a href=\"https://www.letudiant.fr/classements/classement-des-ecoles-d-ingenieurs.html\">\"Classement de l’Etudiant 2025\"</a><br/>• Cours : Mathématiques appliquées, Statistiques, Probabilités, Machine Learning, Optimisation, Recherche opérationnelle, IA, Python, Java, Anglais"
                     }
                 ]
             },
             {
-                id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                 type: "subsection",
                 content: {
                     title: "Shanghai Jiao Tong University — Master en Informatique et Recherche Opérationnelle",
@@ -1938,14 +2437,14 @@ const initialBlocks = [
                 },
                 children: [
                     {
-                        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                         type: "text",
                         content: "• <strong>#9 université mondiale</strong> en <strong>Computer Science</strong>, d'après le <a href=\"https://www.shanghairanking.com/rankings/gras/2024/RS0210\">\"Classement de Shanghai 2025\"</a><br/>• Cours : Deep Learning, Computer Vision, Machine Learning, Cloud Computing, Chinois"
                     }
                 ]
             },
             {
-                id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                 type: "subsection",
                 content: {
                     title: "Lycée Pasteur — Classes préparatoires scientifiques PCSI/PC (CPGE)",
@@ -1954,7 +2453,7 @@ const initialBlocks = [
                 },
                 children: [
                     {
-                        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                         type: "text",
                         content: "• Formation intensive en Mathématiques, Physique, Chimie, Informatique, Français, Anglais"
                     }
@@ -1963,18 +2462,18 @@ const initialBlocks = [
         ]
     },
     {
-        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
         type: "divider"
     },
     {
-        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
         type: "section",
         content: {
             title: "EXPERIENCES PROFESSIONNELLES"
         },
         children: [
             {
-                id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                 type: "subsection",
                 content: {
                     title: "JCDecaux — Data Scientist",
@@ -1983,24 +2482,24 @@ const initialBlocks = [
                 },
                 children: [
                     {
-                        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                         type: "text",
                         content: "<em>Stage de 6 mois au sein de la DataCorp, entité de JCDecaux développant des produits data</em>"
                     },
                     {
-                        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                         type: "text",
                         content: "• Développement de solutions RAG (Retrieval-Augmented Generation) as-a-service (Python, AWS, Langchain). Création de <strong>copilotes IA</strong> à destination :<br/>• des commerciaux pour un accès rapide à des données ciblées et fiables du groupe pour l'<strong>élaboration de devis</strong>.<br/>• de la direction financière permettant la <strong>création de tableaux de bord à partir du langage naturel</strong> basés sur les données du groupe."
                     },
                     {
-                        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                         type: "text",
                         content: "Ces produits permettent de <strong>réduire drastiquement le temps</strong> de recherche et les frottements entre différentes entités du groupe."
                     }
                 ]
             },
             {
-                id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                 type: "subsection",
                 content: {
                     title: "Sopra Steria Next — Data Analyst / Data Engineer",
@@ -2009,12 +2508,12 @@ const initialBlocks = [
                 },
                 children: [
                     {
-                        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                         type: "text",
                         content: "<em>Stage de 6 mois, mission de conseil orientée data pour le compte du Ministère de l’Intérieur</em>"
                     },
                     {
-                        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                         type: "text",
                         content: "• Collecte et traitement de données incluant du <strong>web scraping</strong> et <strong>extraction</strong> depuis diverses sources (Python, Selenium).<br/>• Création de pipelines de données pour automatiser l’<strong>intégration</strong> et le <strong>nettoyage</strong> (Python, Pandas, M/Power BI).<br/>• Production de <strong>tableaux de bord</strong> et <strong>rapports automatisés</strong> pour suivre les indicateurs de performance (Power BI, Python)."
                     }
@@ -2023,18 +2522,18 @@ const initialBlocks = [
         ]
     },
     {
-        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
         type: "divider"
     },
     {
-        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
         type: "section",
         content: {
             title: "AUTRES EXPERIENCES"
         },
         children: [
             {
-                id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                 type: "subsection",
                 content: {
                     title: "Junior Atlantique – Timber Productions — Développeur logiciel",
@@ -2043,14 +2542,14 @@ const initialBlocks = [
                 },
                 children: [
                     {
-                        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                         type: "text",
                         content: "• Développement complet d’une application de gestion et recherche de contacts clients (JavaScript).<br/>• Vente de l’application pour <strong>3 000€</strong>."
                     }
                 ]
             },
             {
-                id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                 type: "subsection",
                 content: {
                     title: "Reeverse Systems — Chef de projet",
@@ -2059,12 +2558,12 @@ const initialBlocks = [
                 },
                 children: [
                     {
-                        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                         type: "text",
                         content: "<em>Projet académique de 4 mois avec Reeverse Systems, élaboration d'un simulateur pour démontrer <br/> l’efficacité de leur solution : réduction des déchets industriels et maximisation des rendements.</em>"
                     },
                     {
-                        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                         type: "text",
                         content: "• Conception d’un simulateur multi-objectifs pour la production industrielle (Python, Matplotlib) :<br/>• Génération de données aléatoires suivant différentes lois pour simuler plusieurs facteurs (nombre d’ouvriers, poids des déchets, etc.).<br/>• Création de <strong>fronts de Pareto</strong> et visualisation sous forme de <strong>graphes radar</strong> (Python, Matplotlib).<br/>• Clustering <strong>K-means</strong> sur le front de Pareto pour ne présenter que 5 solutions représentatives."
                     }
@@ -2073,50 +2572,45 @@ const initialBlocks = [
         ]
     },
     {
-        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
         type: "divider"
     },
     {
-        id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+        id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
         type: "section",
         content: {
             title: "COMPETENCES, LANGUES ET ACTIVITES"
         },
         children: [
             {
-                id: (0, __TURBOPACK__imported__module__$5b$externals$5d2f$uuid__$5b$external$5d$__$28$uuid$2c$__esm_import$29$__["v4"])(),
+                id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$uuid$2f$dist$2f$v4$2e$js__$5b$client$5d$__$28$ecmascript$29$__$3c$export__default__as__v4$3e$__["v4"])(),
                 type: "text",
                 content: "<strong>Langues :</strong> Français (natif), Anglais (IELTS 7/9), Espagnol (A2), Allemand (A2)<br/><strong>Programmation :</strong> Python (Pandas, Scikit-learn), SQL, GitHub, Java, JavaScript, M/Power BI<br/><strong>Machine Learning :</strong> Kaggle competitions (stacking LGBM+CatBoost sur les prix de voitures d’occasion), étude de cas <a href=\"https://colab.research.google.com/drive/1onv9AMOuMZQ_lIy7tBFuBrV1Pg3gU0fa#scrollTo=166cd074-f8c4-4f9d-9787-275a2a4e08af\">Roland Berger</a> (cliniques dentaires)<br/><strong>Sports :</strong> Judo, Rugby (capitaine et responsable de l’équipe de l’école)<br/><strong>Bénévolat :</strong> Scouts (10 ans) + mission humanitaire (1 mois)"
             }
         ]
     }
 ];
-__turbopack_async_result__();
-} catch(e) { __turbopack_async_result__(e); } }, false);}),
-"[project]/pages/cv.tsx [ssr] (ecmascript)", ((__turbopack_context__) => {
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
+}
+}),
+"[project]/pages/cv.tsx [client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
-
-return __turbopack_context__.a(async (__turbopack_handle_async_dependencies__, __turbopack_async_result__) => { try {
 
 __turbopack_context__.s([
     "default",
     ()=>CvGeneratorPage
 ]);
-var __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/react/jsx-dev-runtime [external] (react/jsx-dev-runtime, cjs)");
-var __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/react [external] (react, cjs)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Header$2e$tsx__$5b$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/Header.tsx [ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$externals$5d2f$react$2d$resizable$2d$panels__$5b$external$5d$__$28$react$2d$resizable$2d$panels$2c$__esm_import$29$__ = __turbopack_context__.i("[externals]/react-resizable-panels [external] (react-resizable-panels, esm_import)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$BlockEditor$2e$tsx__$5b$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/BlockEditor.tsx [ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$blocksToHTML$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/utils/blocksToHTML.ts [ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$cvStyles$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/utils/cvStyles.ts [ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$data$2f$initialCV$2e$tsx__$5b$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/data/initialCV.tsx [ssr] (ecmascript)");
-var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
-    __TURBOPACK__imported__module__$5b$externals$5d2f$react$2d$resizable$2d$panels__$5b$external$5d$__$28$react$2d$resizable$2d$panels$2c$__esm_import$29$__,
-    __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$BlockEditor$2e$tsx__$5b$ssr$5d$__$28$ecmascript$29$__,
-    __TURBOPACK__imported__module__$5b$project$5d2f$data$2f$initialCV$2e$tsx__$5b$ssr$5d$__$28$ecmascript$29$__
-]);
-[__TURBOPACK__imported__module__$5b$externals$5d2f$react$2d$resizable$2d$panels__$5b$external$5d$__$28$react$2d$resizable$2d$panels$2c$__esm_import$29$__, __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$BlockEditor$2e$tsx__$5b$ssr$5d$__$28$ecmascript$29$__, __TURBOPACK__imported__module__$5b$project$5d2f$data$2f$initialCV$2e$tsx__$5b$ssr$5d$__$28$ecmascript$29$__] = __turbopack_async_dependencies__.then ? (await __turbopack_async_dependencies__)() : __turbopack_async_dependencies__;
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react/jsx-dev-runtime.js [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react/index.js [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$DynamicHeader$2e$tsx__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/DynamicHeader.tsx [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$resizable$2d$panels$2f$dist$2f$react$2d$resizable$2d$panels$2e$browser$2e$development$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react-resizable-panels/dist/react-resizable-panels.browser.development.js [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$BlockEditor$2e$tsx__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/BlockEditor.tsx [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$blocksToHTML$2e$ts__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/utils/blocksToHTML.ts [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$cvStyles$2e$ts__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/utils/cvStyles.ts [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$data$2f$initialCV$2e$tsx__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/data/initialCV.tsx [client] (ecmascript)");
 ;
+var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
@@ -2125,44 +2619,45 @@ var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
 ;
 ;
 // Styles CSS pour la responsivité
-const styles = `
-  .preview-cv {
-    transform: scale(0.8);
-    transform-origin: top center;
-  }
-  
-  @media (max-width: 1200px) {
-    .preview-cv {
-      transform: scale(0.6) !important;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .preview-cv {
-      transform: scale(0.5) !important;
-    }
-  }
-`;
+const styles = "\n  .preview-cv {\n    transform: scale(0.8);\n    transform-origin: top center;\n  }\n  \n  @media (max-width: 1200px) {\n    .preview-cv {\n      transform: scale(0.6) !important;\n    }\n  }\n  \n  @media (max-width: 768px) {\n    .preview-cv {\n      transform: scale(0.5) !important;\n    }\n  }\n";
 function CvGeneratorPage() {
+    _s();
     console.log("CvGeneratorPage component rendered");
     // IDs stables: charger depuis localStorage si disponible
-    const [blocks, setBlocks] = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useState"])([]);
-    const [fontScale, setFontScale] = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useState"])(1);
-    const [showWarning, setShowWarning] = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useState"])(false);
-    const previewRef = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useRef"])(null);
-    const editorScrollRef = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useRef"])(null);
+    const [blocks, setBlocks] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [fontScale, setFontScale] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(1);
+    const [showWarning, setShowWarning] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const previewRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const editorScrollRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useRef"])(null);
     // Charger/Sauvegarder les blocs pour stabiliser les IDs (éviter HMR qui regénère)
-    (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useEffect"])(()=>{
-        if ("TURBOPACK compile-time truthy", 1) return;
-        //TURBOPACK unreachable
-        ;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-    (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useEffect"])(()=>{
-        if ("TURBOPACK compile-time truthy", 1) return;
-        //TURBOPACK unreachable
-        ;
-    }, [
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "CvGeneratorPage.useEffect": ()=>{
+            if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+            ;
+            try {
+                const stored = window.localStorage.getItem("cv_blocks");
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    setBlocks(parsed);
+                } else {
+                    setBlocks(__TURBOPACK__imported__module__$5b$project$5d2f$data$2f$initialCV$2e$tsx__$5b$client$5d$__$28$ecmascript$29$__["initialBlocks"]);
+                    window.localStorage.setItem("cv_blocks", JSON.stringify(__TURBOPACK__imported__module__$5b$project$5d2f$data$2f$initialCV$2e$tsx__$5b$client$5d$__$28$ecmascript$29$__["initialBlocks"]));
+                }
+            } catch (e) {
+                setBlocks(__TURBOPACK__imported__module__$5b$project$5d2f$data$2f$initialCV$2e$tsx__$5b$client$5d$__$28$ecmascript$29$__["initialBlocks"]);
+            }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        }
+    }["CvGeneratorPage.useEffect"], []);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "CvGeneratorPage.useEffect": ()=>{
+            if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+            ;
+            try {
+                window.localStorage.setItem("cv_blocks", JSON.stringify(blocks));
+            } catch (e) {}
+        }
+    }["CvGeneratorPage.useEffect"], [
         blocks
     ]);
     // Calcul de la taille optimale
@@ -2180,7 +2675,7 @@ function CvGeneratorPage() {
         let currentScale = 1;
         let step = 0.02;
         while(currentScale > 0.5){
-            tempDiv.innerHTML = `<style>${(0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$cvStyles$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__["default"])(currentScale)}</style>` + (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$blocksToHTML$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__["default"])(blocks, currentScale);
+            tempDiv.innerHTML = "<style>".concat((0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$cvStyles$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["default"])(currentScale), "</style>") + (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$blocksToHTML$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["default"])(blocks, currentScale);
             const contentHeight = tempDiv.scrollHeight;
             if (contentHeight <= maxHeight) {
                 scale = currentScale;
@@ -2192,14 +2687,20 @@ function CvGeneratorPage() {
         return scale;
     };
     // Vérifier le dépassement à chaque changement de blocks avec délai
-    (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useEffect"])(()=>{
-        const timer = setTimeout(()=>{
-            const scale = calculateOptimalFontScale();
-            setFontScale(scale);
-            setShowWarning(scale < 1);
-        }, 100);
-        return ()=>clearTimeout(timer);
-    }, [
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "CvGeneratorPage.useEffect": ()=>{
+            const timer = setTimeout({
+                "CvGeneratorPage.useEffect.timer": ()=>{
+                    const scale = calculateOptimalFontScale();
+                    setFontScale(scale);
+                    setShowWarning(scale < 1);
+                }
+            }["CvGeneratorPage.useEffect.timer"], 100);
+            return ({
+                "CvGeneratorPage.useEffect": ()=>clearTimeout(timer)
+            })["CvGeneratorPage.useEffect"];
+        }
+    }["CvGeneratorPage.useEffect"], [
         blocks
     ]);
     const handleGeneratePDF = async ()=>{
@@ -2223,7 +2724,7 @@ function CvGeneratorPage() {
             if (!res.ok) {
                 const errorData = await res.json();
                 console.error("API Error:", errorData);
-                throw new Error(errorData.error || `HTTP error! status: ${res.status}`);
+                throw new Error(errorData.error || "HTTP error! status: ".concat(res.status));
             }
             console.log("Converting response to blob");
             const blob = await res.blob();
@@ -2239,69 +2740,70 @@ function CvGeneratorPage() {
             console.log("PDF download initiated");
         } catch (error) {
             console.error("Erreur lors de la génération du PDF:", error);
-            alert(`Erreur lors de la génération du PDF: ${error instanceof Error ? error.message : "Erreur inconnue"}`);
+            alert("Erreur lors de la génération du PDF: ".concat(error instanceof Error ? error.message : "Erreur inconnue"));
         }
     };
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["Fragment"], {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Fragment"], {
         children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("style", {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("style", {
                 children: styles
             }, void 0, false, {
                 fileName: "[project]/pages/cv.tsx",
                 lineNumber: 149,
                 columnNumber: 7
             }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("style", {
-                children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$cvStyles$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__["default"])(fontScale)
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("style", {
+                children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$cvStyles$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["default"])(fontScale)
             }, void 0, false, {
                 fileName: "[project]/pages/cv.tsx",
                 lineNumber: 150,
                 columnNumber: 7
             }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Header$2e$tsx__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
-                variant: "landing"
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$DynamicHeader$2e$tsx__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                variant: "landing",
+                scrollContainerRef: editorScrollRef
             }, void 0, false, {
                 fileName: "[project]/pages/cv.tsx",
                 lineNumber: 152,
                 columnNumber: 7
             }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f$react$2d$resizable$2d$panels__$5b$external$5d$__$28$react$2d$resizable$2d$panels$2c$__esm_import$29$__["PanelGroup"], {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$resizable$2d$panels$2f$dist$2f$react$2d$resizable$2d$panels$2e$browser$2e$development$2e$js__$5b$client$5d$__$28$ecmascript$29$__["PanelGroup"], {
                 direction: "horizontal",
                 style: {
-                    height: "calc(100vh - 64px)"
+                    height: "100vh"
                 },
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f$react$2d$resizable$2d$panels__$5b$external$5d$__$28$react$2d$resizable$2d$panels$2c$__esm_import$29$__["Panel"], {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$resizable$2d$panels$2f$dist$2f$react$2d$resizable$2d$panels$2e$browser$2e$development$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Panel"], {
                         defaultSize: 60,
                         minSize: 30,
                         maxSize: 80,
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             style: {
                                 height: "100%",
                                 padding: "1rem",
                                 overflow: "auto"
                             },
                             ref: editorScrollRef,
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$BlockEditor$2e$tsx__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$BlockEditor$2e$tsx__$5b$client$5d$__$28$ecmascript$29$__["default"], {
                                 blocks: blocks,
                                 setBlocks: setBlocks,
                                 scrollContainerRef: editorScrollRef
                             }, void 0, false, {
                                 fileName: "[project]/pages/cv.tsx",
-                                lineNumber: 162,
+                                lineNumber: 165,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/pages/cv.tsx",
-                            lineNumber: 157,
+                            lineNumber: 160,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/pages/cv.tsx",
-                        lineNumber: 156,
+                        lineNumber: 159,
                         columnNumber: 9
                     }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f$react$2d$resizable$2d$panels__$5b$external$5d$__$28$react$2d$resizable$2d$panels$2c$__esm_import$29$__["PanelResizeHandle"], {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$resizable$2d$panels$2f$dist$2f$react$2d$resizable$2d$panels$2e$browser$2e$development$2e$js__$5b$client$5d$__$28$ecmascript$29$__["PanelResizeHandle"], {
                         style: {
                             width: "8px",
                             backgroundColor: "#e1e5e9",
@@ -2310,7 +2812,7 @@ function CvGeneratorPage() {
                             alignItems: "center",
                             justifyContent: "center"
                         },
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             style: {
                                 width: "2px",
                                 height: "40px",
@@ -2319,21 +2821,21 @@ function CvGeneratorPage() {
                             }
                         }, void 0, false, {
                             fileName: "[project]/pages/cv.tsx",
-                            lineNumber: 177,
+                            lineNumber: 180,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/pages/cv.tsx",
-                        lineNumber: 167,
+                        lineNumber: 170,
                         columnNumber: 9
                     }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f$react$2d$resizable$2d$panels__$5b$external$5d$__$28$react$2d$resizable$2d$panels$2c$__esm_import$29$__["Panel"], {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$resizable$2d$panels$2f$dist$2f$react$2d$resizable$2d$panels$2e$browser$2e$development$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Panel"], {
                         defaultSize: 50,
                         minSize: 45,
                         maxSize: 60,
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             style: {
-                                height: "calc(100vh - 64px)",
+                                height: "100vh",
                                 overflow: "hidden",
                                 backgroundColor: "#f8fafc",
                                 padding: "0.5rem",
@@ -2341,14 +2843,14 @@ function CvGeneratorPage() {
                                 display: "flex",
                                 flexDirection: "column"
                             },
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 style: {
                                     flex: 1,
                                     overflow: "auto",
                                     marginBottom: "0.5rem"
                                 },
                                 children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         style: {
                                             display: "flex",
                                             flexDirection: "column",
@@ -2361,42 +2863,39 @@ function CvGeneratorPage() {
                                             flexShrink: 0,
                                             marginBottom: "10px",
                                             position: "relative",
-                                            zIndex: 1000
+                                            zIndex: 20
                                         },
-                                        children: [
-                                            console.log("Rendering PDF button"),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
-                                                onClick: ()=>{
-                                                    console.log("PDF Button clicked!");
-                                                    handleGeneratePDF();
-                                                },
-                                                style: {
-                                                    padding: "12px 16px",
-                                                    backgroundColor: "#3b82f6",
-                                                    color: "white",
-                                                    border: "none",
-                                                    borderRadius: "6px",
-                                                    cursor: "pointer",
-                                                    fontSize: "14px",
-                                                    fontWeight: "600",
-                                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-                                                    position: "relative",
-                                                    zIndex: 1001,
-                                                    pointerEvents: "auto"
-                                                },
-                                                children: "Générer PDF"
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/cv.tsx",
-                                                lineNumber: 218,
-                                                columnNumber: 17
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            onClick: ()=>{
+                                                console.log("PDF Button clicked!");
+                                                handleGeneratePDF();
+                                            },
+                                            style: {
+                                                padding: "12px 16px",
+                                                backgroundColor: "#3b82f6",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "6px",
+                                                cursor: "pointer",
+                                                fontSize: "14px",
+                                                fontWeight: "600",
+                                                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                                position: "relative",
+                                                zIndex: 21,
+                                                pointerEvents: "auto"
+                                            },
+                                            children: "Générer PDF"
+                                        }, void 0, false, {
+                                            fileName: "[project]/pages/cv.tsx",
+                                            lineNumber: 220,
+                                            columnNumber: 17
+                                        }, this)
+                                    }, void 0, false, {
                                         fileName: "[project]/pages/cv.tsx",
-                                        lineNumber: 203,
+                                        lineNumber: 206,
                                         columnNumber: 15
                                     }, this),
-                                    showWarning && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                                    showWarning && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         style: {
                                             backgroundColor: "#fff3cd",
                                             border: "1px solid #ffeaa7",
@@ -2415,12 +2914,12 @@ function CvGeneratorPage() {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/pages/cv.tsx",
-                                        lineNumber: 243,
+                                        lineNumber: 245,
                                         columnNumber: 17
                                     }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         style: {},
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             ref: previewRef,
                                             className: "preview-cv",
                                             style: {
@@ -2435,51 +2934,75 @@ function CvGeneratorPage() {
                                                 marginBottom: "0.1rem"
                                             },
                                             dangerouslySetInnerHTML: {
-                                                __html: (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$blocksToHTML$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__["default"])(blocks, fontScale)
+                                                __html: (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$blocksToHTML$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["default"])(blocks, fontScale)
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/pages/cv.tsx",
-                                            lineNumber: 260,
+                                            lineNumber: 262,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/pages/cv.tsx",
-                                        lineNumber: 258,
+                                        lineNumber: 260,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/pages/cv.tsx",
-                                lineNumber: 197,
+                                lineNumber: 200,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/pages/cv.tsx",
-                            lineNumber: 187,
+                            lineNumber: 190,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/pages/cv.tsx",
-                        lineNumber: 186,
+                        lineNumber: 189,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/pages/cv.tsx",
-                lineNumber: 154,
+                lineNumber: 157,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true);
 }
-__turbopack_async_result__();
-} catch(e) { __turbopack_async_result__(e); } }, false);}),
-"[externals]/next/dist/shared/lib/no-fallback-error.external.js [external] (next/dist/shared/lib/no-fallback-error.external.js, cjs)", ((__turbopack_context__, module, exports) => {
-
-const mod = __turbopack_context__.x("next/dist/shared/lib/no-fallback-error.external.js", () => require("next/dist/shared/lib/no-fallback-error.external.js"));
-
-module.exports = mod;
+_s(CvGeneratorPage, "HGTfcYigYdfk01u+ADe6yQUsRI8=");
+_c = CvGeneratorPage;
+var _c;
+__turbopack_context__.k.register(_c, "CvGeneratorPage");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
+}
 }),
-];
+"[next]/entry/page-loader.ts { PAGE => \"[project]/pages/cv.tsx [client] (ecmascript)\" } [client] (ecmascript)", ((__turbopack_context__, module, exports) => {
 
-//# sourceMappingURL=%5Broot-of-the-server%5D__69ab2cbc._.js.map
+const PAGE_PATH = "/cv";
+(window.__NEXT_P = window.__NEXT_P || []).push([
+    PAGE_PATH,
+    ()=>{
+        return __turbopack_context__.r("[project]/pages/cv.tsx [client] (ecmascript)");
+    }
+]);
+// @ts-expect-error module.hot exists
+if (module.hot) {
+    // @ts-expect-error module.hot exists
+    module.hot.dispose(function() {
+        window.__NEXT_P.push([
+            PAGE_PATH
+        ]);
+    });
+}
+}),
+"[hmr-entry]/hmr-entry.js { ENTRY => \"[project]/pages/cv\" }", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.r("[next]/entry/page-loader.ts { PAGE => \"[project]/pages/cv.tsx [client] (ecmascript)\" } [client] (ecmascript)");
+}),
+]);
+
+//# sourceMappingURL=%5Broot-of-the-server%5D__4aec7cf1._.js.map

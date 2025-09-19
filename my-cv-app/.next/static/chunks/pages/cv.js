@@ -1,5 +1,5 @@
 __turbopack_load_page_chunks__("/cv", [
-  "static/chunks/[root-of-the-server]__6a71752b._.js",
+  "static/chunks/[root-of-the-server]__4aec7cf1._.js",
   "static/chunks/node_modules_next_dist_compiled_next-devtools_index_5277ebc8.js",
   "static/chunks/node_modules_next_dist_compiled_166120c5._.js",
   "static/chunks/node_modules_next_dist_shared_lib_f041b118._.js",
@@ -10,5 +10,5 @@ __turbopack_load_page_chunks__("/cv", [
   "static/chunks/node_modules_@hello-pangea_dnd_dist_dnd_esm_b5f80d02.js",
   "static/chunks/node_modules_14ef5ce7._.js",
   "static/chunks/pages_cv_2da965e7._.js",
-  "static/chunks/turbopack-pages_cv_e9f79a3d._.js"
+  "static/chunks/turbopack-pages_cv_52f0579f._.js"
 ])

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import Header from "../components/Header";
+import DynamicHeader from "../components/DynamicHeader";
 import Footer from "../components/Footer";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import BlockEditor from "../components/BlockEditor";
@@ -30,6 +30,8 @@ const styles = `
 `;
 
 export default function CvGeneratorPage() {
+  console.log("CvGeneratorPage component rendered");
+  
   // IDs stables: charger depuis localStorage si disponible
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [fontScale, setFontScale] = useState<number>(1);
@@ -106,21 +108,40 @@ export default function CvGeneratorPage() {
   }, [blocks]);
 
   const handleGeneratePDF = async () => {
-    const res = await fetch("/api/generate-pdf", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ blocks, fontScale }),
-    });
-    const blob = await res.blob();
-    
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'mon-cv.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    console.log("Generating PDF...", { blocks, fontScale });
+    try {
+      console.log("Making fetch request to /api/generate-pdf");
+      const res = await fetch("/api/generate-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ blocks, fontScale }),
+      });
+
+      console.log("Response received:", res.status, res.statusText);
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error("API Error:", errorData);
+        throw new Error(errorData.error || `HTTP error! status: ${res.status}`);
+      }
+
+      console.log("Converting response to blob");
+      const blob = await res.blob();
+      console.log("Blob created:", blob.size, "bytes");
+      
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'mon-cv.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      console.log("PDF download initiated");
+    } catch (error) {
+      console.error("Erreur lors de la génération du PDF:", error);
+      alert(`Erreur lors de la génération du PDF: ${error instanceof Error ? error.message : "Erreur inconnue"}`);
+    }
   };
 
   return (
@@ -128,9 +149,12 @@ export default function CvGeneratorPage() {
       <style>{styles}</style>
       <style>{getCvCss(fontScale)}</style>
 
-      <Header variant="landing" />
+      <DynamicHeader 
+        variant="landing" 
+        scrollContainerRef={editorScrollRef as React.RefObject<HTMLDivElement>}
+      />
 
-      <PanelGroup direction="horizontal" style={{ height: "calc(100vh - 64px)" }}>
+      <PanelGroup direction="horizontal" style={{ height: "100vh" }}>
         {/* Partie gauche - Éditeur (scrollable) */}
         <Panel defaultSize={60} minSize={30} maxSize={80}>
           <div style={{ 
@@ -164,7 +188,7 @@ export default function CvGeneratorPage() {
         {/* Partie droite - Aperçu (fixe) */}
         <Panel defaultSize={50} minSize={45} maxSize={60}>
           <div style={{ 
-            height: "calc(100vh - 64px)",
+            height: "100vh",
             overflow: "hidden",
             backgroundColor: "#f8fafc",
             padding: "0.5rem",
@@ -178,6 +202,45 @@ export default function CvGeneratorPage() {
               overflow: "auto",
               marginBottom: "0.5rem"
             }}>
+              {/* Bouton fixe en bas - toujours visible */}
+              <div style={{ 
+                display: "flex", 
+                flexDirection: "column",
+                gap: "8px",
+                backgroundColor: "#fff",
+                padding: "1rem",
+                borderRadius: "8px",
+                border: "1px solid #e1e5e9",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                flexShrink: 0,
+                marginBottom: "10px",
+                position: "relative",
+                zIndex: 20
+              }}>
+                <button 
+                  onClick={() => {
+                    console.log("PDF Button clicked!");
+                    handleGeneratePDF();
+                  }}
+                  style={{
+                    padding: "12px 16px",
+                    backgroundColor: "#3b82f6",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                    position: "relative",
+                    zIndex: 21,
+                    pointerEvents: "auto"
+                  }}
+                >
+                  Générer PDF
+                </button>
+              </div>
+
               {showWarning && (
                 <div style={{
                   backgroundColor: "#fff3cd",
@@ -186,7 +249,9 @@ export default function CvGeneratorPage() {
                   padding: "8px 12px",
                   margin: "10px 0",
                   color: "#856404",
-                  fontSize: "14px"
+                  fontSize: "14px",
+                  fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                  fontWeight: "500"
                 }}>
                   ⚠️ Attention : Tu dépasses la première page ! La taille de police a été réduite à {Math.round(fontScale * 100)}% pour tenir sur une page.
                 </div>
@@ -212,41 +277,11 @@ export default function CvGeneratorPage() {
                 />
               </div>
             </div>
-            
-            {/* Bouton fixe en bas - toujours visible */}
-            <div style={{ 
-              display: "flex", 
-              flexDirection: "column",
-              gap: "8px",
-              backgroundColor: "#fff",
-              padding: "1rem",
-              borderRadius: "8px",
-              border: "1px solid #e1e5e9",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-              flexShrink: 0
-            }}>
-              <button 
-                onClick={handleGeneratePDF}
-                style={{
-                  padding: "12px 16px",
-                  backgroundColor: "#3b82f6",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  fontSize: "14px",
-                  fontWeight: "500"
-                }}
-              >
-                Générer PDF
-              </button>
-            </div>
         
           </div>
         </Panel>
-      </PanelGroup>
-      <Footer />
-    </>
+       </PanelGroup>
+     </>
   );
 }
 

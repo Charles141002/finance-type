@@ -3152,106 +3152,105 @@ function CvGeneratorPage() {
                                 display: "flex",
                                 flexDirection: "column"
                             },
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    style: {
-                                        flex: 1,
-                                        overflow: "auto",
-                                        marginBottom: "0.5rem"
-                                    },
-                                    children: [
-                                        showWarning && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    flex: 1,
+                                    overflow: "auto",
+                                    marginBottom: "0.5rem"
+                                },
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            gap: "8px",
+                                            backgroundColor: "#fff",
+                                            padding: "1rem",
+                                            borderRadius: "8px",
+                                            border: "1px solid #e1e5e9",
+                                            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                                            flexShrink: 0,
+                                            marginBottom: "10px"
+                                        },
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            onClick: handleGeneratePDF,
                                             style: {
-                                                backgroundColor: "#fff3cd",
-                                                border: "1px solid #ffeaa7",
-                                                borderRadius: "4px",
-                                                padding: "8px 12px",
-                                                margin: "10px 0",
-                                                color: "#856404",
-                                                fontSize: "14px"
+                                                padding: "12px 16px",
+                                                backgroundColor: "#3b82f6",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "6px",
+                                                cursor: "pointer",
+                                                fontSize: "14px",
+                                                fontWeight: "500"
                                             },
-                                            children: [
-                                                "⚠️ Attention : Tu dépasses la première page ! La taille de police a été réduite à ",
-                                                Math.round(fontScale * 100),
-                                                "% pour tenir sur une page."
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/pages/cv.tsx",
-                                            lineNumber: 182,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            style: {},
-                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                ref: previewRef,
-                                                className: "preview-cv",
-                                                style: {
-                                                    width: "210mm",
-                                                    minHeight: "297mm",
-                                                    padding: "15mm",
-                                                    border: "1px solid #000",
-                                                    boxSizing: "border-box",
-                                                    backgroundColor: "#fff",
-                                                    transform: "scale(0.8)",
-                                                    transformOrigin: "top left",
-                                                    marginBottom: "0.1rem"
-                                                },
-                                                dangerouslySetInnerHTML: {
-                                                    __html: (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$blocksToHTML$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["default"])(blocks, fontScale)
-                                                }
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/cv.tsx",
-                                                lineNumber: 197,
-                                                columnNumber: 17
-                                            }, this)
+                                            children: "Générer PDF"
                                         }, void 0, false, {
                                             fileName: "[project]/pages/cv.tsx",
-                                            lineNumber: 195,
-                                            columnNumber: 15
+                                            lineNumber: 194,
+                                            columnNumber: 17
                                         }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/pages/cv.tsx",
-                                    lineNumber: 176,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    style: {
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        gap: "8px",
-                                        backgroundColor: "#fff",
-                                        padding: "1rem",
-                                        borderRadius: "8px",
-                                        border: "1px solid #e1e5e9",
-                                        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                                        flexShrink: 0
-                                    },
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        onClick: handleGeneratePDF,
-                                        style: {
-                                            padding: "12px 16px",
-                                            backgroundColor: "#3b82f6",
-                                            color: "white",
-                                            border: "none",
-                                            borderRadius: "6px",
-                                            cursor: "pointer",
-                                            fontSize: "14px",
-                                            fontWeight: "500"
-                                        },
-                                        children: "Générer PDF"
                                     }, void 0, false, {
                                         fileName: "[project]/pages/cv.tsx",
-                                        lineNumber: 228,
+                                        lineNumber: 182,
+                                        columnNumber: 15
+                                    }, this),
+                                    showWarning && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            backgroundColor: "#fff3cd",
+                                            border: "1px solid #ffeaa7",
+                                            borderRadius: "4px",
+                                            padding: "8px 12px",
+                                            margin: "10px 0",
+                                            color: "#856404",
+                                            fontSize: "14px"
+                                        },
+                                        children: [
+                                            "⚠️ Attention : Tu dépasses la première page ! La taille de police a été réduite à ",
+                                            Math.round(fontScale * 100),
+                                            "% pour tenir sur une page."
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/pages/cv.tsx",
+                                        lineNumber: 212,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {},
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            ref: previewRef,
+                                            className: "preview-cv",
+                                            style: {
+                                                width: "210mm",
+                                                minHeight: "297mm",
+                                                padding: "15mm",
+                                                border: "1px solid #000",
+                                                boxSizing: "border-box",
+                                                backgroundColor: "#fff",
+                                                transform: "scale(0.8)",
+                                                transformOrigin: "top left",
+                                                marginBottom: "0.1rem"
+                                            },
+                                            dangerouslySetInnerHTML: {
+                                                __html: (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$blocksToHTML$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["default"])(blocks, fontScale)
+                                            }
+                                        }, void 0, false, {
+                                            fileName: "[project]/pages/cv.tsx",
+                                            lineNumber: 227,
+                                            columnNumber: 17
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/cv.tsx",
+                                        lineNumber: 225,
                                         columnNumber: 15
                                     }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/pages/cv.tsx",
-                                    lineNumber: 217,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/pages/cv.tsx",
+                                lineNumber: 176,
+                                columnNumber: 13
+                            }, this)
+                        }, void 0, false, {
                             fileName: "[project]/pages/cv.tsx",
                             lineNumber: 166,
                             columnNumber: 11
@@ -3269,7 +3268,7 @@ function CvGeneratorPage() {
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Footer$2e$tsx__$5b$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/pages/cv.tsx",
-                lineNumber: 248,
+                lineNumber: 249,
                 columnNumber: 7
             }, this)
         ]

@@ -5,178 +5,217 @@ const mod = __turbopack_context__.x("react/jsx-dev-runtime", () => require("reac
 
 module.exports = mod;
 }),
-"[project]/components/Header.tsx [ssr] (ecmascript)", ((__turbopack_context__) => {
+"[project]/components/DynamicHeader.tsx [ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
     "default",
-    ()=>Header
+    ()=>DynamicHeader
 ]);
 var __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/react/jsx-dev-runtime [external] (react/jsx-dev-runtime, cjs)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/link.js [ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/react [external] (react, cjs)");
 ;
 ;
-function Header({ rightActions, variant = "default" }) {
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("header", {
+;
+function DynamicHeader({ rightActions, variant = "default", scrollContainerRef }) {
+    const [isVisible, setIsVisible] = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useState"])(false);
+    const [lastScrollY, setLastScrollY] = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useState"])(0);
+    (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__["useEffect"])(()=>{
+        const handleScroll = ()=>{
+            // Utiliser le conteneur de scroll si fourni, sinon la fenêtre
+            const scrollElement = scrollContainerRef?.current || window;
+            const currentScrollY = scrollElement === window ? window.scrollY : scrollElement.scrollTop;
+            // Afficher le header si on remonte (scroll vers le haut) ou si on est en haut
+            const newVisibility = currentScrollY < lastScrollY || currentScrollY <= 10;
+            if (newVisibility !== isVisible) {
+                setIsVisible(newVisibility);
+            }
+            setLastScrollY(currentScrollY);
+        };
+        const scrollElement = scrollContainerRef?.current || window;
+        scrollElement.addEventListener('scroll', handleScroll, {
+            passive: true
+        });
+        return ()=>{
+            scrollElement.removeEventListener('scroll', handleScroll);
+        };
+    }, [
+        lastScrollY,
+        scrollContainerRef
+    ]);
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
         style: {
-            height: "120px",
-            display: "flex",
-            alignItems: "center",
-            background: "linear-gradient(180deg, rgba(2, 6, 23, 0.95), rgba(2, 6, 23, 0.9))",
-            backdropFilter: "saturate(140%) blur(8px)",
-            WebkitBackdropFilter: "saturate(140%) blur(8px)",
-            borderBottom: "2px solid rgba(255,255,255,0.15)",
-            borderTop: "1px solid rgba(255,255,255,0.1)",
-            position: "sticky",
-            top: 0,
+            height: isVisible ? "120px" : "0px",
+            overflow: "hidden",
+            transition: "height 0.3s ease-in-out",
+            position: "relative",
             zIndex: 30
         },
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("header", {
             style: {
-                width: "100%",
-                maxWidth: "2000px",
-                margin: "0 auto",
-                padding: "0 24px 0 0",
+                height: "120px",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "flex-start",
-                gap: "20px"
+                background: "linear-gradient(180deg, rgba(2, 6, 23, 0.95), rgba(2, 6, 23, 0.9))",
+                backdropFilter: "saturate(140%) blur(8px)",
+                WebkitBackdropFilter: "saturate(140%) blur(8px)",
+                borderBottom: "2px solid rgba(255,255,255,0.15)",
+                borderTop: "1px solid rgba(255,255,255,0.1)",
+                position: "relative",
+                width: "100%"
             },
-            children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
-                    style: {
-                        display: "flex",
-                        alignItems: "center"
-                    },
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
-                        href: "/",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                style: {
+                    width: "100%",
+                    maxWidth: "2000px",
+                    margin: "0 auto",
+                    padding: "0 24px 0 0",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    gap: "20px"
+                },
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
                         style: {
-                            textDecoration: "none",
                             display: "flex",
                             alignItems: "center"
                         },
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
-                            src: "/Logo.png",
-                            alt: "FinanceCV Smart Resume Builder",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
+                            href: "/",
                             style: {
-                                height: "250px",
-                                width: "auto",
-                                objectFit: "contain"
-                            }
+                                textDecoration: "none",
+                                display: "flex",
+                                alignItems: "center"
+                            },
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
+                                src: "/Logo.png",
+                                alt: "FinanceCV Smart Resume Builder",
+                                style: {
+                                    height: "250px",
+                                    width: "auto",
+                                    objectFit: "contain"
+                                }
+                            }, void 0, false, {
+                                fileName: "[project]/components/DynamicHeader.tsx",
+                                lineNumber: 83,
+                                columnNumber: 13
+                            }, this)
                         }, void 0, false, {
-                            fileName: "[project]/components/Header.tsx",
-                            lineNumber: 48,
-                            columnNumber: 13
+                            fileName: "[project]/components/DynamicHeader.tsx",
+                            lineNumber: 75,
+                            columnNumber: 11
                         }, this)
                     }, void 0, false, {
-                        fileName: "[project]/components/Header.tsx",
-                        lineNumber: 40,
-                        columnNumber: 11
+                        fileName: "[project]/components/DynamicHeader.tsx",
+                        lineNumber: 74,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                        style: {
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "32px",
+                            marginLeft: "auto"
+                        },
+                        children: rightActions ?? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["Fragment"], {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "/cv",
+                                    style: {
+                                        textDecoration: "none",
+                                        color: "#e2e8f0",
+                                        fontWeight: 600,
+                                        fontSize: "15px",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                        transition: "all 0.2s ease"
+                                    },
+                                    children: "Générateur CV"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/DynamicHeader.tsx",
+                                    lineNumber: 99,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "/a-propos",
+                                    style: {
+                                        textDecoration: "none",
+                                        color: "#e2e8f0",
+                                        fontWeight: 600,
+                                        fontSize: "15px",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                        transition: "all 0.2s ease"
+                                    },
+                                    children: "À propos"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/DynamicHeader.tsx",
+                                    lineNumber: 112,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "/cv",
+                                    style: {
+                                        textDecoration: "none",
+                                        background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+                                        color: "#ffffff",
+                                        padding: "14px 24px",
+                                        borderRadius: "12px",
+                                        fontWeight: 700,
+                                        fontSize: "16px",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                        boxShadow: "0 8px 24px rgba(59, 130, 246, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15)",
+                                        border: "2px solid rgba(255, 255, 255, 0.1)",
+                                        transition: "all 0.2s ease"
+                                    },
+                                    children: "Commencer"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/DynamicHeader.tsx",
+                                    lineNumber: 125,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "/login",
+                                    style: {
+                                        textDecoration: "none",
+                                        color: "#e2e8f0",
+                                        background: "rgba(255,255,255,0.08)",
+                                        border: "1px solid rgba(255,255,255,0.15)",
+                                        padding: "12px 20px",
+                                        borderRadius: "12px",
+                                        fontWeight: 600,
+                                        fontSize: "15px",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                        transition: "all 0.2s ease",
+                                        backdropFilter: "blur(10px)"
+                                    },
+                                    children: "Se connecter"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/DynamicHeader.tsx",
+                                    lineNumber: 143,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true)
+                    }, void 0, false, {
+                        fileName: "[project]/components/DynamicHeader.tsx",
+                        lineNumber: 96,
+                        columnNumber: 9
                     }, this)
-                }, void 0, false, {
-                    fileName: "[project]/components/Header.tsx",
-                    lineNumber: 39,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
-                    style: {
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "32px",
-                        marginLeft: "auto"
-                    },
-                    children: rightActions ?? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["Fragment"], {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                href: "/cv",
-                                style: {
-                                    textDecoration: "none",
-                                    color: "#e2e8f0",
-                                    fontWeight: 600,
-                                    fontSize: "15px",
-                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-                                    transition: "all 0.2s ease"
-                                },
-                                children: "Générateur CV"
-                            }, void 0, false, {
-                                fileName: "[project]/components/Header.tsx",
-                                lineNumber: 64,
-                                columnNumber: 15
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                href: "/a-propos",
-                                style: {
-                                    textDecoration: "none",
-                                    color: "#e2e8f0",
-                                    fontWeight: 600,
-                                    fontSize: "15px",
-                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-                                    transition: "all 0.2s ease"
-                                },
-                                children: "À propos"
-                            }, void 0, false, {
-                                fileName: "[project]/components/Header.tsx",
-                                lineNumber: 77,
-                                columnNumber: 15
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                href: "/cv",
-                                style: {
-                                    textDecoration: "none",
-                                    background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
-                                    color: "#ffffff",
-                                    padding: "14px 24px",
-                                    borderRadius: "12px",
-                                    fontWeight: 700,
-                                    fontSize: "16px",
-                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-                                    boxShadow: "0 8px 24px rgba(59, 130, 246, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15)",
-                                    border: "2px solid rgba(255, 255, 255, 0.1)",
-                                    transition: "all 0.2s ease"
-                                },
-                                children: "Commencer"
-                            }, void 0, false, {
-                                fileName: "[project]/components/Header.tsx",
-                                lineNumber: 90,
-                                columnNumber: 15
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                href: "/login",
-                                style: {
-                                    textDecoration: "none",
-                                    color: "#e2e8f0",
-                                    background: "rgba(255,255,255,0.08)",
-                                    border: "1px solid rgba(255,255,255,0.15)",
-                                    padding: "12px 20px",
-                                    borderRadius: "12px",
-                                    fontWeight: 600,
-                                    fontSize: "15px",
-                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-                                    transition: "all 0.2s ease",
-                                    backdropFilter: "blur(10px)"
-                                },
-                                children: "Se connecter"
-                            }, void 0, false, {
-                                fileName: "[project]/components/Header.tsx",
-                                lineNumber: 108,
-                                columnNumber: 15
-                            }, this)
-                        ]
-                    }, void 0, true)
-                }, void 0, false, {
-                    fileName: "[project]/components/Header.tsx",
-                    lineNumber: 61,
-                    columnNumber: 9
-                }, this)
-            ]
-        }, void 0, true, {
-            fileName: "[project]/components/Header.tsx",
-            lineNumber: 26,
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/DynamicHeader.tsx",
+                lineNumber: 61,
+                columnNumber: 7
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/components/DynamicHeader.tsx",
+            lineNumber: 47,
             columnNumber: 7
         }, this)
     }, void 0, false, {
-        fileName: "[project]/components/Header.tsx",
-        lineNumber: 11,
+        fileName: "[project]/components/DynamicHeader.tsx",
+        lineNumber: 38,
         columnNumber: 5
     }, this);
 }
@@ -2104,7 +2143,7 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/react/jsx-dev-runtime [external] (react/jsx-dev-runtime, cjs)");
 var __TURBOPACK__imported__module__$5b$externals$5d2f$react__$5b$external$5d$__$28$react$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/react [external] (react, cjs)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Header$2e$tsx__$5b$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/Header.tsx [ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$DynamicHeader$2e$tsx__$5b$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/DynamicHeader.tsx [ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$externals$5d2f$react$2d$resizable$2d$panels__$5b$external$5d$__$28$react$2d$resizable$2d$panels$2c$__esm_import$29$__ = __turbopack_context__.i("[externals]/react-resizable-panels [external] (react-resizable-panels, esm_import)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$BlockEditor$2e$tsx__$5b$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/BlockEditor.tsx [ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$blocksToHTML$2e$ts__$5b$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/utils/blocksToHTML.ts [ssr] (ecmascript)");
@@ -2258,8 +2297,9 @@ function CvGeneratorPage() {
                 lineNumber: 150,
                 columnNumber: 7
             }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Header$2e$tsx__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
-                variant: "landing"
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$DynamicHeader$2e$tsx__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
+                variant: "landing",
+                scrollContainerRef: editorScrollRef
             }, void 0, false, {
                 fileName: "[project]/pages/cv.tsx",
                 lineNumber: 152,
@@ -2268,7 +2308,7 @@ function CvGeneratorPage() {
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f$react$2d$resizable$2d$panels__$5b$external$5d$__$28$react$2d$resizable$2d$panels$2c$__esm_import$29$__["PanelGroup"], {
                 direction: "horizontal",
                 style: {
-                    height: "calc(100vh - 64px)"
+                    height: "100vh"
                 },
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f$react$2d$resizable$2d$panels__$5b$external$5d$__$28$react$2d$resizable$2d$panels$2c$__esm_import$29$__["Panel"], {
@@ -2288,17 +2328,17 @@ function CvGeneratorPage() {
                                 scrollContainerRef: editorScrollRef
                             }, void 0, false, {
                                 fileName: "[project]/pages/cv.tsx",
-                                lineNumber: 162,
+                                lineNumber: 165,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/pages/cv.tsx",
-                            lineNumber: 157,
+                            lineNumber: 160,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/pages/cv.tsx",
-                        lineNumber: 156,
+                        lineNumber: 159,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f$react$2d$resizable$2d$panels__$5b$external$5d$__$28$react$2d$resizable$2d$panels$2c$__esm_import$29$__["PanelResizeHandle"], {
@@ -2319,12 +2359,12 @@ function CvGeneratorPage() {
                             }
                         }, void 0, false, {
                             fileName: "[project]/pages/cv.tsx",
-                            lineNumber: 177,
+                            lineNumber: 180,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/pages/cv.tsx",
-                        lineNumber: 167,
+                        lineNumber: 170,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f$react$2d$resizable$2d$panels__$5b$external$5d$__$28$react$2d$resizable$2d$panels$2c$__esm_import$29$__["Panel"], {
@@ -2333,7 +2373,7 @@ function CvGeneratorPage() {
                         maxSize: 60,
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
                             style: {
-                                height: "calc(100vh - 64px)",
+                                height: "100vh",
                                 overflow: "hidden",
                                 backgroundColor: "#f8fafc",
                                 padding: "0.5rem",
@@ -2361,39 +2401,36 @@ function CvGeneratorPage() {
                                             flexShrink: 0,
                                             marginBottom: "10px",
                                             position: "relative",
-                                            zIndex: 1000
+                                            zIndex: 20
                                         },
-                                        children: [
-                                            console.log("Rendering PDF button"),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
-                                                onClick: ()=>{
-                                                    console.log("PDF Button clicked!");
-                                                    handleGeneratePDF();
-                                                },
-                                                style: {
-                                                    padding: "12px 16px",
-                                                    backgroundColor: "#3b82f6",
-                                                    color: "white",
-                                                    border: "none",
-                                                    borderRadius: "6px",
-                                                    cursor: "pointer",
-                                                    fontSize: "14px",
-                                                    fontWeight: "600",
-                                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-                                                    position: "relative",
-                                                    zIndex: 1001,
-                                                    pointerEvents: "auto"
-                                                },
-                                                children: "Générer PDF"
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/cv.tsx",
-                                                lineNumber: 218,
-                                                columnNumber: 17
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                                            onClick: ()=>{
+                                                console.log("PDF Button clicked!");
+                                                handleGeneratePDF();
+                                            },
+                                            style: {
+                                                padding: "12px 16px",
+                                                backgroundColor: "#3b82f6",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "6px",
+                                                cursor: "pointer",
+                                                fontSize: "14px",
+                                                fontWeight: "600",
+                                                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                                position: "relative",
+                                                zIndex: 21,
+                                                pointerEvents: "auto"
+                                            },
+                                            children: "Générer PDF"
+                                        }, void 0, false, {
+                                            fileName: "[project]/pages/cv.tsx",
+                                            lineNumber: 220,
+                                            columnNumber: 17
+                                        }, this)
+                                    }, void 0, false, {
                                         fileName: "[project]/pages/cv.tsx",
-                                        lineNumber: 203,
+                                        lineNumber: 206,
                                         columnNumber: 15
                                     }, this),
                                     showWarning && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -2415,7 +2452,7 @@ function CvGeneratorPage() {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/pages/cv.tsx",
-                                        lineNumber: 243,
+                                        lineNumber: 245,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -2439,34 +2476,34 @@ function CvGeneratorPage() {
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/pages/cv.tsx",
-                                            lineNumber: 260,
+                                            lineNumber: 262,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/pages/cv.tsx",
-                                        lineNumber: 258,
+                                        lineNumber: 260,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/pages/cv.tsx",
-                                lineNumber: 197,
+                                lineNumber: 200,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/pages/cv.tsx",
-                            lineNumber: 187,
+                            lineNumber: 190,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/pages/cv.tsx",
-                        lineNumber: 186,
+                        lineNumber: 189,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/pages/cv.tsx",
-                lineNumber: 154,
+                lineNumber: 157,
                 columnNumber: 7
             }, this)
         ]
@@ -2482,4 +2519,4 @@ module.exports = mod;
 }),
 ];
 
-//# sourceMappingURL=%5Broot-of-the-server%5D__69ab2cbc._.js.map
+//# sourceMappingURL=%5Broot-of-the-server%5D__76f46d93._.js.map

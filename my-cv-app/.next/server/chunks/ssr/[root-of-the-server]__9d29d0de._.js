@@ -629,9 +629,9 @@ function APropos() {
                             zIndex: 2,
                             maxWidth: "1100px",
                             margin: "0 auto",
-                            padding: "120px 20px 100px 20px",
+                            padding: "100px 20px 80px 20px",
                             textAlign: "center",
-                            minHeight: "80vh",
+                            minHeight: "60vh",
                             display: "flex",
                             flexDirection: "column",
                             justifyContent: "center"
@@ -778,15 +778,44 @@ function APropos() {
                                                     margin: "0 auto 24px auto",
                                                     boxShadow: "0 8px 32px rgba(59, 130, 246, 0.3)"
                                                 },
-                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("span", {
-                                                    style: {
-                                                        color: "#ffffff",
-                                                        fontSize: "32px",
-                                                        fontWeight: 800,
-                                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
-                                                    },
-                                                    children: "?"
-                                                }, void 0, false, {
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("svg", {
+                                                    width: "32",
+                                                    height: "32",
+                                                    viewBox: "0 0 24 24",
+                                                    fill: "none",
+                                                    stroke: "currentColor",
+                                                    strokeWidth: "2",
+                                                    strokeLinecap: "round",
+                                                    strokeLinejoin: "round",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("circle", {
+                                                            cx: "12",
+                                                            cy: "12",
+                                                            r: "10"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/pages/a-propos.tsx",
+                                                            lineNumber: 138,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("path", {
+                                                            d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/pages/a-propos.tsx",
+                                                            lineNumber: 139,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("line", {
+                                                            x1: "12",
+                                                            y1: "17",
+                                                            x2: "12.01",
+                                                            y2: "17"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/pages/a-propos.tsx",
+                                                            lineNumber: 140,
+                                                            columnNumber: 19
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
                                                     fileName: "[project]/pages/a-propos.tsx",
                                                     lineNumber: 137,
                                                     columnNumber: 17
@@ -807,7 +836,7 @@ function APropos() {
                                                 children: "Pourquoi ?"
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/a-propos.tsx",
-                                                lineNumber: 147,
+                                                lineNumber: 144,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("p", {
@@ -821,7 +850,7 @@ function APropos() {
                                                 children: "Parce qu'on a tous perdu des heures sur Word à re-aligner des puces et des marges. Créer un CV professionnel ne devrait pas être un calvaire."
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/a-propos.tsx",
-                                                lineNumber: 156,
+                                                lineNumber: 153,
                                                 columnNumber: 15
                                             }, this)
                                         ]
@@ -848,22 +877,55 @@ function APropos() {
                                                     margin: "0 auto 24px auto",
                                                     boxShadow: "0 8px 32px rgba(59, 130, 246, 0.3)"
                                                 },
-                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("span", {
-                                                    style: {
-                                                        color: "#ffffff",
-                                                        fontSize: "32px",
-                                                        fontWeight: 800,
-                                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
-                                                    },
-                                                    children: "👥"
-                                                }, void 0, false, {
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("svg", {
+                                                    width: "32",
+                                                    height: "32",
+                                                    viewBox: "0 0 24 24",
+                                                    fill: "none",
+                                                    stroke: "currentColor",
+                                                    strokeWidth: "2",
+                                                    strokeLinecap: "round",
+                                                    strokeLinejoin: "round",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("path", {
+                                                            d: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/pages/a-propos.tsx",
+                                                            lineNumber: 181,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("circle", {
+                                                            cx: "9",
+                                                            cy: "7",
+                                                            r: "4"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/pages/a-propos.tsx",
+                                                            lineNumber: 182,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("path", {
+                                                            d: "M23 21v-2a4 4 0 0 0-3-3.87"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/pages/a-propos.tsx",
+                                                            lineNumber: 183,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("path", {
+                                                            d: "M16 3.13a4 4 0 0 1 0 7.75"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/pages/a-propos.tsx",
+                                                            lineNumber: 184,
+                                                            columnNumber: 19
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
                                                     fileName: "[project]/pages/a-propos.tsx",
-                                                    lineNumber: 183,
+                                                    lineNumber: 180,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/a-propos.tsx",
-                                                lineNumber: 172,
+                                                lineNumber: 169,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("h3", {
@@ -877,7 +939,7 @@ function APropos() {
                                                 children: "Pour qui ?"
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/a-propos.tsx",
-                                                lineNumber: 193,
+                                                lineNumber: 188,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("p", {
@@ -891,13 +953,13 @@ function APropos() {
                                                 children: "Étudiants, jeunes diplômés et juniors visant banques, fonds d'investissement et cabinets de conseil."
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/a-propos.tsx",
-                                                lineNumber: 202,
+                                                lineNumber: 197,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/pages/a-propos.tsx",
-                                        lineNumber: 168,
+                                        lineNumber: 165,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -918,22 +980,30 @@ function APropos() {
                                                     margin: "0 auto 24px auto",
                                                     boxShadow: "0 8px 32px rgba(59, 130, 246, 0.3)"
                                                 },
-                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("span", {
-                                                    style: {
-                                                        color: "#ffffff",
-                                                        fontSize: "32px",
-                                                        fontWeight: 800,
-                                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
-                                                    },
-                                                    children: "⚡"
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("svg", {
+                                                    width: "32",
+                                                    height: "32",
+                                                    viewBox: "0 0 24 24",
+                                                    fill: "none",
+                                                    stroke: "currentColor",
+                                                    strokeWidth: "2",
+                                                    strokeLinecap: "round",
+                                                    strokeLinejoin: "round",
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("path", {
+                                                        d: "M13 2L3 14h9l-1 8 10-12h-9l1-8z"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/pages/a-propos.tsx",
+                                                        lineNumber: 225,
+                                                        columnNumber: 19
+                                                    }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/pages/a-propos.tsx",
-                                                    lineNumber: 229,
+                                                    lineNumber: 224,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/a-propos.tsx",
-                                                lineNumber: 218,
+                                                lineNumber: 213,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("h3", {
@@ -947,7 +1017,7 @@ function APropos() {
                                                 children: "Comment ?"
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/a-propos.tsx",
-                                                lineNumber: 239,
+                                                lineNumber: 229,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("p", {
@@ -961,13 +1031,13 @@ function APropos() {
                                                 children: "Une structure académique stricte, des sections claires, export PDF ATS-friendly. L'IA propose, vous personnalisez."
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/a-propos.tsx",
-                                                lineNumber: 248,
+                                                lineNumber: 238,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/pages/a-propos.tsx",
-                                        lineNumber: 214,
+                                        lineNumber: 209,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -988,22 +1058,44 @@ function APropos() {
                                                     margin: "0 auto 24px auto",
                                                     boxShadow: "0 8px 32px rgba(59, 130, 246, 0.3)"
                                                 },
-                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("span", {
-                                                    style: {
-                                                        color: "#ffffff",
-                                                        fontSize: "32px",
-                                                        fontWeight: 800,
-                                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
-                                                    },
-                                                    children: "🤖"
-                                                }, void 0, false, {
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("svg", {
+                                                    width: "32",
+                                                    height: "32",
+                                                    viewBox: "0 0 24 24",
+                                                    fill: "none",
+                                                    stroke: "currentColor",
+                                                    strokeWidth: "2",
+                                                    strokeLinecap: "round",
+                                                    strokeLinejoin: "round",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("rect", {
+                                                            x: "3",
+                                                            y: "3",
+                                                            width: "18",
+                                                            height: "18",
+                                                            rx: "2",
+                                                            ry: "2"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/pages/a-propos.tsx",
+                                                            lineNumber: 266,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("path", {
+                                                            d: "M9 9h6v6H9z"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/pages/a-propos.tsx",
+                                                            lineNumber: 267,
+                                                            columnNumber: 19
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
                                                     fileName: "[project]/pages/a-propos.tsx",
-                                                    lineNumber: 275,
+                                                    lineNumber: 265,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/a-propos.tsx",
-                                                lineNumber: 264,
+                                                lineNumber: 254,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("h3", {
@@ -1017,7 +1109,7 @@ function APropos() {
                                                 children: "Et l'IA ?"
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/a-propos.tsx",
-                                                lineNumber: 285,
+                                                lineNumber: 271,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("p", {
@@ -1031,13 +1123,13 @@ function APropos() {
                                                 children: "Elle te propose une base propre et professionnelle. Tu personnalises en 2 minutes selon ton profil."
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/a-propos.tsx",
-                                                lineNumber: 294,
+                                                lineNumber: 280,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/pages/a-propos.tsx",
-                                        lineNumber: 260,
+                                        lineNumber: 250,
                                         columnNumber: 13
                                     }, this)
                                 ]
@@ -1076,7 +1168,7 @@ function APropos() {
                         }
                     }, void 0, false, {
                         fileName: "[project]/pages/a-propos.tsx",
-                        lineNumber: 314,
+                        lineNumber: 300,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -1105,7 +1197,7 @@ function APropos() {
                                         children: "Notre Promesse"
                                     }, void 0, false, {
                                         fileName: "[project]/pages/a-propos.tsx",
-                                        lineNumber: 333,
+                                        lineNumber: 319,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("p", {
@@ -1119,13 +1211,13 @@ function APropos() {
                                         children: "Des standards professionnels, sans la complexité"
                                     }, void 0, false, {
                                         fileName: "[project]/pages/a-propos.tsx",
-                                        lineNumber: 343,
+                                        lineNumber: 329,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/pages/a-propos.tsx",
-                                lineNumber: 329,
+                                lineNumber: 315,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -1137,22 +1229,166 @@ function APropos() {
                                 },
                                 children: [
                                     {
-                                        icon: "🆓",
+                                        icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("svg", {
+                                            width: "24",
+                                            height: "24",
+                                            viewBox: "0 0 24 24",
+                                            fill: "none",
+                                            stroke: "currentColor",
+                                            strokeWidth: "2",
+                                            strokeLinecap: "round",
+                                            strokeLinejoin: "round",
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("path", {
+                                                d: "M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/a-propos.tsx",
+                                                lineNumber: 349,
+                                                columnNumber: 19
+                                            }, this)
+                                        }, void 0, false, {
+                                            fileName: "[project]/pages/a-propos.tsx",
+                                            lineNumber: 348,
+                                            columnNumber: 17
+                                        }, this),
                                         title: "Gratuit et sans friction",
                                         desc: "Aucun coût caché, aucune inscription obligatoire"
                                     },
                                     {
-                                        icon: "📄",
+                                        icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("svg", {
+                                            width: "24",
+                                            height: "24",
+                                            viewBox: "0 0 24 24",
+                                            fill: "none",
+                                            stroke: "currentColor",
+                                            strokeWidth: "2",
+                                            strokeLinecap: "round",
+                                            strokeLinejoin: "round",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("path", {
+                                                    d: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/a-propos.tsx",
+                                                    lineNumber: 354,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("polyline", {
+                                                    points: "14,2 14,8 20,8"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/a-propos.tsx",
+                                                    lineNumber: 355,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("line", {
+                                                    x1: "16",
+                                                    y1: "13",
+                                                    x2: "8",
+                                                    y2: "13"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/a-propos.tsx",
+                                                    lineNumber: 356,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("line", {
+                                                    x1: "16",
+                                                    y1: "17",
+                                                    x2: "8",
+                                                    y2: "17"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/a-propos.tsx",
+                                                    lineNumber: 357,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("polyline", {
+                                                    points: "10,9 9,9 8,9"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/a-propos.tsx",
+                                                    lineNumber: 358,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/pages/a-propos.tsx",
+                                            lineNumber: 353,
+                                            columnNumber: 17
+                                        }, this),
                                         title: "Lisible par les ATS",
                                         desc: "Format optimisé pour passer les filtres automatiques"
                                     },
                                     {
-                                        icon: "⚡",
+                                        icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("svg", {
+                                            width: "24",
+                                            height: "24",
+                                            viewBox: "0 0 24 24",
+                                            fill: "none",
+                                            stroke: "currentColor",
+                                            strokeWidth: "2",
+                                            strokeLinecap: "round",
+                                            strokeLinejoin: "round",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("path", {
+                                                    d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/a-propos.tsx",
+                                                    lineNumber: 363,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("polyline", {
+                                                    points: "7,10 12,15 17,10"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/a-propos.tsx",
+                                                    lineNumber: 364,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("line", {
+                                                    x1: "12",
+                                                    y1: "15",
+                                                    x2: "12",
+                                                    y2: "3"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/a-propos.tsx",
+                                                    lineNumber: 365,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/pages/a-propos.tsx",
+                                            lineNumber: 362,
+                                            columnNumber: 17
+                                        }, this),
                                         title: "Export PDF en un clic",
                                         desc: "Téléchargement instantané, prêt à envoyer"
                                     },
                                     {
-                                        icon: "✏️",
+                                        icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("svg", {
+                                            width: "24",
+                                            height: "24",
+                                            viewBox: "0 0 24 24",
+                                            fill: "none",
+                                            stroke: "currentColor",
+                                            strokeWidth: "2",
+                                            strokeLinecap: "round",
+                                            strokeLinejoin: "round",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("path", {
+                                                    d: "M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/a-propos.tsx",
+                                                    lineNumber: 370,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("path", {
+                                                    d: "M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/a-propos.tsx",
+                                                    lineNumber: 371,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/pages/a-propos.tsx",
+                                            lineNumber: 369,
+                                            columnNumber: 17
+                                        }, this),
                                         title: "Édition rapide et simple",
                                         desc: "Interface intuitive, modifications en temps réel"
                                     }
@@ -1167,13 +1403,13 @@ function APropos() {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
                                                 style: {
-                                                    fontSize: "32px",
+                                                    color: "#3b82f6",
                                                     marginBottom: "12px"
                                                 },
                                                 children: item.icon
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/a-propos.tsx",
-                                                lineNumber: 373,
+                                                lineNumber: 382,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("h3", {
@@ -1187,7 +1423,7 @@ function APropos() {
                                                 children: item.title
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/a-propos.tsx",
-                                                lineNumber: 379,
+                                                lineNumber: 388,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("p", {
@@ -1201,18 +1437,18 @@ function APropos() {
                                                 children: item.desc
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/a-propos.tsx",
-                                                lineNumber: 388,
+                                                lineNumber: 397,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, index, true, {
                                         fileName: "[project]/pages/a-propos.tsx",
-                                        lineNumber: 366,
+                                        lineNumber: 375,
                                         columnNumber: 15
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/pages/a-propos.tsx",
-                                lineNumber: 354,
+                                lineNumber: 340,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -1241,7 +1477,7 @@ function APropos() {
                                         children: "Créer mon CV"
                                     }, void 0, false, {
                                         fileName: "[project]/pages/a-propos.tsx",
-                                        lineNumber: 405,
+                                        lineNumber: 414,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -1264,30 +1500,30 @@ function APropos() {
                                         children: "Retour à l'accueil"
                                     }, void 0, false, {
                                         fileName: "[project]/pages/a-propos.tsx",
-                                        lineNumber: 423,
+                                        lineNumber: 432,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/pages/a-propos.tsx",
-                                lineNumber: 402,
+                                lineNumber: 411,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/pages/a-propos.tsx",
-                        lineNumber: 323,
+                        lineNumber: 309,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/pages/a-propos.tsx",
-                lineNumber: 309,
+                lineNumber: 295,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Footer$2e$tsx__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/pages/a-propos.tsx",
-                lineNumber: 444,
+                lineNumber: 453,
                 columnNumber: 7
             }, this)
         ]
