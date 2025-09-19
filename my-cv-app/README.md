@@ -33,6 +33,11 @@ Générateur de CV type finance basé sur Next.js (Pages Router) avec authentifi
    npm install
    ```
 
+4. Provisionnez la base de données Supabase :
+
+   - Ouvrez l'onglet **SQL Editor** dans Supabase.
+   - Collez le contenu de `supabase/cv_schema.sql` puis exécutez-le pour créer la table `user_cvs`, activer la RLS et installer les politiques associées.
+
 ## Démarrage
 
 ```bash
@@ -50,6 +55,13 @@ Le site est accessible sur [http://localhost:3000](http://localhost:3000).
   - Créer un compte et confirmer leur email.
   - Se connecter / se déconnecter depuis l'interface.
   - Demander un lien de réinitialisation et choisir un nouveau mot de passe sur `/reset-password`.
+
+## Sauvegarde des CV
+
+- Depuis `/cv`, le bouton `Sauvegarder` envoie les blocs et le `fontScale` courant vers l'API `POST /api/cv/save` qui effectue un **upsert** dans `user_cvs` pour l'utilisateur connecté.
+- Le script `supabase/cv_schema.sql` inclut la table, un index sur `user_id`, les politiques RLS et un trigger `updated_at`.
+- Vérifiez que vos politiques Supabase autorisent les insert/update/select lorsque `auth.uid() = user_id`.
+- La page `/mes-cv` affiche toutes les sauvegardes, permet d'en créer de nouvelles, de rouvrir un CV (`/cv?id=...`) et de supprimer un enregistrement.
 
 ## Bonnes pratiques supplémentaires
 

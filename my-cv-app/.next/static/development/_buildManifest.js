@@ -1,6 +1,21 @@
 self.__BUILD_MANIFEST = {
+  "/": [
+    "./static/chunks/pages/index.js"
+  ],
+  "/_error": [
+    "./static/chunks/pages/_error.js"
+  ],
+  "/a-propos": [
+    "./static/chunks/pages/a-propos.js"
+  ],
+  "/cv": [
+    "./static/chunks/pages/cv.js"
+  ],
   "/login": [
     "./static/chunks/pages/login.js"
+  ],
+  "/mes-cv": [
+    "./static/chunks/pages/mes-cv.js"
   ],
   "__rewrites": {
     "afterFiles": [],
@@ -13,9 +28,14 @@ self.__BUILD_MANIFEST = {
     "/_error",
     "/a-propos",
     "/api/auth/callback",
+    "/api/cv/delete",
+    "/api/cv/detail",
+    "/api/cv/list",
+    "/api/cv/save",
     "/api/generate-pdf",
     "/cv",
     "/login",
+    "/mes-cv",
     "/reset-password"
   ]
 };self.__BUILD_MANIFEST_CB && self.__BUILD_MANIFEST_CB()

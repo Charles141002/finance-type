@@ -1,5 +1,15 @@
 {
+  "/": "pages/index.js",
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
-  "/login": "pages/login.js"
+  "/_error": "pages/_error.js",
+  "/a-propos": "pages/a-propos.js",
+  "/api/cv/delete": "pages/api/cv/delete.js",
+  "/api/cv/detail": "pages/api/cv/detail.js",
+  "/api/cv/list": "pages/api/cv/list.js",
+  "/api/cv/save": "pages/api/cv/save.js",
+  "/api/generate-pdf": "pages/api/generate-pdf.js",
+  "/cv": "pages/cv.js",
+  "/login": "pages/login.js",
+  "/mes-cv": "pages/mes-cv.js"
 }

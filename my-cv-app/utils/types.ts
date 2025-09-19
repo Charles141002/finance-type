@@ -6,10 +6,23 @@ export type BlockType =
   | "contact"
   | "divider";
 
+export type BlockContent =
+  | string
+  | {
+      title?: string;
+      subtitle?: string;
+      period?: string;
+      email?: string;
+      phone?: string;
+      address?: string;
+      linkedin?: string;
+      [key: string]: string | string[] | undefined;
+    };
+
 export interface Block {
   id: string;
   type: BlockType;
-  content?: any;
+  content?: BlockContent;
   children?: Block[];
   style?: {
     size?: "small" | "medium" | "large";
@@ -126,7 +139,6 @@ export const canMoveBlock = (context: DragContext, allBlocks: Block[]): boolean 
   }
 
   // 4) Optionnel: limiter la profondeur totale à 3 (root=0)
-  const currentDepth = getDepthOfBlock(allBlocks, source.blockId);
   const destinationDepth = destinationParentType
     ? getDepthOfBlock(allBlocks, destination.parentId!) + 1
     : 0;

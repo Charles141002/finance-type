@@ -1,6 +1,7 @@
 import { Block } from "./types";
 
-export default function blocksToHTML(blocks: Block[], fontScale: number = 1): string {
+export default function blocksToHTML(blocks: Block[], _fontScale: number = 1): string {
+    void _fontScale;
     const render = (list: Block[], depth: number): string =>
       list.map(block => {
       switch (block.type) {
