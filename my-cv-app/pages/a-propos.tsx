@@ -1,34 +1,11 @@
 import Link from "next/link";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 export default function APropos() {
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#ffffff" }}>
-      {/* Header */}
-      <header style={{
-        height: "64px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "0 20px",
-        backgroundColor: "#ffffff",
-        borderBottom: "1px solid #e5e7eb"
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <Link href="/" style={{ color: "#111827", textDecoration: "none", fontWeight: 700 }}>Finance CV AI</Link>
-          <nav style={{ display: "flex", gap: "12px" }}>
-            <Link href="/cv" style={{ color: "#374151", textDecoration: "none" }}>Générateur</Link>
-            <Link href="/a-propos" style={{ color: "#111827", textDecoration: "none", fontWeight: 600 }}>À propos</Link>
-          </nav>
-        </div>
-        <Link href="/cv" style={{
-          padding: "8px 12px",
-          backgroundColor: "#0ea5e9",
-          color: "#fff",
-          borderRadius: "8px",
-          textDecoration: "none",
-          fontWeight: 600
-        }}>Générer mon CV</Link>
-      </header>
+      <Header />
 
       <main style={{ maxWidth: "900px", margin: "0 auto", padding: "40px 20px" }}>
         <h1 style={{ fontSize: "36px", lineHeight: 1.2, margin: 0, color: "#0f172a" }}>À propos</h1>
@@ -106,20 +83,7 @@ export default function APropos() {
         </div>
       </main>
 
-      <footer style={{
-        borderTop: "1px solid #e5e7eb",
-        backgroundColor: "#ffffff",
-        padding: "16px 20px",
-        color: "#64748b"
-      }}>
-        <div style={{ maxWidth: "900px", margin: "0 auto", display: "flex", justifyContent: "space-between" }}>
-          <span>© {new Date().getFullYear()} Finance CV AI</span>
-          <div style={{ display: "flex", gap: "12px" }}>
-            <Link href="/a-propos" style={{ color: "#64748b", textDecoration: "none" }}>À propos</Link>
-            <Link href="/cv" style={{ color: "#64748b", textDecoration: "none" }}>Générateur</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

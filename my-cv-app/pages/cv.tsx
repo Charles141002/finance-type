@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import BlockEditor from "../components/BlockEditor";
 import blocksToHTML from "../utils/blocksToHTML";
@@ -126,43 +128,25 @@ export default function CvGeneratorPage() {
       <style>{styles}</style>
       <style>{getCvCss(fontScale)}</style>
 
-      {/* Barre de navigation supérieure */}
-      <div
-        style={{
-          height: "56px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "0 16px",
-          borderBottom: "1px solid #e1e5e9",
-          backgroundColor: "#ffffff",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          <Link href="/" style={{ color: "#111827", textDecoration: "none", fontWeight: 600 }}>Finance CV AI</Link>
-          <Link href="/a-propos" style={{ color: "#374151", textDecoration: "none" }}>À propos</Link>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <a href="https://" style={{ display: "none" }} aria-hidden="true">hidden</a>
-          <button 
-            onClick={handleGeneratePDF}
-            style={{
-              padding: "8px 12px",
-              backgroundColor: "#111827",
-              color: "#fff",
-              border: "1px solid #111827",
-              borderRadius: "6px",
-              cursor: "pointer",
-              fontSize: "14px",
-              fontWeight: 500
-            }}
-          >
-            Télécharger PDF
-          </button>
-        </div>
-      </div>
+      <Header rightActions={(
+        <button 
+          onClick={handleGeneratePDF}
+          style={{
+            padding: "8px 12px",
+            backgroundColor: "#111827",
+            color: "#fff",
+            border: "1px solid #111827",
+            borderRadius: "8px",
+            cursor: "pointer",
+            fontSize: "14px",
+            fontWeight: 600
+          }}
+        >
+          Télécharger PDF
+        </button>
+      )} />
 
-      <PanelGroup direction="horizontal" style={{ height: "calc(100vh - 56px)" }}>
+      <PanelGroup direction="horizontal" style={{ height: "calc(100vh - 64px)" }}>
         {/* Partie gauche - Éditeur (scrollable) */}
         <Panel defaultSize={60} minSize={30} maxSize={80}>
           <div style={{ 
@@ -196,7 +180,7 @@ export default function CvGeneratorPage() {
         {/* Partie droite - Aperçu (fixe) */}
         <Panel defaultSize={45} minSize={45} maxSize={45}>
           <div style={{ 
-            height: "calc(100vh - 56px)",
+            height: "calc(100vh - 64px)",
             overflow: "auto",
             backgroundColor: "#f8fafc",
             padding: "0.5rem",
@@ -268,6 +252,7 @@ export default function CvGeneratorPage() {
           </div>
         </Panel>
       </PanelGroup>
+      <Footer />
     </>
   );
 }
