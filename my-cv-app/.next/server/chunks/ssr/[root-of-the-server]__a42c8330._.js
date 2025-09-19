@@ -691,7 +691,7 @@ function LandingPage() {
                 variant: "landing"
             }, void 0, false, {
                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                lineNumber: 8,
+                lineNumber: 9,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("section", {
@@ -713,7 +713,7 @@ function LandingPage() {
                         }
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                        lineNumber: 13,
+                        lineNumber: 14,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -725,7 +725,7 @@ function LandingPage() {
                         }
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                        lineNumber: 24,
+                        lineNumber: 25,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -755,7 +755,7 @@ function LandingPage() {
                                         children: "Générateur automatique de CV type finance avec IA"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                        lineNumber: 42,
+                                        lineNumber: 43,
                                         columnNumber: 11
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("ul", {
@@ -773,27 +773,27 @@ function LandingPage() {
                                                 children: "CV finance professionnel généré automatiquement"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                                lineNumber: 62,
+                                                lineNumber: 63,
                                                 columnNumber: 13
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("li", {
                                                 children: "Format 1 page, optimisé ATS pour banques et fonds"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                                lineNumber: 63,
+                                                lineNumber: 64,
                                                 columnNumber: 13
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("li", {
                                                 children: "Gratuit et téléchargeable en PDF instantanément"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                                lineNumber: 64,
+                                                lineNumber: 65,
                                                 columnNumber: 13
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                        lineNumber: 53,
+                                        lineNumber: 54,
                                         columnNumber: 11
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -825,18 +825,18 @@ function LandingPage() {
                                             children: "Créer mon CV"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 67,
+                                            lineNumber: 68,
                                             columnNumber: 13
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                        lineNumber: 66,
+                                        lineNumber: 67,
                                         columnNumber: 11
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                lineNumber: 41,
+                                lineNumber: 42,
                                 columnNumber: 9
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -852,38 +852,39 @@ function LandingPage() {
                                         borderRadius: "8px",
                                         objectFit: "contain"
                                     },
-                                    onError: (e)=>{
-                                        e.currentTarget.style.display = 'none';
-                                        const parent = e.currentTarget.parentElement;
+                                    onError: (event)=>{
+                                        const image = event.currentTarget;
+                                        image.style.display = "none";
+                                        const parent = image.parentElement;
                                         if (parent) {
-                                            parent.style.display = 'flex';
-                                            parent.style.alignItems = 'center';
-                                            parent.style.justifyContent = 'center';
-                                            parent.style.color = '#334155';
-                                            parent.style.height = '420px';
-                                            parent.textContent = 'Dépose l\'image cv-example.png dans /public pour afficher un aperçu.';
+                                            parent.style.display = "flex";
+                                            parent.style.alignItems = "center";
+                                            parent.style.justifyContent = "center";
+                                            parent.style.color = "#334155";
+                                            parent.style.height = "420px";
+                                            parent.textContent = "Dépose l'image cv-example.png dans /public pour afficher un aperçu.";
                                         }
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                    lineNumber: 87,
+                                    lineNumber: 88,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                lineNumber: 86,
+                                lineNumber: 87,
                                 columnNumber: 9
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                        lineNumber: 31,
+                        lineNumber: 32,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                lineNumber: 11,
+                lineNumber: 12,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("section", {
@@ -914,7 +915,7 @@ function LandingPage() {
                                 children: "Nos étudiants ont été recrutés par :"
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                lineNumber: 116,
+                                lineNumber: 129,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -948,7 +949,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 142,
+                                            lineNumber: 155,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -963,7 +964,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 152,
+                                            lineNumber: 165,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -978,7 +979,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 162,
+                                            lineNumber: 175,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -993,7 +994,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 172,
+                                            lineNumber: 185,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1008,7 +1009,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 182,
+                                            lineNumber: 195,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1023,7 +1024,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 192,
+                                            lineNumber: 205,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1038,7 +1039,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 202,
+                                            lineNumber: 215,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1053,7 +1054,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 212,
+                                            lineNumber: 225,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1068,7 +1069,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 222,
+                                            lineNumber: 235,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1083,7 +1084,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 232,
+                                            lineNumber: 245,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1098,7 +1099,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 242,
+                                            lineNumber: 255,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1113,7 +1114,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 252,
+                                            lineNumber: 265,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1128,7 +1129,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 262,
+                                            lineNumber: 275,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1143,7 +1144,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 274,
+                                            lineNumber: 287,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1158,7 +1159,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 284,
+                                            lineNumber: 297,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1173,7 +1174,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 294,
+                                            lineNumber: 307,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1188,7 +1189,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 304,
+                                            lineNumber: 317,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1203,7 +1204,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 314,
+                                            lineNumber: 327,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1218,7 +1219,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 324,
+                                            lineNumber: 337,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1233,7 +1234,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 334,
+                                            lineNumber: 347,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1248,7 +1249,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 344,
+                                            lineNumber: 357,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1263,7 +1264,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 354,
+                                            lineNumber: 367,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1278,7 +1279,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 364,
+                                            lineNumber: 377,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1293,7 +1294,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 374,
+                                            lineNumber: 387,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1308,7 +1309,7 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 384,
+                                            lineNumber: 397,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("img", {
@@ -1323,24 +1324,24 @@ function LandingPage() {
                                             className: "jsx-e8c388d9017a286c"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                            lineNumber: 394,
+                                            lineNumber: 407,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                    lineNumber: 135,
+                                    lineNumber: 148,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                lineNumber: 127,
+                                lineNumber: 140,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                        lineNumber: 110,
+                        lineNumber: 123,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f$styled$2d$jsx$2f$style$2e$js__$5b$external$5d$__$28$styled$2d$jsx$2f$style$2e$js$2c$__cjs$29$__["default"], {
@@ -1350,7 +1351,7 @@ function LandingPage() {
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                lineNumber: 106,
+                lineNumber: 119,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("section", {
@@ -1371,7 +1372,7 @@ function LandingPage() {
                         }
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                        lineNumber: 427,
+                        lineNumber: 440,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -1400,7 +1401,7 @@ function LandingPage() {
                                         children: "Comment ça marche"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                        lineNumber: 446,
+                                        lineNumber: 459,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("p", {
@@ -1414,13 +1415,13 @@ function LandingPage() {
                                         children: "Créez votre CV professionnel en 3 étapes simples"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                        lineNumber: 456,
+                                        lineNumber: 469,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                lineNumber: 442,
+                                lineNumber: 455,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -1455,12 +1456,12 @@ function LandingPage() {
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                                    lineNumber: 481,
+                                                    lineNumber: 494,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                                lineNumber: 480,
+                                                lineNumber: 493,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("h3", {
@@ -1474,7 +1475,7 @@ function LandingPage() {
                                                 children: "Générer votre CV"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                                lineNumber: 493,
+                                                lineNumber: 506,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("p", {
@@ -1488,13 +1489,13 @@ function LandingPage() {
                                                 children: "Générez votre CV type finance sur une page lisible par les ATS des plus grandes banques et fonds d'investissements"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                                lineNumber: 502,
+                                                lineNumber: 515,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                        lineNumber: 474,
+                                        lineNumber: 487,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -1521,12 +1522,12 @@ function LandingPage() {
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                                    lineNumber: 521,
+                                                    lineNumber: 534,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                                lineNumber: 520,
+                                                lineNumber: 533,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("h3", {
@@ -1540,7 +1541,7 @@ function LandingPage() {
                                                 children: "Remplir les sections"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                                lineNumber: 533,
+                                                lineNumber: 546,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("p", {
@@ -1554,13 +1555,13 @@ function LandingPage() {
                                                 children: "Remplissez chaque section de votre CV en vous appuyant sur notre contenu pré-rédigé, si vous le souhaitez. Pas besoin de vous occuper de la mise en forme, l'IA le fait pour vous"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                                lineNumber: 542,
+                                                lineNumber: 555,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                        lineNumber: 514,
+                                        lineNumber: 527,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -1587,12 +1588,12 @@ function LandingPage() {
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                                    lineNumber: 561,
+                                                    lineNumber: 574,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                                lineNumber: 560,
+                                                lineNumber: 573,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("h3", {
@@ -1606,7 +1607,7 @@ function LandingPage() {
                                                 children: "Télécharger votre CV"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                                lineNumber: 573,
+                                                lineNumber: 586,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("p", {
@@ -1620,19 +1621,19 @@ function LandingPage() {
                                                 children: "Téléchargez votre CV au format PDF gratuitement en 1 clic. Inscrivez-vous si vous souhaitez sauvegarder votre travail"
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                                lineNumber: 582,
+                                                lineNumber: 595,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                        lineNumber: 554,
+                                        lineNumber: 567,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                lineNumber: 467,
+                                lineNumber: 480,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -1660,35 +1661,35 @@ function LandingPage() {
                                     children: "Commencer maintenant"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                    lineNumber: 599,
+                                    lineNumber: 612,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                                lineNumber: 595,
+                                lineNumber: 608,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                        lineNumber: 436,
+                        lineNumber: 449,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                lineNumber: 422,
+                lineNumber: 435,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$components$2f$Footer$2e$tsx__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-                lineNumber: 621,
+                lineNumber: 634,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/index.tsx",
-        lineNumber: 7,
+        lineNumber: 8,
         columnNumber: 5
     }, this);
 }

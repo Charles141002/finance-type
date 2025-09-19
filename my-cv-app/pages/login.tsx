@@ -303,7 +303,7 @@ export default function LoginPage({ initialSession }: LoginPageProps) {
             <>
               Pas encore de compte ?{' '}
               <button type="button" onClick={toggleMode} style={{ ...secondaryButtonStyle, width: 'auto', display: 'inline-block', marginTop: 0 }}>
-                S'inscrire gratuitement
+                S&apos;inscrire gratuitement
               </button>
             </>
           ) : (

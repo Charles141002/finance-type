@@ -1,9 +1,7 @@
-import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
+import { useState, useEffect, useRef, useCallback } from "react";
 import type { GetServerSidePropsContext } from "next";
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import DynamicHeader from "../components/DynamicHeader";
-import Footer from "../components/Footer";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import BlockEditor from "../components/BlockEditor";
 import blocksToHTML from "../utils/blocksToHTML";
@@ -53,10 +51,9 @@ export default function CvGeneratorPage() {
         setBlocks(initialBlocks);
         window.localStorage.setItem("cv_blocks", JSON.stringify(initialBlocks));
       }
-    } catch (e) {
+    } catch {
       setBlocks(initialBlocks);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -67,7 +64,7 @@ export default function CvGeneratorPage() {
   }, [blocks]);
 
   // Calcul de la taille optimale
-  const calculateOptimalFontScale = () => {
+  const calculateOptimalFontScale = useCallback(() => {
     if (!previewRef.current) return 1;
   
     const maxHeight = 1050;
@@ -82,7 +79,7 @@ export default function CvGeneratorPage() {
     document.body.appendChild(tempDiv);
   
     let currentScale = 1;
-    let step = 0.02;
+    const step = 0.02;
     while (currentScale > 0.5) {
       tempDiv.innerHTML = `<style>${getCvCss(currentScale)}</style>` + blocksToHTML(blocks, currentScale);
       const contentHeight = tempDiv.scrollHeight;
@@ -96,7 +93,7 @@ export default function CvGeneratorPage() {
   
     document.body.removeChild(tempDiv);
     return scale;
-  };
+  }, [blocks]);
 
   // Vérifier le dépassement à chaque changement de blocks avec délai
   useEffect(() => {
@@ -107,7 +104,7 @@ export default function CvGeneratorPage() {
     }, 100);
     
     return () => clearTimeout(timer);
-  }, [blocks]);
+  }, [calculateOptimalFontScale]);
 
   const handleGeneratePDF = async () => {
     console.log("Generating PDF...", { blocks, fontScale });

@@ -1,3 +1,4 @@
+import type { SyntheticEvent } from "react";
 import Link from "next/link";
 import DynamicHeader from "../components/DynamicHeader";
 import Footer from "../components/Footer";
@@ -96,7 +97,19 @@ export default function LandingPage() {
                 borderRadius: "8px",
                 objectFit: "contain"
               }}
-            onError={(e:any)=>{ e.currentTarget.style.display='none'; const parent=e.currentTarget.parentElement; if(parent){ parent.style.display='flex'; parent.style.alignItems='center'; parent.style.justifyContent='center'; parent.style.color='#334155'; parent.style.height='420px'; parent.textContent='Dépose l\'image cv-example.png dans /public pour afficher un aperçu.'; } }}
+            onError={(event: SyntheticEvent<HTMLImageElement>) => {
+              const image = event.currentTarget;
+              image.style.display = "none";
+              const parent = image.parentElement;
+              if (parent) {
+                parent.style.display = "flex";
+                parent.style.alignItems = "center";
+                parent.style.justifyContent = "center";
+                parent.style.color = "#334155";
+                parent.style.height = "420px";
+                parent.textContent = "Dépose l'image cv-example.png dans /public pour afficher un aperçu.";
+              }
+            }}
           />
         </div>
         </div>
@@ -506,7 +519,7 @@ export default function LandingPage() {
                 margin: 0,
                 fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
               }}>
-                Générez votre CV type finance sur une page lisible par les ATS des plus grandes banques et fonds d'investissements
+                Générez votre CV type finance sur une page lisible par les ATS des plus grandes banques et fonds d&apos;investissements
               </p>
             </div>
 
@@ -546,7 +559,7 @@ export default function LandingPage() {
                 margin: 0,
                 fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
               }}>
-                Remplissez chaque section de votre CV en vous appuyant sur notre contenu pré-rédigé, si vous le souhaitez. Pas besoin de vous occuper de la mise en forme, l'IA le fait pour vous
+                Remplissez chaque section de votre CV en vous appuyant sur notre contenu pré-rédigé, si vous le souhaitez. Pas besoin de vous occuper de la mise en forme, l&apos;IA le fait pour vous
               </p>
             </div>
 

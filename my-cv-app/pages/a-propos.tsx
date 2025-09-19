@@ -61,7 +61,7 @@ export default function APropos() {
             marginLeft: "auto",
             marginRight: "auto"
           }}>
-            Nous sommes deux étudiants passionnés de finance et de tech. On s'est rendu compte que créer un CV type finance est souvent long, pénible et mal formaté. Alors on a décidé de vous aider : un CV type finance en quelques clics qui tient sur une page quoiqu'il arrive sans se soucier de la taille de la police ou la taille des marges ! Pas le temps pour les remerciements, allez sharker !
+            Nous sommes deux étudiants passionnés de finance et de tech. On s&apos;est rendu compte que créer un CV type finance est souvent long, pénible et mal formaté. Alors on a décidé de vous aider : un CV type finance en quelques clics qui tient sur une page quoiqu&apos;il arrive sans se soucier de la taille de la police ou la taille des marges ! Pas le temps pour les remerciements, allez sharker !
           </p>
         </div>
       </section>
@@ -157,7 +157,7 @@ export default function APropos() {
                 margin: 0,
                 fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
               }}>
-                Parce qu'on a tous perdu des heures sur Word à re-aligner des puces et des marges. Créer un CV professionnel ne devrait pas être un calvaire.
+              Parce qu&apos;on a tous perdu des heures sur Word à re-aligner des puces et des marges. Créer un CV professionnel ne devrait pas être un calvaire.
               </p>
             </div>
 
@@ -201,7 +201,7 @@ export default function APropos() {
                 margin: 0,
                 fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
               }}>
-                Étudiants, jeunes diplômés et juniors visant banques, fonds d'investissement et cabinets de conseil.
+                Étudiants, jeunes diplômés et juniors visant banques, fonds d&apos;investissement et cabinets de conseil.
               </p>
             </div>
 
@@ -242,7 +242,7 @@ export default function APropos() {
                 margin: 0,
                 fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
               }}>
-                Une structure académique stricte, des sections claires, export PDF ATS-friendly. L'IA propose, vous personnalisez.
+                Une structure académique stricte, des sections claires, export PDF ATS-friendly. L&apos;IA propose, vous personnalisez.
               </p>
             </div>
 
@@ -275,7 +275,7 @@ export default function APropos() {
                 margin: "0 0 12px 0",
                 fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
               }}>
-                Et l'IA ?
+                Et l&apos;IA ?
               </h3>
               <p style={{
                 fontSize: "16px",
@@ -444,7 +444,7 @@ export default function APropos() {
               textAlign: "center",
               fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
             }}>
-              Retour à l'accueil
+              Retour à l&apos;accueil
             </Link>
           </div>
         </div>

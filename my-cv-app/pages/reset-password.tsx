@@ -62,7 +62,7 @@ export default function ResetPasswordPage() {
 
         {!session && (
           <p style={{ color: '#f87171', fontSize: '13px', marginBottom: '12px' }}>
-            Le lien n'est plus valide ou a déjà été utilisé. Demandez un nouvel e-mail de réinitialisation.
+            Le lien n&apos;est plus valide ou a déjà été utilisé. Demandez un nouvel e-mail de réinitialisation.
           </p>
         )}
 

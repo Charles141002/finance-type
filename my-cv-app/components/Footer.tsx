@@ -41,7 +41,7 @@ export default function Footer() {
               margin: "0 0 24px 0",
               fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
             }}>
-              Générateur automatique de CV type finance avec IA. Créez votre CV professionnel optimisé pour les ATS des plus grandes banques et fonds d'investissement.
+              Générateur automatique de CV type finance avec IA. Créez votre CV professionnel optimisé pour les ATS des plus grandes banques et fonds d&apos;investissement.
             </p>
             <Link href="/cv" style={{
               padding: "12px 24px",
@@ -200,4 +200,3 @@ export default function Footer() {
     </footer>
   );
 }
-
