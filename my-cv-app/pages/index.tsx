@@ -1,242 +1,154 @@
-import { useState, useEffect, useRef } from "react";
-import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import BlockEditor from "../components/BlockEditor";
-import blocksToHTML from "../utils/blocksToHTML";
-import { initialBlocks } from "../data/initialCV";
-import { Block } from "../utils/types";
+import Link from "next/link";
 
-// Styles CSS pour la responsivité
-const styles = `
-  .preview-cv {
-    transform: scale(0.8);
-    transform-origin: top center;
-  }
-  
-  @media (max-width: 1200px) {
-    .preview-cv {
-      transform: scale(0.6) !important;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .preview-cv {
-      transform: scale(0.5) !important;
-    }
-  }
-`;
-
-export default function Home() {
-  // IDs stables: charger depuis localStorage si disponible
-  const [blocks, setBlocks] = useState<Block[]>([]);
-  const [fontScale, setFontScale] = useState<number>(1);
-  const [showWarning, setShowWarning] = useState<boolean>(false);
-  const previewRef = useRef<HTMLDivElement>(null);
-  const editorScrollRef = useRef<HTMLDivElement>(null);
-
-  // Charger/Sauvegarder les blocs pour stabiliser les IDs (éviter HMR qui regénère)
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      const stored = window.localStorage.getItem("cv_blocks");
-      if (stored) {
-        const parsed = JSON.parse(stored) as Block[];
-        setBlocks(parsed);
-      } else {
-        setBlocks(initialBlocks);
-        window.localStorage.setItem("cv_blocks", JSON.stringify(initialBlocks));
-      }
-    } catch (e) {
-      setBlocks(initialBlocks);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      window.localStorage.setItem("cv_blocks", JSON.stringify(blocks));
-    } catch {}
-  }, [blocks]);
-
-  // Fonction pour calculer la taille de police optimale
-  const calculateOptimalFontScale = () => {
-    if (!previewRef.current) return 1;
-  
-    // Hauteur maximale A4 approximative en pixels
-    const maxHeight = 1050;
-    let scale = 1;
-  
-    // Créer un div temporaire pour mesurer
-    const tempDiv = document.createElement("div");
-    tempDiv.style.width = "210mm";
-    tempDiv.style.padding = "15mm";
-    tempDiv.style.boxSizing = "border-box";
-    tempDiv.style.position = "absolute";
-    tempDiv.style.visibility = "hidden";
-    document.body.appendChild(tempDiv);
-  
-    // Itérer pour trouver la plus grande taille qui tient
-    let currentScale = 1;
-    let step = 0.02; // petit pas pour précision
-    while (currentScale > 0.5) {
-      tempDiv.style.fontSize = `${currentScale}em`;
-      tempDiv.style.lineHeight = `${1.1 * currentScale}`;
-      tempDiv.innerHTML = blocksToHTML(blocks, currentScale);
-      const contentHeight = tempDiv.scrollHeight;
-  
-      if (contentHeight <= maxHeight) {
-        scale = currentScale;
-        break;
-      }
-      currentScale -= step;
-    }
-  
-    document.body.removeChild(tempDiv);
-    return scale;
-  };
-  
-
-  // Vérifier le dépassement à chaque changement de blocks avec délai
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const scale = calculateOptimalFontScale();
-      setFontScale(scale);
-      setShowWarning(scale < 1);
-    }, 100); // Délai pour laisser le DOM se mettre à jour
-    
-    return () => clearTimeout(timer);
-  }, [blocks]);
-
-  const handleGeneratePDF = async () => {
-    const res = await fetch("/api/generate-pdf", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ blocks, fontScale }),
-    });
-    const blob = await res.blob();
-    
-    // Créer un lien de téléchargement
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'mon-cv.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
+export default function LandingPage() {
   return (
-    <>
-      <style>{styles}</style>
-      <PanelGroup direction="horizontal" style={{ height: "100vh" }}>
-        {/* Partie gauche - Éditeur (scrollable) */}
-        <Panel defaultSize={60} minSize={30} maxSize={80}>
-          <div style={{ 
-            height: "100%", 
-            padding: "1rem",
-            overflow: "auto"
-          }} ref={editorScrollRef}>
-            <BlockEditor blocks={blocks} setBlocks={setBlocks} scrollContainerRef={editorScrollRef} />
-          </div>
-        </Panel>
-        
-        {/* Séparateur redimensionnable */}
-        <PanelResizeHandle 
-          style={{
-            width: "8px",
-            backgroundColor: "#e1e5e9",
-            cursor: "col-resize",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
-          }}
-        >
-          <div style={{
-            width: "2px",
-            height: "40px",
-            backgroundColor: "#9ca3af",
-            borderRadius: "1px"
-          }} />
-        </PanelResizeHandle>
-        
-        {/* Partie droite - Aperçu (fixe) */}
-        <Panel defaultSize={45} minSize={45} maxSize={45}>
-          <div style={{ 
-            height: "100vh",
-            overflow: "auto",
-            backgroundColor: "#f8fafc",
-            padding: "0.5rem",
-            borderLeft: "1px solid #e1e5e9"
-          }}>
-        {showWarning && (
-          <div style={{
-            backgroundColor: "#fff3cd",
-            border: "1px solid #ffeaa7",
-            borderRadius: "4px",
-            padding: "8px 12px",
-            margin: "10px 0",
-            color: "#856404",
-            fontSize: "14px"
-          }}>
-            ⚠️ Attention : Tu dépasses la première page ! La taille de police a été réduite à {Math.round(fontScale * 100)}% pour tenir sur une page.
-          </div>
-        )}
-        
-        <div style={{ 
-        }}>
-          <div
-            ref={previewRef}
-            className="preview-cv"
-            style={{
-              width: "210mm",
-              minHeight: "297mm",
-              padding: "15mm",
-              border: "1px solid #000",
-              boxSizing: "border-box",
-              backgroundColor: "#fff",
-              fontSize: `${fontScale}em`,
-              lineHeight: `${1.1 * fontScale}`,
-              transform: "scale(0.8)",
-              transformOrigin: "top left",
-              marginBottom: "0.1rem"
-            }}
-            dangerouslySetInnerHTML={{ __html: blocksToHTML(blocks, fontScale) }}
-          />
+    <div style={{ minHeight: "100vh", backgroundColor: "#f9fafb" }}>
+      {/* Header */}
+      <header style={{
+        height: "64px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "0 20px",
+        backgroundColor: "#ffffff",
+        borderBottom: "1px solid #e5e7eb"
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <span style={{ fontWeight: 700, color: "#111827" }}>Finance CV AI</span>
+          <nav style={{ display: "flex", gap: "12px" }}>
+            <Link href="/cv" style={{ color: "#374151", textDecoration: "none" }}>Générer mon CV</Link>
+            <Link href="/a-propos" style={{ color: "#374151", textDecoration: "none" }}>À propos</Link>
+          </nav>
         </div>
-        
-        <div style={{ 
-          display: "flex", 
-          flexDirection: "column",
-          gap: "8px",
-          position: "sticky",
-          bottom: "0.5rem",
-          backgroundColor: "#fff",
-          padding: "1rem",
+        <Link href="/cv" style={{
+          padding: "8px 12px",
+          backgroundColor: "#111827",
+          color: "#fff",
           borderRadius: "8px",
-          border: "1px solid #e1e5e9",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-        }}>
-          <button 
-            onClick={handleGeneratePDF}
-            style={{
+          textDecoration: "none",
+          fontWeight: 600
+        }}>Commencer</Link>
+      </header>
+
+      {/* Hero */}
+      <section style={{
+        maxWidth: "1100px",
+        margin: "0 auto",
+        padding: "64px 20px 24px 20px",
+        display: "grid",
+        gridTemplateColumns: "1.1fr 0.9fr",
+        gap: "32px"
+      }}>
+        <div>
+          <h1 style={{ fontSize: "44px", lineHeight: 1.2, margin: 0, color: "#0f172a" }}>
+            Générateur de CV IA pour étudiants en finance
+          </h1>
+          <p style={{ marginTop: "16px", color: "#334155", fontSize: "18px" }}>
+            Crée un CV pro en quelques minutes, optimisé ATS pour banques, fonds et cabinets.
+            Gratuit, téléchargeable en PDF et modifiable très facilement.
+          </p>
+          <ul style={{ marginTop: "16px", color: "#1f2937", fontSize: "16px", paddingLeft: "20px" }}>
+            <li>Modèle académique, élégant et lisible par les ATS</li>
+            <li>IA qui propose la structure, toi tu ajustes</li>
+            <li>Export PDF en un clic</li>
+          </ul>
+          <div style={{ display: "flex", gap: "12px", marginTop: "24px" }}>
+            <Link href="/cv" style={{
               padding: "12px 16px",
-              backgroundColor: "#3b82f6",
-              color: "white",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-              fontSize: "14px",
-              fontWeight: "500"
-            }}
-          >
-            Générer PDF
-          </button>
-        </div>
-        
+              backgroundColor: "#0ea5e9",
+              color: "#fff",
+              borderRadius: "10px",
+              textDecoration: "none",
+              fontWeight: 600
+            }}>Générer mon CV maintenant</Link>
+            <Link href="/a-propos" style={{
+              padding: "12px 16px",
+              backgroundColor: "#ffffff",
+              color: "#111827",
+              border: "1px solid #e5e7eb",
+              borderRadius: "10px",
+              textDecoration: "none",
+              fontWeight: 600
+            }}>Voir l’histoire</Link>
           </div>
-        </Panel>
-      </PanelGroup>
-    </>
+          <p style={{ marginTop: "12px", color: "#64748b", fontSize: "14px" }}>
+            Créé par deux étudiants: faire un CV finance, c’est pénible. On l’a rendu simple.
+          </p>
+        </div>
+        <div>
+          <div style={{
+            backgroundColor: "#ffffff",
+            border: "1px solid #e5e7eb",
+            borderRadius: "12px",
+            padding: "16px",
+            boxShadow: "0 8px 24px rgba(15, 23, 42, 0.08)"
+          }}>
+            <div style={{
+              height: "420px",
+              borderRadius: "8px",
+              background: "linear-gradient(180deg,#f8fafc,#ffffff)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#334155"
+            }}>
+              Aperçu du modèle académique (CV lisible ATS)
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section bénéfices */}
+      <section style={{
+        maxWidth: "1100px",
+        margin: "0 auto",
+        padding: "24px 20px 64px 20px",
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gap: "16px"
+      }}>
+        {[
+          {
+            title: "ATS friendly",
+            desc: "Structure stricte, hiérarchie claire, mots-clés finance."
+          },
+          {
+            title: "Rapide",
+            desc: "De zéro à PDF en quelques minutes."
+          },
+          {
+            title: "Gratuit",
+            desc: "Sans inscription, export immédiat."
+          }
+        ].map((c) => (
+          <div key={c.title} style={{
+            backgroundColor: "#ffffff",
+            border: "1px solid #e5e7eb",
+            borderRadius: "12px",
+            padding: "16px",
+            boxShadow: "0 4px 16px rgba(15, 23, 42, 0.06)"
+          }}>
+            <h3 style={{ margin: 0, color: "#0f172a" }}>{c.title}</h3>
+            <p style={{ marginTop: "8px", color: "#475569" }}>{c.desc}</p>
+          </div>
+        ))}
+      </section>
+
+      {/* Footer */}
+      <footer style={{
+        borderTop: "1px solid #e5e7eb",
+        backgroundColor: "#ffffff",
+        padding: "16px 20px",
+        color: "#64748b"
+      }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", justifyContent: "space-between" }}>
+          <span>© {new Date().getFullYear()} Finance CV AI</span>
+          <div style={{ display: "flex", gap: "12px" }}>
+            <Link href="/a-propos" style={{ color: "#64748b", textDecoration: "none" }}>À propos</Link>
+            <Link href="/cv" style={{ color: "#64748b", textDecoration: "none" }}>Générateur</Link>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }

@@ -4,6 +4,228 @@ import { DragDropContext, Droppable, Draggable, DropResult, DragStart } from "@h
 import { v4 as uuid } from "uuid";
 import { Block, BlockType, DragContext, canMoveBlock, findBlockById, getAllowedChildTypesForParent } from "../utils/types";
 
+// Utilitaire simple pour assainir le HTML et ne garder que B/I/U/BR/UL/OL/LI
+const sanitizeHtml = (html: string): string => {
+  try {
+    const container = document.createElement("div");
+    container.innerHTML = html;
+    // Convertir <b>/<i> -> <strong>/<em> et spans soulignés -> <u>
+    const replaceTag = (el: HTMLElement, newTag: string) => {
+      const newEl = document.createElement(newTag);
+      while (el.firstChild) newEl.appendChild(el.firstChild);
+      el.parentNode?.replaceChild(newEl, el);
+      return newEl;
+    };
+    container.querySelectorAll("b").forEach((el) => replaceTag(el as HTMLElement, "strong"));
+    container.querySelectorAll("i").forEach((el) => replaceTag(el as HTMLElement, "em"));
+    container.querySelectorAll("span").forEach((el) => {
+      const span = el as HTMLElement;
+      const td = span.style.textDecoration || span.getAttribute("style") || "";
+      if (td && td.toLowerCase().includes("underline")) {
+        replaceTag(span, "u");
+      }
+    });
+    const allowed = new Set(["STRONG", "EM", "U", "BR", "UL", "OL", "LI"]);
+    const walk = (node: Node) => {
+      // Supprimer les <script>, <style> et commentaires
+      if (node.nodeType === Node.COMMENT_NODE) {
+        node.parentNode?.removeChild(node);
+        return;
+      }
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const el = node as HTMLElement;
+        if (!allowed.has(el.tagName)) {
+          // Remplacer l'élément par son contenu (unwrap)
+          const parent = el.parentNode;
+          if (!parent) return;
+          while (el.firstChild) parent.insertBefore(el.firstChild, el);
+          parent.removeChild(el);
+          return;
+        } else {
+          // Nettoyer les attributs
+          [...el.attributes].forEach((attr) => el.removeAttribute(attr.name));
+        }
+      }
+      // Parcourir enfants en copie car on peut modifier pendant l'itération
+      const children = Array.from(node.childNodes);
+      children.forEach(walk);
+    };
+    walk(container);
+    return container.innerHTML;
+  } catch {
+    return html;
+  }
+};
+
+interface RichTextProps {
+  value: string;
+  onChange: (html: string) => void;
+  placeholder?: string;
+  singleLine?: boolean;
+  style?: React.CSSProperties;
+}
+
+const RichTextEditor = ({ value, onChange, placeholder, singleLine, style }: RichTextProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const lastSelectionRef = useRef<Range | null>(null);
+
+  useEffect(() => {
+    // Mettre à jour le contenu si la valeur externe change (éviter boucle infinie)
+    if (ref.current && ref.current.innerHTML !== value) {
+      ref.current.innerHTML = value || "";
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
+  const saveSelection = () => {
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0) {
+      lastSelectionRef.current = sel.getRangeAt(0);
+    }
+  };
+
+  const restoreSelection = () => {
+    const sel = window.getSelection();
+    if (sel && lastSelectionRef.current) {
+      sel.removeAllRanges();
+      sel.addRange(lastSelectionRef.current);
+    }
+  };
+
+  const exec = (cmd: string) => {
+    // Empêcher le bouton de perdre le focus
+    restoreSelection();
+    ref.current?.focus();
+    document.execCommand(cmd);
+    // Déclencher onChange
+    const html = sanitizeHtml(ref.current?.innerHTML || "");
+    if (html !== value) onChange(html);
+  };
+
+  const execArg = (cmd: string, arg?: string) => {
+    restoreSelection();
+    ref.current?.focus();
+    // @ts-ignore execCommand third arg
+    document.execCommand(cmd, false, arg);
+    const html = sanitizeHtml(ref.current?.innerHTML || "");
+    if (html !== value) onChange(html);
+  };
+
+  const insertHTML = (htmlSnippet: string) => {
+    execArg("insertHTML", htmlSnippet);
+  };
+
+  const isInsideList = (): boolean => {
+    const sel = window.getSelection();
+    const node = sel?.anchorNode as Node | null;
+    let current: Node | null = node;
+    while (current) {
+      if ((current as HTMLElement).tagName) {
+        const tag = ((current as HTMLElement).tagName || "").toUpperCase();
+        if (tag === "LI" || tag === "UL" || tag === "OL") return true;
+      }
+      current = current.parentNode;
+    }
+    return false;
+  };
+
+  const onInput = () => {
+    const html = sanitizeHtml(ref.current?.innerHTML || "");
+    if (html !== value) onChange(html);
+  };
+
+  const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
+    // Empêcher retour chariot en mode singleLine
+    if (singleLine && e.key === "Enter") {
+      e.preventDefault();
+      return;
+    }
+    // Shift+Enter => saut de ligne doux (br)
+    if (!singleLine && e.key === "Enter" && e.shiftKey) {
+      e.preventDefault();
+      insertHTML("<br>");
+      return;
+    }
+    // Enter sans Shift: en dehors d'une liste, insérer un <br>
+    if (!singleLine && e.key === "Enter" && !e.shiftKey) {
+      if (!isInsideList()) {
+        e.preventDefault();
+        insertHTML("<br>");
+        return;
+      }
+    }
+  };
+
+  const toolbarBtnStyle: React.CSSProperties = {
+    padding: "2px 6px",
+    border: "1px solid #d1d5db",
+    borderRadius: 4,
+    background: "#fff",
+    fontSize: 12,
+    cursor: "pointer",
+  };
+
+  return (
+    <div>
+      <div style={{ display: "flex", gap: 6, marginBottom: 6, flexWrap: "wrap" }}>
+        <button type="button" style={toolbarBtnStyle} onMouseDown={(e) => e.preventDefault()} onClick={() => exec("bold")}>
+          B
+        </button>
+        <button type="button" style={toolbarBtnStyle} onMouseDown={(e) => e.preventDefault()} onClick={() => exec("italic")}>
+          I
+        </button>
+        <button type="button" style={toolbarBtnStyle} onMouseDown={(e) => e.preventDefault()} onClick={() => exec("underline")}>
+          U
+        </button>
+        <span style={{ width: 8 }} />
+        <button type="button" title="Liste à puces" style={toolbarBtnStyle} onMouseDown={(e) => e.preventDefault()} onClick={() => exec("insertUnorderedList")}>
+          •
+        </button>
+        <button type="button" title="Liste numérotée" style={toolbarBtnStyle} onMouseDown={(e) => e.preventDefault()} onClick={() => exec("insertOrderedList")}>
+          1.
+        </button>
+        <button type="button" title="Augmenter le retrait" style={toolbarBtnStyle} onMouseDown={(e) => e.preventDefault()} onClick={() => exec("indent")}>
+          →
+        </button>
+        <button type="button" title="Diminuer le retrait" style={toolbarBtnStyle} onMouseDown={(e) => e.preventDefault()} onClick={() => exec("outdent")}>
+          ←
+        </button>
+        <span style={{ width: 8 }} />
+        <button type="button" title="Insérer tiret demi-cadratin" style={toolbarBtnStyle} onMouseDown={(e) => e.preventDefault()} onClick={() => insertHTML("– ")}>–</button>
+        <button type="button" title="Insérer tiret cadratin" style={toolbarBtnStyle} onMouseDown={(e) => e.preventDefault()} onClick={() => insertHTML("— ")}>—</button>
+      </div>
+      <div
+        ref={ref}
+        contentEditable
+        suppressContentEditableWarning
+        onInput={onInput}
+        onKeyDown={onKeyDown}
+        onKeyUp={saveSelection}
+        onMouseUp={saveSelection}
+        onBlur={saveSelection}
+        style={{
+          minHeight: singleLine ? 28 : 60,
+          border: "1px solid #d1d5db",
+          borderRadius: 4,
+          padding: 8,
+          background: "#fff",
+          outline: "none",
+          whiteSpace: singleLine ? "nowrap" : "pre-wrap",
+          overflow: "auto",
+          ...style,
+        }}
+        data-placeholder={placeholder}
+      />
+      <style>{`
+        [contenteditable][data-placeholder]:empty:before {
+          content: attr(data-placeholder);
+          color: #9ca3af;
+        }
+      `}</style>
+    </div>
+  );
+};
+
 interface Props {
   blocks: Block[];
   setBlocks: (blocks: Block[]) => void;
@@ -19,6 +241,14 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
   const autoScrollTimerRef = useRef<number | null>(null);
   const [draggingBlockId, setDraggingBlockId] = useState<string | null>(null);
   const [draggingBlockType, setDraggingBlockType] = useState<BlockType | null>(null);
+  const [subtitleVisible, setSubtitleVisible] = useState<Record<string, boolean>>({});
+  const [periodVisible, setPeriodVisible] = useState<Record<string, boolean>>({});
+
+  const hasMeaningfulText = (html: string | undefined): boolean => {
+    if (!html) return false;
+    const plain = html.replace(/<[^>]*>/g, "").replace(/\u00A0/g, " ").trim();
+    return /[A-Za-zÀ-ÖØ-öø-ÿ0-9]/.test(plain);
+  };
 
   // Gestion auto-scroll pendant le drag dans le conteneur scrollable gauche
   useEffect(() => {
@@ -435,49 +665,103 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
             </div>
           ) : block.type === "subsection" ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <input
-                placeholder="Titre (ex: JCDecaux)"
+              <RichTextEditor
                 value={block.content?.title || ""}
-                onChange={(e) => updateBlockContent(block.id, { ...block.content, title: e.target.value })}
-                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px", fontWeight: "bold", maxWidth: "600px" }}
+                onChange={(html) => updateBlockContent(block.id, { ...block.content, title: html })}
+                placeholder="Titre (ex: JCDecaux)"
+                singleLine
+                style={{ maxWidth: "600px" }}
               />
-              <input
-                placeholder="Sous-titre (ex: Data Scientist)"
-                value={block.content?.subtitle || ""}
-                onChange={(e) => updateBlockContent(block.id, { ...block.content, subtitle: e.target.value })}
-                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px", maxWidth: "600px" }}
-              />
-              <input
-                placeholder="Période (ex: 11/2024 -- 05/2025)"
-                value={block.content?.period || ""}
-                onChange={(e) => updateBlockContent(block.id, { ...block.content, period: e.target.value })}
-                style={{ padding: "8px", border: "1px solid #d1d5db", borderRadius: "4px", fontStyle: "italic", maxWidth: "600px" }}
-              />
+
+              {/* Contrôles d’option pour sous-titre et période */}
+              <div style={{ display: "flex", gap: 8 }}>
+                {hasMeaningfulText(block.content?.subtitle) || subtitleVisible[block.id] ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const map = { ...subtitleVisible };
+                      delete map[block.id];
+                      setSubtitleVisible(map);
+                      updateBlockContent(block.id, { ...block.content, subtitle: "" });
+                    }}
+                    style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff" }}
+                  >
+                    Supprimer sous-titre
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setSubtitleVisible({ ...subtitleVisible, [block.id]: true })}
+                    style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff" }}
+                  >
+                    + Sous-titre
+                  </button>
+                )}
+
+                {hasMeaningfulText(block.content?.period) || periodVisible[block.id] ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const map = { ...periodVisible };
+                      delete map[block.id];
+                      setPeriodVisible(map);
+                      updateBlockContent(block.id, { ...block.content, period: "" });
+                    }}
+                    style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff" }}
+                  >
+                    Supprimer date
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setPeriodVisible({ ...periodVisible, [block.id]: true })}
+                    style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff" }}
+                  >
+                    + Date
+                  </button>
+                )}
+              </div>
+
+              {(hasMeaningfulText(block.content?.subtitle) || subtitleVisible[block.id]) && (
+                <RichTextEditor
+                  value={block.content?.subtitle || ""}
+                  onChange={(html) => updateBlockContent(block.id, { ...block.content, subtitle: html })}
+                  placeholder="Sous-titre (ex: Data Scientist)"
+                  singleLine
+                  style={{ maxWidth: "600px" }}
+                />
+              )}
+
+              {(hasMeaningfulText(block.content?.period) || periodVisible[block.id]) && (
+                <RichTextEditor
+                  value={block.content?.period || ""}
+                  onChange={(html) => updateBlockContent(block.id, { ...block.content, period: html })}
+                  placeholder="Période (ex: 11/2024 -- 05/2025)"
+                  singleLine
+                  style={{ fontStyle: "italic", maxWidth: "600px" }}
+                />
+              )}
             </div>
           ) : (
-            <textarea
-              value={typeof block.content === "string" ? block.content : block.content?.title || ""}
-              onChange={(e) => {
-                let newContent = e.target.value;
+            <RichTextEditor
+              value={(block.type === "header" || block.type === "section")
+                ? (block.content?.title || "")
+                : (typeof block.content === "string" ? block.content : "")}
+              onChange={(html) => {
                 if (block.type === "header" || block.type === "section") {
-                  newContent = { ...block.content, title: e.target.value };
+                  updateBlockContent(block.id, { ...block.content, title: html });
+                } else {
+                  updateBlockContent(block.id, html);
                 }
-                updateBlockContent(block.id, newContent);
               }}
-              rows={block.type === "header" ? 1 : 3}
-              style={{ 
-                width: "100%", 
-                padding: "8px", 
-                border: "1px solid #d1d5db", 
-                borderRadius: "4px",
-                fontSize: block.type === "header" ? "18px" : "14px",
-                fontWeight: block.type === "header" ? "bold" : "normal",
-                resize: "vertical",
+              singleLine={block.type === "header"}
+              placeholder={block.type === "header" ? "Nom complet" : 
+                           block.type === "section" ? "Titre de section" : 
+                           "Contenu du texte..."}
+              style={{
+                fontSize: block.type === "header" ? 18 : 14,
                 maxWidth: isChildOfSubsection ? "560px" : "640px"
               }}
-              placeholder={block.type === "header" ? "Nom complet" : 
-                         block.type === "section" ? "Titre de section" : 
-                         "Contenu du texte..."}
             />
           )}
         </div>

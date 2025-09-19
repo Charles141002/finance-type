@@ -28,65 +28,104 @@ __turbopack_context__.s([
     "default",
     ()=>blocksToHTML
 ]);
-function blocksToHTML(blocks, fontScale = 1) {
-    return blocks.map((block)=>{
-        switch(block.type){
-            case "header":
-                {
-                    const text = block.content?.title || "";
-                    return `<div style="text-align:center; margin-bottom:${8 * fontScale}px;">
-            <h1 style="font-size:${18 * fontScale}pt; font-weight:bold; margin:0; padding:0;">${text}</h1>
-          </div>`;
-                }
-            case "contact":
-                {
-                    const c = block.content || {};
-                    return `<div style="text-align:center; margin-bottom:${8 * fontScale}px; font-size:${10 * fontScale}pt;">
-            ${c.email || ""} • ${c.phone || ""} • ${c.address || ""} • ${c.linkedin || ""}
-          </div>`;
-                }
-            case "text":
-                {
-                    const content = block.content || "";
-                    const isItalic = content.includes("Étudiant à IMT Atlantique");
-                    const isBullet = content.startsWith("•");
-                    const hasChildren = block.children && block.children.length > 0;
-                    if (isBullet) {
-                        return `<div style="margin-left:${16 * fontScale}px; margin-bottom:${2 * fontScale}px; font-size:${10 * fontScale}pt;">
-              ${content}
-            </div>${blocksToHTML(block.children || [], fontScale)}`;
-                    } else if (isItalic) {
-                        return `<div style="text-align:center; margin-bottom:${8 * fontScale}px; font-style:italic; font-size:${10 * fontScale}pt;">
-              ${content}
-            </div>${blocksToHTML(block.children || [], fontScale)}`;
-                    } else {
-                        return `<div style="margin-left:${hasChildren ? 16 * fontScale : 0}px; margin-bottom:${2 * fontScale}px; font-size:${10 * fontScale}pt;">
-              ${content}
-            </div>${blocksToHTML(block.children || [], fontScale)}`;
-                    }
-                }
-            case "divider":
-                return `<hr style="border:0; border-top:1px solid #000; margin:${8 * fontScale}px 0;"/>`;
-            case "section":
-                return `<div style="margin-top:${8 * fontScale}px;">
-            <h2 style="font-size:${12 * fontScale}pt; font-weight:bold; text-transform:uppercase; margin:0 0 ${4 * fontScale}px 0;">${block.content?.title || ""}</h2>
-            ${blocksToHTML(block.children || [], fontScale)}
-          </div>`;
-            case "subsection":
-                return `<div style="margin-bottom:${4 * fontScale}px;">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:${2 * fontScale}px;">
-              <div>
-                <div style="font-weight:bold; font-size:${10 * fontScale}pt;">${block.content?.title || ""}</div>
-                ${block.content?.subtitle ? `<div style="font-size:${10 * fontScale}pt; margin-top:${1 * fontScale}px;">${block.content.subtitle}</div>` : ""}
-              </div>
-              <div style="font-style:italic; font-size:${10 * fontScale}pt;">${block.content?.period || ""}</div>
-            </div>
-            ${blocksToHTML(block.children || [], fontScale)}
-          </div>`;
-            default:
-                return "";
+function escapeHtml(input) {
+    return input.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function renderSubsectionChildren(children) {
+    if (!children || children.length === 0) return "";
+    const htmlParts = [];
+    let currentListItems = null;
+    const flushList = ()=>{
+        if (currentListItems && currentListItems.length > 0) {
+            htmlParts.push(`<ul class="cv-list">${currentListItems.join("")}</ul>`);
         }
-    }).join("");
+        currentListItems = null;
+    };
+    for (const child of children){
+        if (child.type === "text") {
+            const raw = typeof child.content === "string" ? child.content : "";
+            const plain = raw.replace(/<[^>]*>/g, "");
+            const trimmed = plain.trim();
+            const isBullet = trimmed.startsWith("•");
+            if (isBullet) {
+                const content = escapeHtml(trimmed.replace(/^•\s*/, ""));
+                if (!currentListItems) currentListItems = [];
+                currentListItems.push(`<li>${content}</li>`);
+                continue;
+            }
+            // aucun bullet => flush puis paragraphe
+            flushList();
+            htmlParts.push(`<p class="cv-text">${raw}</p>`);
+        } else if (child.type === "divider") {
+            flushList();
+            htmlParts.push(`<hr class="cv-hr"/>`);
+        } else if (child.type === "section" || child.type === "subsection") {
+            // cas rare: sous-niveaux -> flush puis rendu normal récursif
+            flushList();
+            htmlParts.push(blockToHTML(child));
+        } else {
+            // défaut: flush et rendu enfants
+            flushList();
+            htmlParts.push(blockToHTML(child));
+        }
+    }
+    flushList();
+    return htmlParts.join("");
+}
+function blockToHTML(block, fontScale = 1) {
+    switch(block.type){
+        case "header":
+            {
+                const text = block.content?.title || "";
+                return `<header class="cv-header"><h1 class="cv-name">${escapeHtml(text)}</h1></header>`;
+            }
+        case "contact":
+            {
+                const c = block.content || {};
+                const linkedin = c.linkedin ? `<a href="${escapeHtml(c.linkedin)}" target="_blank" rel="noopener">linkedin</a>` : "";
+                const parts = [
+                    c.email || "",
+                    c.phone || "",
+                    c.address || "",
+                    linkedin
+                ].filter(Boolean).join(" <span class=\"sep\">•</span> ");
+                return `<div class="cv-contact">${parts}</div>`;
+            }
+        case "text":
+            {
+                const raw = typeof block.content === "string" ? block.content : "";
+                const plain = raw.replace(/<[^>]*>/g, "");
+                const isSummary = plain.includes("Étudiant à IMT Atlantique");
+                // si déjà préfixé par •, laisser la gestion au parent (subsection) sinon paragraphe simple
+                const isBullet = plain.trim().startsWith("•");
+                if (isBullet) {
+                    return `<p class="cv-text">${raw}</p>`;
+                }
+                return `<p class="${isSummary ? "cv-summary" : "cv-text"}">${raw}</p>`;
+            }
+        case "divider":
+            return `<hr class="cv-hr"/>`;
+        case "section":
+            {
+                const title = block.content?.title || "";
+                const children = (block.children || []).map((ch)=>blockToHTML(ch, fontScale)).join("");
+                return `<section class="cv-section"><h2 class="cv-section-title">${escapeHtml(title)}</h2>${children}</section>`;
+            }
+        case "subsection":
+            {
+                const title = block.content?.title || "";
+                const subtitle = block.content?.subtitle || "";
+                const period = block.content?.period || "";
+                const head = `<div class="cv-subsection-head"><div class="cv-subsection-left"><div class="cv-subsection-title">${escapeHtml(title)}${subtitle ? " — <span class=\"cv-role\">" + escapeHtml(subtitle) + "</span>" : ""}</div></div><div class="cv-period">${escapeHtml(period)}</div></div>`;
+                const body = renderSubsectionChildren(block.children);
+                return `<div class="cv-subsection">${head}${body}</div>`;
+            }
+        default:
+            return "";
+    }
+}
+function blocksToHTML(blocks, fontScale = 1) {
+    return blocks.map((b)=>blockToHTML(b, fontScale)).join("");
 }
 }),
 "[project]/pages/api/generate-pdf.ts [api] (ecmascript)", ((__turbopack_context__) => {
@@ -114,15 +153,27 @@ async function handler(req, res) {
     <head>
       <style>
         @page { size: A4; margin: 15mm; }
-        body { font-family: 'Times New Roman', serif; font-size: ${10 * fontScale}pt; line-height: ${1.2 * fontScale}em; }
-        h3 { margin: ${4 * fontScale}mm 0 ${2 * fontScale}mm 0; text-transform: uppercase; }
-        h4 { margin: ${2 * fontScale}mm 0; }
-        p, li { margin: 0; padding: 0; }
-        ul { margin-left: ${10 * fontScale}pt; padding-left: ${10 * fontScale}pt; }
-        hr { border: 0; border-top: 0.2pt solid #000; margin: ${3 * fontScale}mm 0; }
+        body { font-family: 'Times New Roman', serif; }
+        .cv-page { width: 210mm; min-height: 297mm; box-sizing: border-box; font-size: ${10 * fontScale}pt; line-height: ${1.2 * fontScale}em; }
+        .cv-name { font-size: ${18 * fontScale}pt; margin: 0; padding: 0; font-weight: 700; }
+        .cv-header { text-align: center; margin-bottom: ${8 * fontScale}px; }
+        .cv-contact { text-align: center; margin-bottom: ${8 * fontScale}px; font-size: ${10 * fontScale}pt; }
+        .cv-contact .sep { margin: 0 4px; }
+        .cv-summary { text-align: center; margin-bottom: ${8 * fontScale}px; font-style: italic; font-size: ${10 * fontScale}pt; }
+        .cv-section { margin-top: ${8 * fontScale}px; }
+        .cv-section-title { font-size: ${12 * fontScale}pt; text-transform: uppercase; margin: 0 0 ${4 * fontScale}px 0; }
+        .cv-subsection { margin-bottom: ${6 * fontScale}px; }
+        .cv-subsection-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: ${2 * fontScale}px; }
+        .cv-subsection-title { font-size: ${10 * fontScale}pt; }
+        .cv-role { font-size: ${10 * fontScale}pt; }
+        .cv-period { font-style: italic; font-size: ${10 * fontScale}pt; }
+        .cv-text { margin: 0 0 ${2 * fontScale}px 0; font-size: ${10 * fontScale}pt; }
+        .cv-hr { border: 0; border-top: 0.2pt solid #000; margin: ${6 * fontScale}px 0; }
+        .cv-list { margin: 0 0 ${2 * fontScale}px 1em; padding-left: 0.9em; }
+        .cv-list li { margin: 0; padding: 0; list-style-type: disc; }
       </style>
     </head>
-    <body>${(0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$blocksToHTML$2e$ts__$5b$api$5d$__$28$ecmascript$29$__["default"])(blocks, fontScale)}</body>
+    <body><div class="cv-page" style="padding:15mm;">${(0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$blocksToHTML$2e$ts__$5b$api$5d$__$28$ecmascript$29$__["default"])(blocks, fontScale)}</div></body>
   </html>`;
     const browser = await __TURBOPACK__imported__module__$5b$externals$5d2f$puppeteer__$5b$external$5d$__$28$puppeteer$2c$__esm_import$29$__["default"].launch({
         args: [
