@@ -8,11 +8,24 @@ type DynamicHeaderProps = {
 };
 
 export default function DynamicHeader({ rightActions, variant = "default", scrollContainerRef }: DynamicHeaderProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true); // Visible par défaut au chargement
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Délai d'initialisation pour laisser le header visible au chargement
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitialized(true);
+    }, 2000); // 2 secondes de délai
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
+      // Ne pas appliquer la logique de scroll tant que l'initialisation n'est pas terminée
+      if (!isInitialized) return;
+
       // Utiliser le conteneur de scroll si fourni, sinon la fenêtre
       const scrollElement = scrollContainerRef?.current || window;
       const currentScrollY = scrollElement === window ? window.scrollY : scrollElement.scrollTop;
@@ -32,7 +45,7 @@ export default function DynamicHeader({ rightActions, variant = "default", scrol
     return () => {
       scrollElement.removeEventListener('scroll', handleScroll);
     };
-  }, [lastScrollY, scrollContainerRef]);
+  }, [lastScrollY, scrollContainerRef, isInitialized, isVisible]);
 
   return (
     <div

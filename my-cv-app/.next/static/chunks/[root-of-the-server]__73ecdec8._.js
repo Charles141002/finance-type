@@ -479,22 +479,34 @@ __turbopack_context__.s([
     ()=>App
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react/jsx-dev-runtime.js [client] (ecmascript)");
-(()=>{
-    const e = new Error("Cannot find module '../styles/globals.css'");
-    e.code = 'MODULE_NOT_FOUND';
-    throw e;
-})();
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/styled-jsx/style.js [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$head$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/head.js [client] (ecmascript)");
+;
 ;
 ;
 function App(param) {
     let { Component, pageProps } = param;
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Component, {
-        ...pageProps
-    }, void 0, false, {
-        fileName: "[project]/pages/_app.tsx",
-        lineNumber: 5,
-        columnNumber: 10
-    }, this);
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Fragment"], {
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$head$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                    id: "59fe1b320f96e816",
+                    children: "*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;padding:0;overflow-x:hidden}body{background-color:rgba(2,6,23,.95);font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif}#__next{width:100%;min-height:100vh}h1,h2,h3,h4,h5,h6,p,ul,ol,li,div,section,article,header,footer,nav,main{margin:0;padding:0}img{max-width:100%;height:auto}a{color:inherit;text-decoration:none}ul,ol{list-style:none}.container,.wrapper,main,section{width:100%;max-width:100%}"
+                }, void 0, false, void 0, this)
+            }, void 0, false, {
+                fileName: "[project]/pages/_app.tsx",
+                lineNumber: 7,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Component, {
+                ...pageProps
+            }, void 0, false, {
+                fileName: "[project]/pages/_app.tsx",
+                lineNumber: 61,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true);
 }
 _c = App;
 var _c;

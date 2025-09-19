@@ -32,7 +32,7 @@ export default function Footer() {
               margin: "0 0 16px 0",
               fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
             }}>
-              Finance CV AI
+              Finance CV
             </h3>
             <p style={{
               color: "#e2e8f0",
@@ -177,7 +177,7 @@ export default function Footer() {
             fontSize: "14px",
             fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
           }}>
-            © {new Date().getFullYear()} Finance CV AI. Tous droits réservés.
+            © {new Date().getFullYear()} Finance CV. Tous droits réservés.
           </span>
           <div style={{ display: "flex", gap: "24px" }}>
             <span style={{

@@ -1,10 +1,4 @@
 module.exports = [
-"[externals]/react/jsx-dev-runtime [external] (react/jsx-dev-runtime, cjs)", ((__turbopack_context__, module, exports) => {
-
-const mod = __turbopack_context__.x("react/jsx-dev-runtime", () => require("react/jsx-dev-runtime"));
-
-module.exports = mod;
-}),
 "[project]/components/DynamicHeader.tsx [ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
@@ -1593,4 +1587,4 @@ module.exports = mod;
 }),
 ];
 
-//# sourceMappingURL=%5Broot-of-the-server%5D__71384a5e._.js.map
+//# sourceMappingURL=%5Broot-of-the-server%5D__f4640749._.js.map

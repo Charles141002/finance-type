@@ -488,12 +488,28 @@ var _s = __turbopack_context__.k.signature();
 function DynamicHeader(param) {
     let { rightActions, variant = "default", scrollContainerRef } = param;
     _s();
-    const [isVisible, setIsVisible] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [isVisible, setIsVisible] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(true); // Visible par défaut au chargement
     const [lastScrollY, setLastScrollY] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(0);
+    const [isInitialized, setIsInitialized] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    // Délai d'initialisation pour laisser le header visible au chargement
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "DynamicHeader.useEffect": ()=>{
+            const timer = setTimeout({
+                "DynamicHeader.useEffect.timer": ()=>{
+                    setIsInitialized(true);
+                }
+            }["DynamicHeader.useEffect.timer"], 2000); // 2 secondes de délai
+            return ({
+                "DynamicHeader.useEffect": ()=>clearTimeout(timer)
+            })["DynamicHeader.useEffect"];
+        }
+    }["DynamicHeader.useEffect"], []);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "DynamicHeader.useEffect": ()=>{
             const handleScroll = {
                 "DynamicHeader.useEffect.handleScroll": ()=>{
+                    // Ne pas appliquer la logique de scroll tant que l'initialisation n'est pas terminée
+                    if (!isInitialized) return;
                     // Utiliser le conteneur de scroll si fourni, sinon la fenêtre
                     const scrollElement = (scrollContainerRef === null || scrollContainerRef === void 0 ? void 0 : scrollContainerRef.current) || window;
                     const currentScrollY = scrollElement === window ? window.scrollY : scrollElement.scrollTop;
@@ -517,7 +533,9 @@ function DynamicHeader(param) {
         }
     }["DynamicHeader.useEffect"], [
         lastScrollY,
-        scrollContainerRef
+        scrollContainerRef,
+        isInitialized,
+        isVisible
     ]);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         style: {
@@ -574,17 +592,17 @@ function DynamicHeader(param) {
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/DynamicHeader.tsx",
-                                lineNumber: 83,
+                                lineNumber: 96,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/DynamicHeader.tsx",
-                            lineNumber: 75,
+                            lineNumber: 88,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/DynamicHeader.tsx",
-                        lineNumber: 74,
+                        lineNumber: 87,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -609,7 +627,7 @@ function DynamicHeader(param) {
                                     children: "Générateur CV"
                                 }, void 0, false, {
                                     fileName: "[project]/components/DynamicHeader.tsx",
-                                    lineNumber: 99,
+                                    lineNumber: 112,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
@@ -625,7 +643,7 @@ function DynamicHeader(param) {
                                     children: "À propos"
                                 }, void 0, false, {
                                     fileName: "[project]/components/DynamicHeader.tsx",
-                                    lineNumber: 112,
+                                    lineNumber: 125,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
@@ -646,7 +664,7 @@ function DynamicHeader(param) {
                                     children: "Commencer"
                                 }, void 0, false, {
                                     fileName: "[project]/components/DynamicHeader.tsx",
-                                    lineNumber: 125,
+                                    lineNumber: 138,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
@@ -667,34 +685,34 @@ function DynamicHeader(param) {
                                     children: "Se connecter"
                                 }, void 0, false, {
                                     fileName: "[project]/components/DynamicHeader.tsx",
-                                    lineNumber: 143,
+                                    lineNumber: 156,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true)
                     }, void 0, false, {
                         fileName: "[project]/components/DynamicHeader.tsx",
-                        lineNumber: 96,
+                        lineNumber: 109,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/DynamicHeader.tsx",
-                lineNumber: 61,
+                lineNumber: 74,
                 columnNumber: 7
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/DynamicHeader.tsx",
-            lineNumber: 47,
+            lineNumber: 60,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/DynamicHeader.tsx",
-        lineNumber: 38,
+        lineNumber: 51,
         columnNumber: 5
     }, this);
 }
-_s(DynamicHeader, "nZPBDYTHSaQKOB73GgblTffssHM=");
+_s(DynamicHeader, "4M616bjm2w6wbAZZWJax16JO8i0=");
 _c = DynamicHeader;
 var _c;
 __turbopack_context__.k.register(_c, "DynamicHeader");
