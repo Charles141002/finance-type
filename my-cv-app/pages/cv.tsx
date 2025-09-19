@@ -128,23 +128,7 @@ export default function CvGeneratorPage() {
       <style>{styles}</style>
       <style>{getCvCss(fontScale)}</style>
 
-      <Header rightActions={(
-        <button 
-          onClick={handleGeneratePDF}
-          style={{
-            padding: "8px 12px",
-            backgroundColor: "#111827",
-            color: "#fff",
-            border: "1px solid #111827",
-            borderRadius: "8px",
-            cursor: "pointer",
-            fontSize: "14px",
-            fontWeight: 600
-          }}
-        >
-          Télécharger PDF
-        </button>
-      )} />
+      <Header variant="landing" />
 
       <PanelGroup direction="horizontal" style={{ height: "calc(100vh - 64px)" }}>
         {/* Partie gauche - Éditeur (scrollable) */}
@@ -178,76 +162,85 @@ export default function CvGeneratorPage() {
         </PanelResizeHandle>
         
         {/* Partie droite - Aperçu (fixe) */}
-        <Panel defaultSize={45} minSize={45} maxSize={45}>
+        <Panel defaultSize={50} minSize={45} maxSize={60}>
           <div style={{ 
             height: "calc(100vh - 64px)",
-            overflow: "auto",
+            overflow: "hidden",
             backgroundColor: "#f8fafc",
             padding: "0.5rem",
-            borderLeft: "1px solid #e1e5e9"
+            borderLeft: "1px solid #e1e5e9",
+            display: "flex",
+            flexDirection: "column"
           }}>
-        {showWarning && (
-          <div style={{
-            backgroundColor: "#fff3cd",
-            border: "1px solid #ffeaa7",
-            borderRadius: "4px",
-            padding: "8px 12px",
-            margin: "10px 0",
-            color: "#856404",
-            fontSize: "14px"
-          }}>
-            ⚠️ Attention : Tu dépasses la première page ! La taille de police a été réduite à {Math.round(fontScale * 100)}% pour tenir sur une page.
-          </div>
-        )}
-        
-        <div style={{ 
-        }}>
-          <div
-            ref={previewRef}
-            className="preview-cv"
-            style={{
-              width: "210mm",
-              minHeight: "297mm",
-              padding: "15mm",
-              border: "1px solid #000",
-              boxSizing: "border-box",
+            {/* Zone de scroll pour l'aperçu CV */}
+            <div style={{ 
+              flex: 1,
+              overflow: "auto",
+              marginBottom: "0.5rem"
+            }}>
+              {showWarning && (
+                <div style={{
+                  backgroundColor: "#fff3cd",
+                  border: "1px solid #ffeaa7",
+                  borderRadius: "4px",
+                  padding: "8px 12px",
+                  margin: "10px 0",
+                  color: "#856404",
+                  fontSize: "14px"
+                }}>
+                  ⚠️ Attention : Tu dépasses la première page ! La taille de police a été réduite à {Math.round(fontScale * 100)}% pour tenir sur une page.
+                </div>
+              )}
+              
+              <div style={{ 
+              }}>
+                <div
+                  ref={previewRef}
+                  className="preview-cv"
+                  style={{
+                    width: "210mm",
+                    minHeight: "297mm",
+                    padding: "15mm",
+                    border: "1px solid #000",
+                    boxSizing: "border-box",
+                    backgroundColor: "#fff",
+                    transform: "scale(0.8)",
+                    transformOrigin: "top left",
+                    marginBottom: "0.1rem"
+                  }}
+                  dangerouslySetInnerHTML={{ __html: blocksToHTML(blocks, fontScale) }}
+                />
+              </div>
+            </div>
+            
+            {/* Bouton fixe en bas - toujours visible */}
+            <div style={{ 
+              display: "flex", 
+              flexDirection: "column",
+              gap: "8px",
               backgroundColor: "#fff",
-              transform: "scale(0.8)",
-              transformOrigin: "top left",
-              marginBottom: "0.1rem"
-            }}
-            dangerouslySetInnerHTML={{ __html: blocksToHTML(blocks, fontScale) }}
-          />
-        </div>
-        
-        <div style={{ 
-          display: "flex", 
-          flexDirection: "column",
-          gap: "8px",
-          position: "sticky",
-          bottom: "0.5rem",
-          backgroundColor: "#fff",
-          padding: "1rem",
-          borderRadius: "8px",
-          border: "1px solid #e1e5e9",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-        }}>
-          <button 
-            onClick={handleGeneratePDF}
-            style={{
-              padding: "12px 16px",
-              backgroundColor: "#3b82f6",
-              color: "white",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-              fontSize: "14px",
-              fontWeight: "500"
-            }}
-          >
-            Générer PDF
-          </button>
-        </div>
+              padding: "1rem",
+              borderRadius: "8px",
+              border: "1px solid #e1e5e9",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+              flexShrink: 0
+            }}>
+              <button 
+                onClick={handleGeneratePDF}
+                style={{
+                  padding: "12px 16px",
+                  backgroundColor: "#3b82f6",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  fontWeight: "500"
+                }}
+              >
+                Générer PDF
+              </button>
+            </div>
         
           </div>
         </Panel>

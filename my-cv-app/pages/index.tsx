@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 
 export default function LandingPage() {
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#f9fafb" }}>
+    <div style={{ minHeight: "100vh", backgroundColor: "rgba(2, 6, 23, 0.95)" }}>
       <Header variant="landing" />
 
       {/* Hero avec image de fond floutée + voile bleu foncé */}
@@ -48,7 +48,7 @@ export default function LandingPage() {
             fontWeight: 800,
             letterSpacing: "-0.02em"
           }}>
-            Générateur automatique de CV avec IA
+            Générateur automatique de CV type finance avec IA
           </h1>
           <ul style={{ 
             marginTop: "24px", 
@@ -65,35 +65,22 @@ export default function LandingPage() {
           </ul>
           <div style={{ display: "flex", gap: "16px", marginTop: "28px", flexWrap: "wrap" }}>
             <Link href="/cv" style={{
-              padding: "18px 32px",
+              padding: "20px 36px",
               background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
               color: "#ffffff",
-              borderRadius: "16px",
+              borderRadius: "18px",
               textDecoration: "none",
-              fontWeight: 800,
-              fontSize: "18px",
-              boxShadow: "0 12px 32px rgba(59, 130, 246, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15)",
-              border: "2px solid rgba(255, 255, 255, 0.1)",
-              transition: "all 0.2s ease",
+              fontWeight: 900,
+              fontSize: "20px",
+              fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+              letterSpacing: "-0.01em",
+              boxShadow: "0 14px 36px rgba(59, 130, 246, 0.45), 0 5px 14px rgba(0, 0, 0, 0.18)",
+              border: "2px solid rgba(255, 255, 255, 0.12)",
+              transition: "all 0.3s ease",
               display: "inline-block",
               textAlign: "center",
-              minWidth: "200px"
+              minWidth: "220px"
             }}>Créer mon CV</Link>
-            <Link href="/a-propos" style={{
-              padding: "18px 32px",
-              backgroundColor: "rgba(255,255,255,0.15)",
-              color: "#ffffff",
-              border: "2px solid rgba(255,255,255,0.3)",
-              borderRadius: "16px",
-              textDecoration: "none",
-              fontWeight: 700,
-              fontSize: "18px",
-              backdropFilter: "blur(10px)",
-              transition: "all 0.2s ease",
-              display: "inline-block",
-              textAlign: "center",
-              minWidth: "200px"
-            }}>À propos</Link>
           </div>
         </div>
         <div>
@@ -117,10 +104,7 @@ export default function LandingPage() {
 
       {/* Bandeau logos banques - carousel */}
       <section style={{
-        backgroundColor: "rgba(2, 6, 23, 0.95)",
         padding: "48px 0",
-        borderTop: "1px solid rgba(255,255,255,0.1)",
-        borderBottom: "1px solid rgba(255,255,255,0.1)",
         overflow: "hidden"
       }}>
         <div style={{
@@ -143,13 +127,15 @@ export default function LandingPage() {
           <div style={{
             position: "relative",
             width: "100%",
-            overflow: "hidden"
+            overflow: "hidden",
+            backgroundColor: "#ffffff",
+            borderRadius: "12px",
+            padding: "20px 0"
           }}>
-            <div style={{
+            <div className="scroll-container" style={{
               display: "flex",
               alignItems: "center",
               gap: "80px",
-              animation: "scroll 25s linear infinite",
               width: "max-content"
             }}>
               {/* Première série de logos */}
@@ -196,6 +182,86 @@ export default function LandingPage() {
               <img 
                 src="/Symbole-Goldman-Sachs.jpg" 
                 alt="Goldman Sachs" 
+                style={{ 
+                  height: "60px", 
+                  width: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0
+                }} 
+              />
+              <img 
+                src="/OIP.webp" 
+                alt="Rothschild" 
+                style={{ 
+                  height: "60px", 
+                  width: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0
+                }} 
+              />
+              <img 
+                src="/Rothschild-Co-ART-logo-2018.jpg" 
+                alt="Rothschild" 
+                style={{ 
+                  height: "60px", 
+                  width: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0
+                }} 
+              />
+              <img 
+                src="/lazard-logo-freelogovectors.net_.png" 
+                alt="Lazard" 
+                style={{ 
+                  height: "60px", 
+                  width: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0
+                }} 
+              />
+              <img 
+                src="/l_eurazeo-logo-lyo-2021.png" 
+                alt="Eurazeo" 
+                style={{ 
+                  height: "60px", 
+                  width: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0
+                }} 
+              />
+              <img 
+                src="/Ardian-ART-logo-2018.jpg" 
+                alt="Ardian" 
+                style={{ 
+                  height: "60px", 
+                  width: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0
+                }} 
+              />
+              <img 
+                src="/Barclays-Symbole.jpg" 
+                alt="Barclays" 
+                style={{ 
+                  height: "60px", 
+                  width: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0
+                }} 
+              />
+              <img 
+                src="/UBS_BIG-ca7b9524.png" 
+                alt="UBS" 
+                style={{ 
+                  height: "60px", 
+                  width: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0
+                }} 
+              />
+              <img 
+                src="/Morgan-Stanley-Logo.png" 
+                alt="Morgan Stanley" 
                 style={{ 
                   height: "60px", 
                   width: "auto",
@@ -255,6 +321,86 @@ export default function LandingPage() {
                   flexShrink: 0
                 }} 
               />
+              <img 
+                src="/OIP.webp" 
+                alt="Rothschild" 
+                style={{ 
+                  height: "60px", 
+                  width: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0
+                }} 
+              />
+              <img 
+                src="/Rothschild-Co-ART-logo-2018.jpg" 
+                alt="Rothschild" 
+                style={{ 
+                  height: "60px", 
+                  width: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0
+                }} 
+              />
+              <img 
+                src="/lazard-logo-freelogovectors.net_.png" 
+                alt="Lazard" 
+                style={{ 
+                  height: "60px", 
+                  width: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0
+                }} 
+              />
+              <img 
+                src="/l_eurazeo-logo-lyo-2021.png" 
+                alt="Eurazeo" 
+                style={{ 
+                  height: "60px", 
+                  width: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0
+                }} 
+              />
+              <img 
+                src="/Ardian-ART-logo-2018.jpg" 
+                alt="Ardian" 
+                style={{ 
+                  height: "60px", 
+                  width: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0
+                }} 
+              />
+              <img 
+                src="/Barclays-Symbole.jpg" 
+                alt="Barclays" 
+                style={{ 
+                  height: "60px", 
+                  width: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0
+                }} 
+              />
+              <img 
+                src="/UBS_BIG-ca7b9524.png" 
+                alt="UBS" 
+                style={{ 
+                  height: "60px", 
+                  width: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0
+                }} 
+              />
+              <img 
+                src="/Morgan-Stanley-Logo.png" 
+                alt="Morgan Stanley" 
+                style={{ 
+                  height: "60px", 
+                  width: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0
+                }} 
+              />
             </div>
           </div>
         </div>
@@ -265,94 +411,212 @@ export default function LandingPage() {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
           }
+          .scroll-container {
+            animation: scroll 30s linear infinite;
+          }
         `}</style>
       </section>
 
-      {/* Avantages clés */}
+
+      {/* Section Comment ça marche */}
       <section style={{
-        maxWidth: "1100px",
-        margin: "0 auto",
-        padding: "24px 20px 12px 20px",
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
-        gap: "16px"
+        padding: "80px 20px",
+        position: "relative"
       }}>
-        {[
-          {
-            title: "ATS friendly",
-            desc: "Structure stricte, hiérarchie claire, mots-clés finance."
-          },
-          {
-            title: "Rapide",
-            desc: "De zéro à PDF en quelques minutes."
-          },
-          {
-            title: "Gratuit",
-            desc: "Sans inscription, export immédiat."
-          }
-        ].map((c) => (
-          <div key={c.title} style={{
-            backgroundColor: "#ffffff",
-            border: "1px solid #e5e7eb",
-            borderRadius: "12px",
-            padding: "16px",
-            boxShadow: "0 4px 16px rgba(15, 23, 42, 0.06)"
+        {/* Bulle pour la section Comment ça marche */}
+        <div style={{
+          position: "absolute",
+          inset: "20px",
+          backgroundColor: "rgba(255, 255, 255, 0.12)",
+          borderRadius: "24px",
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(255, 255, 255, 0.2)",
+          zIndex: 1
+        }} />
+        <div style={{
+          maxWidth: "1100px",
+          margin: "0 auto",
+          position: "relative",
+          zIndex: 2
+        }}>
+          <div style={{
+            textAlign: "center",
+            marginBottom: "64px"
           }}>
-            <h3 style={{ margin: 0, color: "#0f172a" }}>{c.title}</h3>
-            <p style={{ marginTop: "8px", color: "#475569" }}>{c.desc}</p>
+            <h2 style={{
+              fontSize: "42px",
+              fontWeight: 800,
+              color: "#ffffff",
+              margin: "0 0 16px 0",
+              fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+              letterSpacing: "-0.02em"
+            }}>
+              Comment ça marche
+            </h2>
+            <p style={{
+              fontSize: "20px",
+              color: "#e2e8f0",
+              margin: 0,
+              fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+              fontWeight: 500
+            }}>
+              Créez votre CV professionnel en 3 étapes simples
+            </p>
           </div>
-        ))}
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "40px",
+            alignItems: "start"
+          }}>
+            {/* Étape 1 */}
+            <div style={{
+              textAlign: "center",
+              position: "relative"
+            }}>
+              
+              {/* Image étape 1 */}
+              <div style={{ height: "380px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <img
+                  src="/Gemini_Generated_Image_ms49kzms49kzms49 (1).png"
+                  alt="Génération de CV automatique"
+                  style={{
+                    width: "100%",
+                    height: "280px",
+                    objectFit: "contain",
+                    borderRadius: "12px"
+                  }}
+                />
+              </div>
+
+              <h3 style={{
+                fontSize: "24px",
+                fontWeight: 700,
+                color: "#ffffff",
+                margin: "0 0 12px 0",
+                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+              }}>
+                Générer votre CV
+              </h3>
+              <p style={{
+                fontSize: "16px",
+                color: "#e2e8f0",
+                lineHeight: 1.6,
+                margin: 0,
+                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+              }}>
+                Générez votre CV type finance sur une page lisible par les ATS des plus grandes banques et fonds d'investissements
+              </p>
+            </div>
+
+            {/* Étape 2 */}
+            <div style={{
+              textAlign: "center",
+              position: "relative"
+            }}>
+              
+              {/* Image étape 2 */}
+              <div style={{ height: "380px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <img
+                  src="/Gemini_Generated_Image_n0iwmtn0iwmtn0iw (1).png"
+                  alt="Remplissage des sections CV"
+                  style={{
+                    width: "100%",
+                    height: "380px",
+                    objectFit: "contain",
+                    borderRadius: "12px"
+                  }}
+                />
+              </div>
+
+              <h3 style={{
+                fontSize: "24px",
+                fontWeight: 700,
+                color: "#ffffff",
+                margin: "0 0 12px 0",
+                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+              }}>
+                Remplir les sections
+              </h3>
+              <p style={{
+                fontSize: "16px",
+                color: "#e2e8f0",
+                lineHeight: 1.6,
+                margin: 0,
+                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+              }}>
+                Remplissez chaque section de votre CV en vous appuyant sur notre contenu pré-rédigé, si vous le souhaitez. Pas besoin de vous occuper de la mise en forme, l'IA le fait pour vous
+              </p>
+            </div>
+
+            {/* Étape 3 */}
+            <div style={{
+              textAlign: "center",
+              position: "relative"
+            }}>
+              
+              {/* Image étape 3 */}
+              <div style={{ height: "380px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <img
+                  src="/Gemini_Generated_Image_ms49kzms49kzms49.png"
+                  alt="Téléchargement du CV PDF"
+                  style={{
+                    width: "100%",
+                    height: "320px",
+                    objectFit: "contain",
+                    borderRadius: "12px"
+                  }}
+                />
+              </div>
+
+              <h3 style={{
+                fontSize: "24px",
+                fontWeight: 700,
+                color: "#ffffff",
+                margin: "0 0 12px 0",
+                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+              }}>
+                Télécharger votre CV
+              </h3>
+              <p style={{
+                fontSize: "16px",
+                color: "#e2e8f0",
+                lineHeight: 1.6,
+                margin: 0,
+                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+              }}>
+                Téléchargez votre CV au format PDF gratuitement en 1 clic. Inscrivez-vous si vous souhaitez sauvegarder votre travail
+              </p>
+            </div>
+          </div>
+
+          {/* CTA central */}
+          <div style={{
+            textAlign: "center",
+            marginTop: "64px"
+          }}>
+            <Link href="/cv" style={{
+              padding: "20px 40px",
+              background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+              color: "#ffffff",
+              borderRadius: "16px",
+              textDecoration: "none",
+              fontWeight: 800,
+              fontSize: "20px",
+              boxShadow: "0 12px 32px rgba(59, 130, 246, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15)",
+              border: "2px solid rgba(255, 255, 255, 0.1)",
+              transition: "all 0.2s ease",
+              display: "inline-block",
+              textAlign: "center",
+              fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+            }}>
+              Commencer maintenant
+            </Link>
+          </div>
+        </div>
       </section>
 
-      
-
-      {/* Section IA / Conseils */}
-      <section style={{
-        maxWidth: "1100px",
-        margin: "0 auto",
-        padding: "0 20px 48px 20px",
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "16px"
-      }}>
-        <div style={{ 
-          background: "#ffffff",
-          border: "1px solid #e5e7eb",
-          borderRadius: "12px",
-          padding: "16px"
-        }}>
-          <h3 style={{ margin: 0, color: "#0f172a" }}>Génération IA intégrée</h3>
-          <p style={{ marginTop: "8px", color: "#475569" }}>
-            Décris ton profil, notre IA propose des contenus adaptés aux attentes des recruteurs.
-          </p>
-          <Link href="/cv" style={{
-            marginTop: "8px",
-            display: "inline-block",
-            padding: "10px 14px",
-            background: "linear-gradient(90deg,#0ea5e9,#2563eb)",
-            color: "#fff",
-            borderRadius: "10px",
-            textDecoration: "none",
-            fontWeight: 600
-          }}>Créer avec l’IA</Link>
-        </div>
-        <div style={{ 
-          background: "#ffffff",
-          border: "1px solid #e5e7eb",
-          borderRadius: "12px",
-          padding: "16px"
-        }}>
-          <h3 style={{ margin: 0, color: "#0f172a" }}>Optimisé pour la finance</h3>
-          <p style={{ marginTop: "8px", color: "#475569" }}>
-            Sections et format pensés pour M&A, marchés, asset management, audit/TS, etc.
-          </p>
-          <ul style={{ marginTop: "8px", color: "#1f2937", paddingLeft: "20px" }}>
-            <li>Rubriques standards (Éducation, Expériences, Compétences)</li>
-            <li>Puces orientées réalisations et métriques</li>
-            <li>Mots-clés ATS essentiels</li>
-          </ul>
-        </div>
-      </section>
         
       <Footer />
           </div>

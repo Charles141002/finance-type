@@ -486,13 +486,14 @@ function Header(param) {
     let { rightActions, variant = "default" } = param;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
         style: {
-            height: "72px",
+            height: "120px",
             display: "flex",
             alignItems: "center",
             background: "linear-gradient(180deg, rgba(2, 6, 23, 0.95), rgba(2, 6, 23, 0.9))",
             backdropFilter: "saturate(140%) blur(8px)",
             WebkitBackdropFilter: "saturate(140%) blur(8px)",
-            borderBottom: "1px solid rgba(255,255,255,0.1)",
+            borderBottom: "2px solid rgba(255,255,255,0.15)",
+            borderTop: "1px solid rgba(255,255,255,0.1)",
             position: "sticky",
             top: 0,
             zIndex: 30
@@ -500,123 +501,144 @@ function Header(param) {
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             style: {
                 width: "100%",
-                maxWidth: "1200px",
+                maxWidth: "2000px",
                 margin: "0 auto",
-                padding: "0 20px",
+                padding: "0 24px 0 0",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "space-between",
-                gap: "16px"
+                justifyContent: "flex-start",
+                gap: "20px"
             },
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     style: {
                         display: "flex",
-                        alignItems: "center",
-                        gap: "16px"
+                        alignItems: "center"
                     },
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                            href: "/",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                        href: "/",
+                        style: {
+                            textDecoration: "none",
+                            display: "flex",
+                            alignItems: "center"
+                        },
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                            src: "/Logo.png",
+                            alt: "FinanceCV Smart Resume Builder",
                             style: {
-                                color: "#ffffff",
-                                textDecoration: "none",
-                                fontWeight: 800,
-                                letterSpacing: "-0.02em",
-                                fontSize: "20px"
-                            },
-                            children: "Finance CV AI"
+                                height: "250px",
+                                width: "auto",
+                                objectFit: "contain"
+                            }
                         }, void 0, false, {
                             fileName: "[project]/components/Header.tsx",
-                            lineNumber: 38,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
-                            style: {
-                                display: "flex",
-                                gap: "8px"
-                            },
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                                    href: "/cv",
-                                    style: {
-                                        textDecoration: "none",
-                                        color: "#e2e8f0",
-                                        background: "rgba(255,255,255,0.1)",
-                                        border: "1px solid rgba(255,255,255,0.2)",
-                                        padding: "10px 14px",
-                                        borderRadius: "999px",
-                                        fontWeight: 600
-                                    },
-                                    children: "Générateur"
-                                }, void 0, false, {
-                                    fileName: "[project]/components/Header.tsx",
-                                    lineNumber: 51,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                                    href: "/a-propos",
-                                    style: {
-                                        textDecoration: "none",
-                                        color: "#e2e8f0",
-                                        background: "rgba(255,255,255,0.1)",
-                                        border: "1px solid rgba(255,255,255,0.2)",
-                                        padding: "10px 14px",
-                                        borderRadius: "999px",
-                                        fontWeight: 600
-                                    },
-                                    children: "À propos"
-                                }, void 0, false, {
-                                    fileName: "[project]/components/Header.tsx",
-                                    lineNumber: 65,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/components/Header.tsx",
-                            lineNumber: 50,
-                            columnNumber: 11
+                            lineNumber: 48,
+                            columnNumber: 13
                         }, this)
-                    ]
-                }, void 0, true, {
+                    }, void 0, false, {
+                        fileName: "[project]/components/Header.tsx",
+                        lineNumber: 40,
+                        columnNumber: 11
+                    }, this)
+                }, void 0, false, {
                     fileName: "[project]/components/Header.tsx",
-                    lineNumber: 37,
+                    lineNumber: 39,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     style: {
                         display: "flex",
                         alignItems: "center",
-                        gap: "10px"
+                        gap: "32px",
+                        marginLeft: "auto"
                     },
-                    children: rightActions !== null && rightActions !== void 0 ? rightActions : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                        href: "/cv",
-                        style: {
-                            textDecoration: "none",
-                            background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
-                            color: "#ffffff",
-                            padding: "14px 20px",
-                            borderRadius: "12px",
-                            fontWeight: 700,
-                            boxShadow: "0 8px 24px rgba(59, 130, 246, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15)",
-                            border: "2px solid rgba(255, 255, 255, 0.1)",
-                            fontSize: "16px"
-                        },
-                        children: "Commencer"
-                    }, void 0, false, {
-                        fileName: "[project]/components/Header.tsx",
-                        lineNumber: 83,
-                        columnNumber: 13
-                    }, this)
+                    children: rightActions !== null && rightActions !== void 0 ? rightActions : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                href: "/cv",
+                                style: {
+                                    textDecoration: "none",
+                                    color: "#e2e8f0",
+                                    fontWeight: 600,
+                                    fontSize: "15px",
+                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                    transition: "all 0.2s ease"
+                                },
+                                children: "Générateur CV"
+                            }, void 0, false, {
+                                fileName: "[project]/components/Header.tsx",
+                                lineNumber: 64,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                href: "/a-propos",
+                                style: {
+                                    textDecoration: "none",
+                                    color: "#e2e8f0",
+                                    fontWeight: 600,
+                                    fontSize: "15px",
+                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                    transition: "all 0.2s ease"
+                                },
+                                children: "À propos"
+                            }, void 0, false, {
+                                fileName: "[project]/components/Header.tsx",
+                                lineNumber: 77,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                href: "/cv",
+                                style: {
+                                    textDecoration: "none",
+                                    background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+                                    color: "#ffffff",
+                                    padding: "14px 24px",
+                                    borderRadius: "12px",
+                                    fontWeight: 700,
+                                    fontSize: "16px",
+                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                    boxShadow: "0 8px 24px rgba(59, 130, 246, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15)",
+                                    border: "2px solid rgba(255, 255, 255, 0.1)",
+                                    transition: "all 0.2s ease"
+                                },
+                                children: "Commencer"
+                            }, void 0, false, {
+                                fileName: "[project]/components/Header.tsx",
+                                lineNumber: 90,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                href: "/login",
+                                style: {
+                                    textDecoration: "none",
+                                    color: "#e2e8f0",
+                                    background: "rgba(255,255,255,0.08)",
+                                    border: "1px solid rgba(255,255,255,0.15)",
+                                    padding: "12px 20px",
+                                    borderRadius: "12px",
+                                    fontWeight: 600,
+                                    fontSize: "15px",
+                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                    transition: "all 0.2s ease",
+                                    backdropFilter: "blur(10px)"
+                                },
+                                children: "Se connecter"
+                            }, void 0, false, {
+                                fileName: "[project]/components/Header.tsx",
+                                lineNumber: 108,
+                                columnNumber: 15
+                            }, this)
+                        ]
+                    }, void 0, true)
                 }, void 0, false, {
                     fileName: "[project]/components/Header.tsx",
-                    lineNumber: 81,
+                    lineNumber: 61,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/Header.tsx",
-            lineNumber: 25,
+            lineNumber: 26,
             columnNumber: 7
         }, this)
     }, void 0, false, {
@@ -646,75 +668,364 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link
 function Footer() {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("footer", {
         style: {
-            borderTop: "1px solid rgba(226,232,240,0.8)",
-            background: "linear-gradient(180deg, rgba(248,250,252,0.9), rgba(255,255,255,0.95))",
-            backdropFilter: "saturate(140%) blur(6px)",
-            WebkitBackdropFilter: "saturate(140%) blur(6px)",
-            padding: "16px 0"
+            backgroundColor: "rgba(2, 6, 23, 0.95)",
+            padding: "64px 0 32px 0"
         },
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             style: {
                 width: "100%",
-                maxWidth: "1120px",
+                maxWidth: "1100px",
                 margin: "0 auto",
-                padding: "0 20px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                color: "#64748b"
+                padding: "0 20px"
             },
             children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                    children: [
-                        "© ",
-                        new Date().getFullYear(),
-                        " Finance CV AI"
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/components/Footer.tsx",
-                    lineNumber: 26,
-                    columnNumber: 9
-                }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     style: {
-                        display: "flex",
-                        gap: "12px"
+                        display: "grid",
+                        gridTemplateColumns: "2fr 1fr 1fr 1fr",
+                        gap: "48px",
+                        marginBottom: "48px"
                     },
                     children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                            href: "/a-propos",
-                            style: {
-                                color: "#64748b",
-                                textDecoration: "none"
-                            },
-                            children: "À propos"
-                        }, void 0, false, {
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                    style: {
+                                        color: "#ffffff",
+                                        fontSize: "24px",
+                                        fontWeight: 800,
+                                        margin: "0 0 16px 0",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                    },
+                                    children: "Finance CV AI"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/Footer.tsx",
+                                    lineNumber: 28,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    style: {
+                                        color: "#e2e8f0",
+                                        fontSize: "16px",
+                                        lineHeight: 1.6,
+                                        margin: "0 0 24px 0",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                    },
+                                    children: "Générateur automatique de CV type finance avec IA. Créez votre CV professionnel optimisé pour les ATS des plus grandes banques et fonds d'investissement."
+                                }, void 0, false, {
+                                    fileName: "[project]/components/Footer.tsx",
+                                    lineNumber: 37,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "/cv",
+                                    style: {
+                                        padding: "12px 24px",
+                                        background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+                                        color: "#ffffff",
+                                        borderRadius: "12px",
+                                        textDecoration: "none",
+                                        fontWeight: 700,
+                                        fontSize: "16px",
+                                        display: "inline-block",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                    },
+                                    children: "Créer mon CV"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/Footer.tsx",
+                                    lineNumber: 46,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
                             fileName: "[project]/components/Footer.tsx",
-                            lineNumber: 28,
+                            lineNumber: 27,
                             columnNumber: 11
                         }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                            href: "/cv",
-                            style: {
-                                color: "#64748b",
-                                textDecoration: "none"
-                            },
-                            children: "Générateur"
-                        }, void 0, false, {
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                                    style: {
+                                        color: "#ffffff",
+                                        fontSize: "18px",
+                                        fontWeight: 700,
+                                        margin: "0 0 16px 0",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                    },
+                                    children: "Liens rapides"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/Footer.tsx",
+                                    lineNumber: 63,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    style: {
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: "12px"
+                                    },
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                            href: "/cv",
+                                            style: {
+                                                color: "#e2e8f0",
+                                                textDecoration: "none",
+                                                fontSize: "16px",
+                                                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                            },
+                                            children: "Générateur CV"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/Footer.tsx",
+                                            lineNumber: 73,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                            href: "/a-propos",
+                                            style: {
+                                                color: "#e2e8f0",
+                                                textDecoration: "none",
+                                                fontSize: "16px",
+                                                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                            },
+                                            children: "À propos"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/Footer.tsx",
+                                            lineNumber: 81,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/Footer.tsx",
+                                    lineNumber: 72,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
                             fileName: "[project]/components/Footer.tsx",
-                            lineNumber: 29,
+                            lineNumber: 62,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                                    style: {
+                                        color: "#ffffff",
+                                        fontSize: "18px",
+                                        fontWeight: 700,
+                                        margin: "0 0 16px 0",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                    },
+                                    children: "Fonctionnalités"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/Footer.tsx",
+                                    lineNumber: 94,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    style: {
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: "12px"
+                                    },
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            style: {
+                                                color: "#e2e8f0",
+                                                fontSize: "16px",
+                                                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                            },
+                                            children: "IA intégrée"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/Footer.tsx",
+                                            lineNumber: 104,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            style: {
+                                                color: "#e2e8f0",
+                                                fontSize: "16px",
+                                                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                            },
+                                            children: "Optimisé ATS"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/Footer.tsx",
+                                            lineNumber: 111,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            style: {
+                                                color: "#e2e8f0",
+                                                fontSize: "16px",
+                                                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                            },
+                                            children: "Export PDF"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/Footer.tsx",
+                                            lineNumber: 118,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/Footer.tsx",
+                                    lineNumber: 103,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/Footer.tsx",
+                            lineNumber: 93,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                                    style: {
+                                        color: "#ffffff",
+                                        fontSize: "18px",
+                                        fontWeight: 700,
+                                        margin: "0 0 16px 0",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                    },
+                                    children: "Secteurs"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/Footer.tsx",
+                                    lineNumber: 130,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    style: {
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: "12px"
+                                    },
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            style: {
+                                                color: "#e2e8f0",
+                                                fontSize: "16px",
+                                                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                            },
+                                            children: "M&A"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/Footer.tsx",
+                                            lineNumber: 140,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            style: {
+                                                color: "#e2e8f0",
+                                                fontSize: "16px",
+                                                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                            },
+                                            children: "Marchés"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/Footer.tsx",
+                                            lineNumber: 147,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            style: {
+                                                color: "#e2e8f0",
+                                                fontSize: "16px",
+                                                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                            },
+                                            children: "Asset Management"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/Footer.tsx",
+                                            lineNumber: 154,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/Footer.tsx",
+                                    lineNumber: 139,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/Footer.tsx",
+                            lineNumber: 129,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/Footer.tsx",
-                    lineNumber: 27,
+                    lineNumber: 20,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    style: {
+                        borderTop: "1px solid rgba(255,255,255,0.1)",
+                        paddingTop: "32px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        flexWrap: "wrap",
+                        gap: "16px"
+                    },
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            style: {
+                                color: "#94a3b8",
+                                fontSize: "14px",
+                                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                            },
+                            children: [
+                                "© ",
+                                new Date().getFullYear(),
+                                " Finance CV AI. Tous droits réservés."
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/Footer.tsx",
+                            lineNumber: 175,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            style: {
+                                display: "flex",
+                                gap: "24px"
+                            },
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    style: {
+                                        color: "#94a3b8",
+                                        fontSize: "14px",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                    },
+                                    children: "Gratuit"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/Footer.tsx",
+                                    lineNumber: 183,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    style: {
+                                        color: "#94a3b8",
+                                        fontSize: "14px",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                    },
+                                    children: "Sans inscription"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/Footer.tsx",
+                                    lineNumber: 190,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/Footer.tsx",
+                            lineNumber: 182,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/components/Footer.tsx",
+                    lineNumber: 166,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/Footer.tsx",
-            lineNumber: 14,
+            lineNumber: 11,
             columnNumber: 7
         }, this)
     }, void 0, false, {
@@ -749,7 +1060,7 @@ function APropos() {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         style: {
             minHeight: "100vh",
-            backgroundColor: "#ffffff"
+            backgroundColor: "rgba(2, 6, 23, 0.95)"
         },
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Header$2e$tsx__$5b$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
@@ -757,224 +1068,705 @@ function APropos() {
                 lineNumber: 8,
                 columnNumber: 7
             }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
                 style: {
-                    maxWidth: "900px",
-                    margin: "0 auto",
-                    padding: "40px 20px"
+                    position: "relative",
+                    overflow: "hidden"
                 },
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
-                            fontSize: "36px",
-                            lineHeight: 1.2,
-                            margin: 0,
-                            color: "#0f172a"
-                        },
-                        children: "À propos"
+                            position: "absolute",
+                            inset: 0,
+                            backgroundImage: "url(/photo_a_propos.jpg)",
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            filter: "blur(3px)",
+                            transform: "scale(1.02)",
+                            zIndex: 0
+                        }
                     }, void 0, false, {
                         fileName: "[project]/pages/a-propos.tsx",
-                        lineNumber: 11,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        style: {
-                            marginTop: "12px",
-                            color: "#334155",
-                            fontSize: "18px"
-                        },
-                        children: "Nous sommes deux étudiants passionnés de finance et de tech. On s’est rendu compte que créer un CV type finance est souvent long, pénible et formaté. Alors on a construit un générateur de CV IA qui respecte les standards des grandes institutions, lisible par les ATS, et modifiable en quelques minutes."
-                    }, void 0, false, {
-                        fileName: "[project]/pages/a-propos.tsx",
-                        lineNumber: 12,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
-                        style: {
-                            marginTop: "24px",
-                            display: "grid",
-                            gridTemplateColumns: "1fr 1fr",
-                            gap: "16px"
-                        },
-                        children: [
-                            {
-                                title: "Pourquoi ?",
-                                desc: "Parce qu’on a tous perdu des heures sur Word à re-aligner des puces et des marges."
-                            },
-                            {
-                                title: "Pour qui ?",
-                                desc: "Étudiants, jeunes diplômés et juniors visant banques, fonds et cabinets."
-                            },
-                            {
-                                title: "Comment ?",
-                                desc: "Une structure académique stricte, des sections claires, export PDF ATS-friendly."
-                            },
-                            {
-                                title: "Et l’IA ?",
-                                desc: "Elle te propose une base propre. Tu personnalises en 2 minutes."
-                            }
-                        ].map((item)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                style: {
-                                    backgroundColor: "#f8fafc",
-                                    border: "1px solid #e5e7eb",
-                                    borderRadius: "12px",
-                                    padding: "16px"
-                                },
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                        style: {
-                                            margin: 0,
-                                            color: "#0f172a"
-                                        },
-                                        children: item.title
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/a-propos.tsx",
-                                        lineNumber: 44,
-                                        columnNumber: 15
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        style: {
-                                            marginTop: "8px",
-                                            color: "#475569"
-                                        },
-                                        children: item.desc
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/a-propos.tsx",
-                                        lineNumber: 45,
-                                        columnNumber: 15
-                                    }, this)
-                                ]
-                            }, item.title, true, {
-                                fileName: "[project]/pages/a-propos.tsx",
-                                lineNumber: 38,
-                                columnNumber: 13
-                            }, this))
-                    }, void 0, false, {
-                        fileName: "[project]/pages/a-propos.tsx",
-                        lineNumber: 19,
+                        lineNumber: 13,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
-                            marginTop: "32px",
-                            padding: "16px",
-                            backgroundColor: "#ffffff",
-                            border: "1px solid #e5e7eb",
-                            borderRadius: "12px"
+                            position: "absolute",
+                            inset: 0,
+                            background: "linear-gradient(180deg, rgba(2, 6, 23, 0.55), rgba(2, 6, 23, 0.48))",
+                            zIndex: 1
+                        }
+                    }, void 0, false, {
+                        fileName: "[project]/pages/a-propos.tsx",
+                        lineNumber: 24,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            position: "relative",
+                            zIndex: 2,
+                            maxWidth: "1100px",
+                            margin: "0 auto",
+                            padding: "120px 20px 100px 20px",
+                            textAlign: "center",
+                            minHeight: "80vh",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center"
                         },
                         children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                                 style: {
-                                    marginTop: 0,
-                                    color: "#0f172a"
+                                    fontSize: "56px",
+                                    lineHeight: 1.1,
+                                    margin: 0,
+                                    color: "#ffffff",
+                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                    fontWeight: 800,
+                                    letterSpacing: "-0.02em"
                                 },
-                                children: "Notre promesse"
+                                children: "À propos de FinanceCV"
                             }, void 0, false, {
                                 fileName: "[project]/pages/a-propos.tsx",
-                                lineNumber: 57,
+                                lineNumber: 43,
                                 columnNumber: 11
                             }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 style: {
-                                    color: "#1f2937",
-                                    paddingLeft: "20px"
+                                    fontSize: "24px",
+                                    color: "#e2e8f0",
+                                    margin: "24px 0 0 0",
+                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                    fontWeight: 500,
+                                    maxWidth: "800px",
+                                    marginLeft: "auto",
+                                    marginRight: "auto"
                                 },
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
-                                        children: "Gratuit et sans friction"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/a-propos.tsx",
-                                        lineNumber: 59,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
-                                        children: "Lisible par les ATS"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/a-propos.tsx",
-                                        lineNumber: 60,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
-                                        children: "Export PDF en un clic"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/a-propos.tsx",
-                                        lineNumber: 61,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
-                                        children: "Édition rapide et simple"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/a-propos.tsx",
-                                        lineNumber: 62,
-                                        columnNumber: 13
-                                    }, this)
-                                ]
-                            }, void 0, true, {
+                                children: "Nous sommes deux étudiants passionnés de finance et de tech. On s'est rendu compte que créer un CV type finance est souvent long, pénible et mal formaté."
+                            }, void 0, false, {
                                 fileName: "[project]/pages/a-propos.tsx",
-                                lineNumber: 58,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                style: {
-                                    display: "flex",
-                                    gap: "12px",
-                                    marginTop: "12px"
-                                },
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                                        href: "/cv",
-                                        style: {
-                                            padding: "12px 16px",
-                                            backgroundColor: "#111827",
-                                            color: "#fff",
-                                            borderRadius: "10px",
-                                            textDecoration: "none",
-                                            fontWeight: 600
-                                        },
-                                        children: "Créer mon CV"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/a-propos.tsx",
-                                        lineNumber: 65,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                                        href: "/",
-                                        style: {
-                                            padding: "12px 16px",
-                                            backgroundColor: "#ffffff",
-                                            color: "#111827",
-                                            border: "1px solid #e5e7eb",
-                                            borderRadius: "10px",
-                                            textDecoration: "none",
-                                            fontWeight: 600
-                                        },
-                                        children: "Voir la landing"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/a-propos.tsx",
-                                        lineNumber: 73,
-                                        columnNumber: 13
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/pages/a-propos.tsx",
-                                lineNumber: 64,
+                                lineNumber: 54,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/pages/a-propos.tsx",
-                        lineNumber: 50,
+                        lineNumber: 31,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/pages/a-propos.tsx",
-                lineNumber: 10,
+                lineNumber: 11,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+                style: {
+                    padding: "80px 20px",
+                    position: "relative"
+                },
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            position: "absolute",
+                            inset: "20px",
+                            backgroundColor: "rgba(255, 255, 255, 0.12)",
+                            borderRadius: "24px",
+                            backdropFilter: "blur(10px)",
+                            border: "1px solid rgba(255, 255, 255, 0.2)",
+                            zIndex: 1
+                        }
+                    }, void 0, false, {
+                        fileName: "[project]/pages/a-propos.tsx",
+                        lineNumber: 75,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            maxWidth: "1100px",
+                            margin: "0 auto",
+                            position: "relative",
+                            zIndex: 2
+                        },
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    textAlign: "center",
+                                    marginBottom: "64px"
+                                },
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                        style: {
+                                            fontSize: "42px",
+                                            fontWeight: 800,
+                                            color: "#ffffff",
+                                            margin: "0 0 16px 0",
+                                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                            letterSpacing: "-0.02em"
+                                        },
+                                        children: "Notre Mission"
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/a-propos.tsx",
+                                        lineNumber: 94,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        style: {
+                                            fontSize: "20px",
+                                            color: "#e2e8f0",
+                                            margin: 0,
+                                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                            fontWeight: 500
+                                        },
+                                        children: "Révolutionner la création de CV pour le secteur financier"
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/a-propos.tsx",
+                                        lineNumber: 104,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/pages/a-propos.tsx",
+                                lineNumber: 90,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    display: "grid",
+                                    gridTemplateColumns: "repeat(2, 1fr)",
+                                    gap: "40px",
+                                    alignItems: "start"
+                                },
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            textAlign: "center",
+                                            position: "relative"
+                                        },
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                style: {
+                                                    width: "80px",
+                                                    height: "80px",
+                                                    background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+                                                    borderRadius: "50%",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    margin: "0 auto 24px auto",
+                                                    boxShadow: "0 8px 32px rgba(59, 130, 246, 0.3)"
+                                                },
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    style: {
+                                                        color: "#ffffff",
+                                                        fontSize: "32px",
+                                                        fontWeight: 800,
+                                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                                    },
+                                                    children: "?"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/a-propos.tsx",
+                                                    lineNumber: 137,
+                                                    columnNumber: 17
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/a-propos.tsx",
+                                                lineNumber: 126,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                style: {
+                                                    fontSize: "24px",
+                                                    fontWeight: 700,
+                                                    color: "#ffffff",
+                                                    margin: "0 0 12px 0",
+                                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                                },
+                                                children: "Pourquoi ?"
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/a-propos.tsx",
+                                                lineNumber: 147,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                style: {
+                                                    fontSize: "16px",
+                                                    color: "#e2e8f0",
+                                                    lineHeight: 1.6,
+                                                    margin: 0,
+                                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                                },
+                                                children: "Parce qu'on a tous perdu des heures sur Word à re-aligner des puces et des marges. Créer un CV professionnel ne devrait pas être un calvaire."
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/a-propos.tsx",
+                                                lineNumber: 156,
+                                                columnNumber: 15
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/pages/a-propos.tsx",
+                                        lineNumber: 122,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            textAlign: "center",
+                                            position: "relative"
+                                        },
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                style: {
+                                                    width: "80px",
+                                                    height: "80px",
+                                                    background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+                                                    borderRadius: "50%",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    margin: "0 auto 24px auto",
+                                                    boxShadow: "0 8px 32px rgba(59, 130, 246, 0.3)"
+                                                },
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    style: {
+                                                        color: "#ffffff",
+                                                        fontSize: "32px",
+                                                        fontWeight: 800,
+                                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                                    },
+                                                    children: "👥"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/a-propos.tsx",
+                                                    lineNumber: 183,
+                                                    columnNumber: 17
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/a-propos.tsx",
+                                                lineNumber: 172,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                style: {
+                                                    fontSize: "24px",
+                                                    fontWeight: 700,
+                                                    color: "#ffffff",
+                                                    margin: "0 0 12px 0",
+                                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                                },
+                                                children: "Pour qui ?"
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/a-propos.tsx",
+                                                lineNumber: 193,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                style: {
+                                                    fontSize: "16px",
+                                                    color: "#e2e8f0",
+                                                    lineHeight: 1.6,
+                                                    margin: 0,
+                                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                                },
+                                                children: "Étudiants, jeunes diplômés et juniors visant banques, fonds d'investissement et cabinets de conseil."
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/a-propos.tsx",
+                                                lineNumber: 202,
+                                                columnNumber: 15
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/pages/a-propos.tsx",
+                                        lineNumber: 168,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            textAlign: "center",
+                                            position: "relative"
+                                        },
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                style: {
+                                                    width: "80px",
+                                                    height: "80px",
+                                                    background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+                                                    borderRadius: "50%",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    margin: "0 auto 24px auto",
+                                                    boxShadow: "0 8px 32px rgba(59, 130, 246, 0.3)"
+                                                },
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    style: {
+                                                        color: "#ffffff",
+                                                        fontSize: "32px",
+                                                        fontWeight: 800,
+                                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                                    },
+                                                    children: "⚡"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/a-propos.tsx",
+                                                    lineNumber: 229,
+                                                    columnNumber: 17
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/a-propos.tsx",
+                                                lineNumber: 218,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                style: {
+                                                    fontSize: "24px",
+                                                    fontWeight: 700,
+                                                    color: "#ffffff",
+                                                    margin: "0 0 12px 0",
+                                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                                },
+                                                children: "Comment ?"
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/a-propos.tsx",
+                                                lineNumber: 239,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                style: {
+                                                    fontSize: "16px",
+                                                    color: "#e2e8f0",
+                                                    lineHeight: 1.6,
+                                                    margin: 0,
+                                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                                },
+                                                children: "Une structure académique stricte, des sections claires, export PDF ATS-friendly. L'IA propose, vous personnalisez."
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/a-propos.tsx",
+                                                lineNumber: 248,
+                                                columnNumber: 15
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/pages/a-propos.tsx",
+                                        lineNumber: 214,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            textAlign: "center",
+                                            position: "relative"
+                                        },
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                style: {
+                                                    width: "80px",
+                                                    height: "80px",
+                                                    background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+                                                    borderRadius: "50%",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    margin: "0 auto 24px auto",
+                                                    boxShadow: "0 8px 32px rgba(59, 130, 246, 0.3)"
+                                                },
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    style: {
+                                                        color: "#ffffff",
+                                                        fontSize: "32px",
+                                                        fontWeight: 800,
+                                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                                    },
+                                                    children: "🤖"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/a-propos.tsx",
+                                                    lineNumber: 275,
+                                                    columnNumber: 17
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/a-propos.tsx",
+                                                lineNumber: 264,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                style: {
+                                                    fontSize: "24px",
+                                                    fontWeight: 700,
+                                                    color: "#ffffff",
+                                                    margin: "0 0 12px 0",
+                                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                                },
+                                                children: "Et l'IA ?"
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/a-propos.tsx",
+                                                lineNumber: 285,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                style: {
+                                                    fontSize: "16px",
+                                                    color: "#e2e8f0",
+                                                    lineHeight: 1.6,
+                                                    margin: 0,
+                                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                                },
+                                                children: "Elle te propose une base propre et professionnelle. Tu personnalises en 2 minutes selon ton profil."
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/a-propos.tsx",
+                                                lineNumber: 294,
+                                                columnNumber: 15
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/pages/a-propos.tsx",
+                                        lineNumber: 260,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/pages/a-propos.tsx",
+                                lineNumber: 115,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/pages/a-propos.tsx",
+                        lineNumber: 84,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/pages/a-propos.tsx",
+                lineNumber: 70,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+                style: {
+                    padding: "80px 20px",
+                    position: "relative"
+                },
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            position: "absolute",
+                            inset: "20px",
+                            backgroundColor: "rgba(255, 255, 255, 0.12)",
+                            borderRadius: "24px",
+                            backdropFilter: "blur(10px)",
+                            border: "1px solid rgba(255, 255, 255, 0.2)",
+                            zIndex: 1
+                        }
+                    }, void 0, false, {
+                        fileName: "[project]/pages/a-propos.tsx",
+                        lineNumber: 314,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            maxWidth: "1100px",
+                            margin: "0 auto",
+                            position: "relative",
+                            zIndex: 2
+                        },
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    textAlign: "center",
+                                    marginBottom: "48px"
+                                },
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                        style: {
+                                            fontSize: "42px",
+                                            fontWeight: 800,
+                                            color: "#ffffff",
+                                            margin: "0 0 16px 0",
+                                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                            letterSpacing: "-0.02em"
+                                        },
+                                        children: "Notre Promesse"
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/a-propos.tsx",
+                                        lineNumber: 333,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        style: {
+                                            fontSize: "20px",
+                                            color: "#e2e8f0",
+                                            margin: 0,
+                                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                            fontWeight: 500
+                                        },
+                                        children: "Des standards professionnels, sans la complexité"
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/a-propos.tsx",
+                                        lineNumber: 343,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/pages/a-propos.tsx",
+                                lineNumber: 329,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    display: "grid",
+                                    gridTemplateColumns: "repeat(2, 1fr)",
+                                    gap: "32px",
+                                    marginBottom: "48px"
+                                },
+                                children: [
+                                    {
+                                        icon: "🆓",
+                                        title: "Gratuit et sans friction",
+                                        desc: "Aucun coût caché, aucune inscription obligatoire"
+                                    },
+                                    {
+                                        icon: "📄",
+                                        title: "Lisible par les ATS",
+                                        desc: "Format optimisé pour passer les filtres automatiques"
+                                    },
+                                    {
+                                        icon: "⚡",
+                                        title: "Export PDF en un clic",
+                                        desc: "Téléchargement instantané, prêt à envoyer"
+                                    },
+                                    {
+                                        icon: "✏️",
+                                        title: "Édition rapide et simple",
+                                        desc: "Interface intuitive, modifications en temps réel"
+                                    }
+                                ].map((item, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            backgroundColor: "rgba(255, 255, 255, 0.08)",
+                                            border: "1px solid rgba(255, 255, 255, 0.15)",
+                                            borderRadius: "16px",
+                                            padding: "24px",
+                                            backdropFilter: "blur(10px)"
+                                        },
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                style: {
+                                                    fontSize: "32px",
+                                                    marginBottom: "12px"
+                                                },
+                                                children: item.icon
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/a-propos.tsx",
+                                                lineNumber: 373,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                style: {
+                                                    fontSize: "20px",
+                                                    fontWeight: 700,
+                                                    color: "#ffffff",
+                                                    margin: "0 0 8px 0",
+                                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                                },
+                                                children: item.title
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/a-propos.tsx",
+                                                lineNumber: 379,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                style: {
+                                                    fontSize: "16px",
+                                                    color: "#e2e8f0",
+                                                    lineHeight: 1.5,
+                                                    margin: 0,
+                                                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                                },
+                                                children: item.desc
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/a-propos.tsx",
+                                                lineNumber: 388,
+                                                columnNumber: 17
+                                            }, this)
+                                        ]
+                                    }, index, true, {
+                                        fileName: "[project]/pages/a-propos.tsx",
+                                        lineNumber: 366,
+                                        columnNumber: 15
+                                    }, this))
+                            }, void 0, false, {
+                                fileName: "[project]/pages/a-propos.tsx",
+                                lineNumber: 354,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    textAlign: "center"
+                                },
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                        href: "/cv",
+                                        style: {
+                                            padding: "20px 40px",
+                                            background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+                                            color: "#ffffff",
+                                            borderRadius: "16px",
+                                            textDecoration: "none",
+                                            fontWeight: 800,
+                                            fontSize: "20px",
+                                            boxShadow: "0 12px 32px rgba(59, 130, 246, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15)",
+                                            border: "2px solid rgba(255, 255, 255, 0.1)",
+                                            transition: "all 0.2s ease",
+                                            display: "inline-block",
+                                            textAlign: "center",
+                                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                            marginRight: "16px"
+                                        },
+                                        children: "Créer mon CV"
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/a-propos.tsx",
+                                        lineNumber: 405,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                        href: "/",
+                                        style: {
+                                            padding: "20px 40px",
+                                            backgroundColor: "rgba(255,255,255,0.15)",
+                                            color: "#ffffff",
+                                            border: "2px solid rgba(255,255,255,0.3)",
+                                            borderRadius: "16px",
+                                            textDecoration: "none",
+                                            fontWeight: 700,
+                                            fontSize: "20px",
+                                            backdropFilter: "blur(10px)",
+                                            transition: "all 0.2s ease",
+                                            display: "inline-block",
+                                            textAlign: "center",
+                                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                        },
+                                        children: "Retour à l'accueil"
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/a-propos.tsx",
+                                        lineNumber: 423,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/pages/a-propos.tsx",
+                                lineNumber: 402,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/pages/a-propos.tsx",
+                        lineNumber: 323,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/pages/a-propos.tsx",
+                lineNumber: 309,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Footer$2e$tsx__$5b$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/pages/a-propos.tsx",
-                lineNumber: 86,
+                lineNumber: 444,
                 columnNumber: 7
             }, this)
         ]
