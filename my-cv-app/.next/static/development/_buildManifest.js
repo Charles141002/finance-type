@@ -11,9 +11,6 @@ self.__BUILD_MANIFEST = {
   "/login": [
     "./static/chunks/pages/login.js"
   ],
-  "/mes-cv": [
-    "./static/chunks/pages/mes-cv.js"
-  ],
   "__rewrites": {
     "afterFiles": [],
     "beforeFiles": [],

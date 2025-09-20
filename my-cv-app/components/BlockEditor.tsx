@@ -889,64 +889,93 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
           {block.type === "divider" ? (
             <hr style={{ border: "none", borderTop: "2px solid #e5e7eb", margin: "8px 0" }} />
           ) : block.type === "contact" ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <input
-                placeholder="Email"
-                value={block.content?.email || ""}
-                onChange={(e) => updateBlockContent(block.id, { ...block.content, email: e.target.value })}
-                style={{
-                  padding: "10px 12px",
-                  border: "1px solid #d1d5db",
-                  borderRadius: 6,
-                  maxWidth: "640px",
-                  backgroundColor: "#f8fafc",
-                  transition: "border-color 0.2s ease, box-shadow 0.2s ease",
-                }}
-                data-contact-input
-              />
-              <input
-                placeholder="Téléphone"
-                value={block.content?.phone || ""}
-                onChange={(e) => updateBlockContent(block.id, { ...block.content, phone: e.target.value })}
-                style={{
-                  padding: "10px 12px",
-                  border: "1px solid #d1d5db",
-                  borderRadius: 6,
-                  maxWidth: "640px",
-                  backgroundColor: "#f8fafc",
-                  transition: "border-color 0.2s ease, box-shadow 0.2s ease",
-                }}
-                data-contact-input
-              />
-              <input
-                placeholder="Adresse"
-                value={block.content?.address || ""}
-                onChange={(e) => updateBlockContent(block.id, { ...block.content, address: e.target.value })}
-                style={{
-                  padding: "10px 12px",
-                  border: "1px solid #d1d5db",
-                  borderRadius: 6,
-                  maxWidth: "640px",
-                  backgroundColor: "#f8fafc",
-                  transition: "border-color 0.2s ease, box-shadow 0.2s ease",
-                }}
-                data-contact-input
-              />
-              <input
-                placeholder="LinkedIn"
-                value={block.content?.linkedin || ""}
-                onChange={(e) => updateBlockContent(block.id, { ...block.content, linkedin: e.target.value })}
-                style={{
-                  padding: "10px 12px",
-                  border: "1px solid #d1d5db",
-                  borderRadius: 6,
-                  maxWidth: "640px",
-                  backgroundColor: "#f8fafc",
-                  transition: "border-color 0.2s ease, box-shadow 0.2s ease",
-                }}
-                data-contact-input
-              />
-            </div>
+            (() => {
+              const contactContent =
+                block.content && typeof block.content === "object"
+                  ? (block.content as Record<string, string | string[] | undefined>)
+                  : {};
+
+              return (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <input
+                    placeholder="Email"
+                    value={contactContent.email || ""}
+                    onChange={(e) =>
+                      updateBlockContent(block.id, {
+                        ...contactContent,
+                        email: e.target.value,
+                      })
+                    }
+                    style={{
+                      padding: "10px 12px",
+                      border: "1px solid #d1d5db",
+                      borderRadius: 6,
+                      maxWidth: "640px",
+                      backgroundColor: "#f8fafc",
+                      transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+                    }}
+                    data-contact-input
+                  />
+                  <input
+                    placeholder="Téléphone"
+                    value={contactContent.phone || ""}
+                    onChange={(e) =>
+                      updateBlockContent(block.id, {
+                        ...contactContent,
+                        phone: e.target.value,
+                      })
+                    }
+                    style={{
+                      padding: "10px 12px",
+                      border: "1px solid #d1d5db",
+                      borderRadius: 6,
+                      maxWidth: "640px",
+                      backgroundColor: "#f8fafc",
+                      transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+                    }}
+                    data-contact-input
+                  />
+                  <input
+                    placeholder="Adresse"
+                    value={contactContent.address || ""}
+                    onChange={(e) =>
+                      updateBlockContent(block.id, {
+                        ...contactContent,
+                        address: e.target.value,
+                      })
+                    }
+                    style={{
+                      padding: "10px 12px",
+                      border: "1px solid #d1d5db",
+                      borderRadius: 6,
+                      maxWidth: "640px",
+                      backgroundColor: "#f8fafc",
+                      transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+                    }}
+                    data-contact-input
+                  />
+                  <input
+                    placeholder="LinkedIn"
+                    value={contactContent.linkedin || ""}
+                    onChange={(e) =>
+                      updateBlockContent(block.id, {
+                        ...contactContent,
+                        linkedin: e.target.value,
+                      })
+                    }
+                    style={{
+                      padding: "10px 12px",
+                      border: "1px solid #d1d5db",
+                      borderRadius: 6,
+                      maxWidth: "640px",
+                      backgroundColor: "#f8fafc",
+                      transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+                    }}
+                    data-contact-input
+                  />
+                </div>
+              );
+            })()
           ) : block.type === "subsection" ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               <RichTextEditor
