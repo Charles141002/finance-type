@@ -61,7 +61,7 @@ Le site est accessible sur [http://localhost:3000](http://localhost:3000).
 - Depuis `/cv`, le bouton `Sauvegarder` envoie les blocs et le `fontScale` courant vers l'API `POST /api/cv/save` qui effectue un **upsert** dans `user_cvs` pour l'utilisateur connecté.
 - Le script `supabase/cv_schema.sql` inclut la table, un index sur `user_id`, les politiques RLS et un trigger `updated_at`.
 - Vérifiez que vos politiques Supabase autorisent les insert/update/select lorsque `auth.uid() = user_id`.
-- La page `/mes-cv` affiche toutes les sauvegardes, permet d'en créer de nouvelles, de rouvrir un CV (`/cv?id=...`) et de supprimer un enregistrement.
+- La page `/gestion-cv` affiche toutes les sauvegardes, permet d'en créer de nouvelles, de rouvrir un CV (`/cv?id=...`) et de supprimer un enregistrement.
 
 ## Bonnes pratiques supplémentaires
 

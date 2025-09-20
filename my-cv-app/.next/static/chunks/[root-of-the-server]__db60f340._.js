@@ -3059,6 +3059,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2
 var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/finance-type/my-cv-app/node_modules/react/index.js [client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/finance-type/my-cv-app/node_modules/next/link.js [client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$next$2f$router$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/finance-type/my-cv-app/node_modules/next/router.js [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f40$supabase$2f$auth$2d$helpers$2d$react$2f$dist$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/finance-type/my-cv-app/node_modules/@supabase/auth-helpers-react/dist/index.js [client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$components$2f$DynamicHeader$2e$tsx__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/finance-type/my-cv-app/components/DynamicHeader.tsx [client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2d$resizable$2d$panels$2f$dist$2f$react$2d$resizable$2d$panels$2e$browser$2e$development$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/finance-type/my-cv-app/node_modules/react-resizable-panels/dist/react-resizable-panels.browser.development.js [client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$components$2f$BlockEditor$2e$tsx__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx [client] (ecmascript)");
@@ -3076,12 +3077,15 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
+;
 // Styles CSS pour la responsivité
 const styles = "\n  .preview-cv {\n    transform: scale(0.8);\n    transform-origin: top center;\n  }\n  \n  @media (max-width: 1200px) {\n    .preview-cv {\n      transform: scale(0.6) !important;\n    }\n  }\n  \n  @media (max-width: 768px) {\n    .preview-cv {\n      transform: scale(0.5) !important;\n    }\n  }\n";
 var __N_SSP = true;
 function CvGeneratorPage() {
     _s();
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$next$2f$router$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useRouter"])();
+    const session = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f40$supabase$2f$auth$2d$helpers$2d$react$2f$dist$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useSession"])();
+    const isAuthenticated = Boolean(session === null || session === void 0 ? void 0 : session.user);
     const [blocks, setBlocks] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [fontScale, setFontScale] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(1);
     const [title, setTitle] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])("Mon CV");
@@ -3140,6 +3144,9 @@ function CvGeneratorPage() {
                             const data = await res.json().catch({
                                 "CvGeneratorPage.useEffect.fetchCv": ()=>({})
                             }["CvGeneratorPage.useEffect.fetchCv"]);
+                            if (res.status === 401) {
+                                throw new Error("Connectez-vous pour charger ce CV sauvegardé.");
+                            }
                             throw new Error(typeof data.error === "string" ? data.error : "Impossible de charger le CV.");
                         }
                         const { cv } = await res.json();
@@ -3278,6 +3285,12 @@ function CvGeneratorPage() {
         }
     };
     const handleSaveCv = async ()=>{
+        if (!isAuthenticated) {
+            setSaveState('error');
+            setSaveMessage('Connectez-vous ou créez un compte pour sauvegarder votre CV.');
+            router.push("/login?redirect=".concat(encodeURIComponent(router.asPath))).catch(()=>{});
+            return;
+        }
         if (isSaving) return;
         setIsSaving(true);
         setSaveState('idle');
@@ -3297,6 +3310,9 @@ function CvGeneratorPage() {
             });
             if (!res.ok) {
                 const data = await res.json().catch(()=>({}));
+                if (res.status === 401) {
+                    throw new Error('Connectez-vous pour sauvegarder votre CV.');
+                }
                 throw new Error(typeof data.error === 'string' ? data.error : 'Impossible de sauvegarder le CV.');
             }
             const { cv } = await res.json();
@@ -3344,14 +3360,14 @@ function CvGeneratorPage() {
                 children: styles
             }, void 0, false, {
                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                lineNumber: 260,
+                lineNumber: 276,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("style", {
                 children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$utils$2f$cvStyles$2e$ts__$5b$client$5d$__$28$ecmascript$29$__["default"])(fontScale)
             }, void 0, false, {
                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                lineNumber: 261,
+                lineNumber: 277,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$components$2f$DynamicHeader$2e$tsx__$5b$client$5d$__$28$ecmascript$29$__["default"], {
@@ -3359,7 +3375,7 @@ function CvGeneratorPage() {
                 scrollContainerRef: editorScrollRef
             }, void 0, false, {
                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                lineNumber: 263,
+                lineNumber: 279,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2d$resizable$2d$panels$2f$dist$2f$react$2d$resizable$2d$panels$2e$browser$2e$development$2e$js__$5b$client$5d$__$28$ecmascript$29$__["PanelGroup"], {
@@ -3385,17 +3401,17 @@ function CvGeneratorPage() {
                                 scrollContainerRef: editorScrollRef
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                                lineNumber: 276,
+                                lineNumber: 292,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                            lineNumber: 271,
+                            lineNumber: 287,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                        lineNumber: 270,
+                        lineNumber: 286,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2d$resizable$2d$panels$2f$dist$2f$react$2d$resizable$2d$panels$2e$browser$2e$development$2e$js__$5b$client$5d$__$28$ecmascript$29$__["PanelResizeHandle"], {
@@ -3416,12 +3432,12 @@ function CvGeneratorPage() {
                             }
                         }, void 0, false, {
                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                            lineNumber: 291,
+                            lineNumber: 307,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                        lineNumber: 281,
+                        lineNumber: 297,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2d$resizable$2d$panels$2f$dist$2f$react$2d$resizable$2d$panels$2e$browser$2e$development$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Panel"], {
@@ -3491,11 +3507,11 @@ function CvGeneratorPage() {
                                                                 }
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                                                                lineNumber: 348,
+                                                                lineNumber: 364,
                                                                 columnNumber: 21
                                                             }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                                                                href: "/mes-cv",
+                                                            isAuthenticated && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                                                href: "/gestion-cv",
                                                                 style: {
                                                                     padding: "10px 14px",
                                                                     borderRadius: "6px",
@@ -3507,16 +3523,16 @@ function CvGeneratorPage() {
                                                                     textDecoration: "none",
                                                                     background: "white"
                                                                 },
-                                                                children: "Mes CV"
+                                                                children: "Gestion CV"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                                                                lineNumber: 362,
-                                                                columnNumber: 21
+                                                                lineNumber: 379,
+                                                                columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                                                        lineNumber: 340,
+                                                        lineNumber: 356,
                                                         columnNumber: 19
                                                     }, this),
                                                     loadError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3532,7 +3548,23 @@ function CvGeneratorPage() {
                                                         children: loadError
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                                                        lineNumber: 380,
+                                                        lineNumber: 398,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    !isAuthenticated && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        style: {
+                                                            backgroundColor: "#eff6ff",
+                                                            border: "1px solid #bfdbfe",
+                                                            color: "#1d4ed8",
+                                                            padding: "8px 12px",
+                                                            borderRadius: "6px",
+                                                            fontSize: "13px",
+                                                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                                        },
+                                                        children: "Connectez-vous pour sauvegarder vos modifications et retrouver vos CV sur d'autres appareils."
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
+                                                        lineNumber: 413,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3560,7 +3592,7 @@ function CvGeneratorPage() {
                                                                 children: isSaving ? "Sauvegarde..." : "Sauvegarder"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                                                                lineNumber: 401,
+                                                                lineNumber: 434,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3581,19 +3613,19 @@ function CvGeneratorPage() {
                                                                 children: "Générer PDF"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                                                                lineNumber: 419,
+                                                                lineNumber: 452,
                                                                 columnNumber: 19
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                                                        lineNumber: 394,
+                                                        lineNumber: 427,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                                                lineNumber: 333,
+                                                lineNumber: 349,
                                                 columnNumber: 17
                                             }, this),
                                             saveMessage && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3605,13 +3637,13 @@ function CvGeneratorPage() {
                                                 children: saveMessage
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                                                lineNumber: 440,
+                                                lineNumber: 473,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                                        lineNumber: 317,
+                                        lineNumber: 333,
                                         columnNumber: 15
                                     }, this),
                                     isLoadingCv && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3628,7 +3660,7 @@ function CvGeneratorPage() {
                                         children: "Chargement du CV..."
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                                        lineNumber: 453,
+                                        lineNumber: 486,
                                         columnNumber: 17
                                     }, this),
                                     showWarning && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3650,7 +3682,7 @@ function CvGeneratorPage() {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                                        lineNumber: 470,
+                                        lineNumber: 503,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3674,42 +3706,43 @@ function CvGeneratorPage() {
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                                            lineNumber: 487,
+                                            lineNumber: 520,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                                        lineNumber: 485,
+                                        lineNumber: 518,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                                lineNumber: 311,
+                                lineNumber: 327,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                            lineNumber: 301,
+                            lineNumber: 317,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                        lineNumber: 300,
+                        lineNumber: 316,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/cv.tsx",
-                lineNumber: 268,
+                lineNumber: 284,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true);
 }
-_s(CvGeneratorPage, "23XrGOouoXCgdmuef8Ox9WhivVc=", false, function() {
+_s(CvGeneratorPage, "PNbM85BGHkccHo3Px0aVjXFxBww=", false, function() {
     return [
-        __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$next$2f$router$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useRouter"]
+        __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$next$2f$router$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useRouter"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f40$supabase$2f$auth$2d$helpers$2d$react$2f$dist$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useSession"]
     ];
 });
 _c = CvGeneratorPage;

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import type { GetServerSidePropsContext } from "next";
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
+import { useSession } from "@supabase/auth-helpers-react";
 import DynamicHeader from "../components/DynamicHeader";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import BlockEditor from "../components/BlockEditor";
@@ -33,6 +34,8 @@ const styles = `
 
 export default function CvGeneratorPage() {
   const router = useRouter();
+  const session = useSession();
+  const isAuthenticated = Boolean(session?.user);
 
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [fontScale, setFontScale] = useState<number>(1);
@@ -95,6 +98,9 @@ export default function CvGeneratorPage() {
         const res = await fetch(`/api/cv/detail?id=${encodeURIComponent(queryId)}`);
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
+          if (res.status === 401) {
+            throw new Error("Connectez-vous pour charger ce CV sauvegardé.");
+          }
           throw new Error(typeof data.error === "string" ? data.error : "Impossible de charger le CV.");
         }
         const { cv } = (await res.json()) as { cv: { id: string; title: string; blocks: Block[]; font_scale: number } };
@@ -212,6 +218,13 @@ export default function CvGeneratorPage() {
   };
 
   const handleSaveCv = async () => {
+    if (!isAuthenticated) {
+      setSaveState('error');
+      setSaveMessage('Connectez-vous ou créez un compte pour sauvegarder votre CV.');
+      router.push(`/login?redirect=${encodeURIComponent(router.asPath)}`).catch(() => {});
+      return;
+    }
+
     if (isSaving) return;
     setIsSaving(true);
     setSaveState('idle');
@@ -226,6 +239,9 @@ export default function CvGeneratorPage() {
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
+        if (res.status === 401) {
+          throw new Error('Connectez-vous pour sauvegarder votre CV.');
+        }
         throw new Error(typeof data.error === 'string' ? data.error : 'Impossible de sauvegarder le CV.');
       }
 
@@ -359,22 +375,24 @@ export default function CvGeneratorPage() {
                         fontSize: "14px"
                       }}
                     />
-                    <Link
-                      href="/mes-cv"
-                      style={{
-                        padding: "10px 14px",
-                        borderRadius: "6px",
-                        border: "1px solid #cbd5f5",
-                        color: "#0f172a",
-                        fontSize: "14px",
-                        fontWeight: 600,
-                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-                        textDecoration: "none",
-                        background: "white"
-                      }}
-                    >
-                      Mes CV
-                    </Link>
+                    {isAuthenticated && (
+                      <Link
+                        href="/gestion-cv"
+                        style={{
+                          padding: "10px 14px",
+                          borderRadius: "6px",
+                          border: "1px solid #cbd5f5",
+                          color: "#0f172a",
+                          fontSize: "14px",
+                          fontWeight: 600,
+                          fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                          textDecoration: "none",
+                          background: "white"
+                        }}
+                      >
+                        Gestion CV
+                      </Link>
+                    )}
                   </div>
                   {loadError && (
                     <div
@@ -389,6 +407,21 @@ export default function CvGeneratorPage() {
                       }}
                     >
                       {loadError}
+                    </div>
+                  )}
+                  {!isAuthenticated && (
+                    <div
+                      style={{
+                        backgroundColor: "#eff6ff",
+                        border: "1px solid #bfdbfe",
+                        color: "#1d4ed8",
+                        padding: "8px 12px",
+                        borderRadius: "6px",
+                        fontSize: "13px",
+                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                      }}
+                    >
+                      Connectez-vous pour sauvegarder vos modifications et retrouver vos CV sur d&apos;autres appareils.
                     </div>
                   )}
                   <div
@@ -516,20 +549,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     data: { session },
   } = await supabase.auth.getSession()
 
-  if (!session) {
-    const redirectDestination = `/login?redirect=${encodeURIComponent(context.resolvedUrl ?? '/cv')}`
-
-    return {
-      redirect: {
-        destination: redirectDestination,
-        permanent: false,
-      },
-    }
-  }
-
   return {
     props: {
-      initialSession: session,
+      initialSession: session ?? null,
     },
   }
 }

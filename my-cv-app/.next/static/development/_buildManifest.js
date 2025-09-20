@@ -2,17 +2,14 @@ self.__BUILD_MANIFEST = {
   "/": [
     "./static/chunks/pages/index.js"
   ],
-  "/_error": [
-    "./static/chunks/pages/_error.js"
-  ],
-  "/a-propos": [
-    "./static/chunks/pages/a-propos.js"
-  ],
   "/cv": [
     "./static/chunks/pages/cv.js"
   ],
   "/gestion-cv": [
     "./static/chunks/pages/gestion-cv.js"
+  ],
+  "/login": [
+    "./static/chunks/pages/login.js"
   ],
   "/mes-cv": [
     "./static/chunks/pages/mes-cv.js"
@@ -36,7 +33,6 @@ self.__BUILD_MANIFEST = {
     "/cv",
     "/gestion-cv",
     "/login",
-    "/mes-cv",
     "/reset-password"
   ]
 };self.__BUILD_MANIFEST_CB && self.__BUILD_MANIFEST_CB()

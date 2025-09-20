@@ -3,13 +3,12 @@
     chunks: [
   "static/chunks/ebde9_next_dist_compiled_next-devtools_index_bc1d0868.js",
   "static/chunks/ebde9_next_dist_compiled_15c78876._.js",
-  "static/chunks/ebde9_next_dist_shared_lib_1bc3780e._.js",
-  "static/chunks/ebde9_next_dist_client_a628c16f._.js",
+  "static/chunks/ebde9_next_dist_shared_lib_0276ad85._.js",
+  "static/chunks/ebde9_next_dist_client_5ca74b0e._.js",
   "static/chunks/ebde9_next_dist_23ca9017._.js",
-  "static/chunks/ebde9_next_c39de508._.js",
   "static/chunks/ebde9_react-dom_016c41de._.js",
-  "static/chunks/ebde9_c979da47._.js",
-  "static/chunks/[root-of-the-server]__6e2ba023._.js"
+  "static/chunks/ebde9_ae5337ea._.js",
+  "static/chunks/[root-of-the-server]__66b34b45._.js"
 ],
     source: "entry"
 });

@@ -178,6 +178,22 @@ function DynamicHeader({ rightActions, variant = "default", scrollContainerRef }
                                     lineNumber: 122,
                                     columnNumber: 15
                                 }, this),
+                                session?.user && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "/gestion-cv",
+                                    style: {
+                                        textDecoration: "none",
+                                        color: "#e2e8f0",
+                                        fontWeight: 600,
+                                        fontSize: "15px",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                        transition: "all 0.2s ease"
+                                    },
+                                    children: "Gestion CV"
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/finance-type/my-cv-app/components/DynamicHeader.tsx",
+                                    lineNumber: 136,
+                                    columnNumber: 17
+                                }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
                                     href: "/a-propos",
                                     style: {
@@ -191,7 +207,7 @@ function DynamicHeader({ rightActions, variant = "default", scrollContainerRef }
                                     children: "À propos"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/DynamicHeader.tsx",
-                                    lineNumber: 135,
+                                    lineNumber: 150,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -212,7 +228,7 @@ function DynamicHeader({ rightActions, variant = "default", scrollContainerRef }
                                     children: "Commencer"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/DynamicHeader.tsx",
-                                    lineNumber: 148,
+                                    lineNumber: 163,
                                     columnNumber: 15
                                 }, this),
                                 session?.user ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
@@ -234,7 +250,7 @@ function DynamicHeader({ rightActions, variant = "default", scrollContainerRef }
                                     children: "Se déconnecter"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/DynamicHeader.tsx",
-                                    lineNumber: 167,
+                                    lineNumber: 182,
                                     columnNumber: 17
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$next$2f$link$2e$js__$5b$ssr$5d$__$28$ecmascript$29$__["default"], {
                                     href: "/login",
@@ -254,7 +270,7 @@ function DynamicHeader({ rightActions, variant = "default", scrollContainerRef }
                                     children: "Se connecter"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/DynamicHeader.tsx",
-                                    lineNumber: 187,
+                                    lineNumber: 202,
                                     columnNumber: 17
                                 }, this)
                             ]
