@@ -23,7 +23,7 @@ const handler: NextApiHandler = async (req, res) => {
 
   const { error } = await supabase
     .from('user_cvs')
-    .delete({ returning: 'minimal' })
+    .delete()
     .eq('id', id)
     .eq('user_id', session.user.id)
 
