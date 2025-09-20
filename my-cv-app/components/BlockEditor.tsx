@@ -4,7 +4,17 @@ import type { CSSProperties } from "react";
 import { DragDropContext, Droppable, Draggable, DropResult, DragStart } from "@hello-pangea/dnd";
 import type { DraggableProvidedDragHandleProps, DraggableLocation } from "@hello-pangea/dnd";
 import { v4 as uuid } from "uuid";
-import { Block, BlockType, DragContext, canMoveBlock, findBlockById, getAllowedChildTypesForParent } from "../utils/types";
+import { Block, BlockContent, BlockType, DragContext, canMoveBlock, findBlockById, getAllowedChildTypesForParent } from "../utils/types";
+
+type StructuredContent = Exclude<BlockContent, string>;
+
+const getStructuredContent = (content: Block["content"]): StructuredContent =>
+  content && typeof content === "object" && !Array.isArray(content) ? content : {};
+
+const getStringField = (content: StructuredContent, key: string): string => {
+  const value = content[key];
+  return typeof value === "string" ? value : "";
+};
 
 const BLOCK_META: Record<
   BlockType,
@@ -715,6 +725,8 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
       transition: "background-color 0.15s ease, color 0.15s ease",
     };
 
+    const structuredContent = getStructuredContent(block.content);
+
     return (
       <div
         data-block-id={block.id}
@@ -890,19 +902,19 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
             <hr style={{ border: "none", borderTop: "2px solid #e5e7eb", margin: "8px 0" }} />
           ) : block.type === "contact" ? (
             (() => {
-              const contactContent =
-                block.content && typeof block.content === "object"
-                  ? (block.content as Record<string, string | string[] | undefined>)
-                  : {};
+              const emailValue = getStringField(structuredContent, "email");
+              const phoneValue = getStringField(structuredContent, "phone");
+              const addressValue = getStringField(structuredContent, "address");
+              const linkedinValue = getStringField(structuredContent, "linkedin");
 
               return (
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   <input
                     placeholder="Email"
-                    value={contactContent.email || ""}
+                    value={emailValue}
                     onChange={(e) =>
                       updateBlockContent(block.id, {
-                        ...contactContent,
+                        ...structuredContent,
                         email: e.target.value,
                       })
                     }
@@ -918,10 +930,10 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
                   />
                   <input
                     placeholder="Téléphone"
-                    value={contactContent.phone || ""}
+                    value={phoneValue}
                     onChange={(e) =>
                       updateBlockContent(block.id, {
-                        ...contactContent,
+                        ...structuredContent,
                         phone: e.target.value,
                       })
                     }
@@ -937,10 +949,10 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
                   />
                   <input
                     placeholder="Adresse"
-                    value={contactContent.address || ""}
+                    value={addressValue}
                     onChange={(e) =>
                       updateBlockContent(block.id, {
-                        ...contactContent,
+                        ...structuredContent,
                         address: e.target.value,
                       })
                     }
@@ -956,10 +968,10 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
                   />
                   <input
                     placeholder="LinkedIn"
-                    value={contactContent.linkedin || ""}
+                    value={linkedinValue}
                     onChange={(e) =>
                       updateBlockContent(block.id, {
-                        ...contactContent,
+                        ...structuredContent,
                         linkedin: e.target.value,
                       })
                     }
@@ -977,105 +989,151 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef }: Props) => {
               );
             })()
           ) : block.type === "subsection" ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <RichTextEditor
-                value={block.content?.title || ""}
-                onChange={(html) => updateBlockContent(block.id, { ...block.content, title: html })}
-                placeholder="Titre (ex: JCDecaux)"
-                singleLine
-                style={{ maxWidth: "600px" }}
-              />
+            (() => {
+              const subsectionContent = structuredContent;
+              const titleValue = typeof subsectionContent.title === "string" ? subsectionContent.title : "";
+              const subtitleValue = typeof subsectionContent.subtitle === "string" ? subsectionContent.subtitle : "";
+              const periodValue = typeof subsectionContent.period === "string" ? subsectionContent.period : "";
 
-              {/* Contrôles d’option pour sous-titre et période */}
-              <div style={{ display: "flex", gap: 8 }}>
-                {hasMeaningfulText(block.content?.subtitle) || subtitleVisible[block.id] ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const map = { ...subtitleVisible };
-                      delete map[block.id];
-                      setSubtitleVisible(map);
-                      updateBlockContent(block.id, { ...block.content, subtitle: "" });
-                    }}
-                    style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
-                  >
-                    Supprimer sous-titre
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setSubtitleVisible({ ...subtitleVisible, [block.id]: true })}
-                    style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
-                  >
-                    + Sous-titre
-                  </button>
-                )}
+              return (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <RichTextEditor
+                    value={titleValue}
+                    onChange={(html) =>
+                      updateBlockContent(block.id, {
+                        ...subsectionContent,
+                        title: html,
+                      })
+                    }
+                    placeholder="Titre (ex: JCDecaux)"
+                    singleLine
+                    style={{ maxWidth: "600px" }}
+                  />
 
-                {hasMeaningfulText(block.content?.period) || periodVisible[block.id] ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const map = { ...periodVisible };
-                      delete map[block.id];
-                      setPeriodVisible(map);
-                      updateBlockContent(block.id, { ...block.content, period: "" });
-                    }}
-                    style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
-                  >
-                    Supprimer date
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setPeriodVisible({ ...periodVisible, [block.id]: true })}
-                    style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
-                  >
-                    + Date
-                  </button>
-                )}
-              </div>
+                  {/* Contrôles d’option pour sous-titre et période */}
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {hasMeaningfulText(subtitleValue) || subtitleVisible[block.id] ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const map = { ...subtitleVisible };
+                          delete map[block.id];
+                          setSubtitleVisible(map);
+                          updateBlockContent(block.id, {
+                            ...subsectionContent,
+                            subtitle: "",
+                          });
+                        }}
+                        style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
+                      >
+                        Supprimer sous-titre
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setSubtitleVisible({ ...subtitleVisible, [block.id]: true })}
+                        style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
+                      >
+                        + Sous-titre
+                      </button>
+                    )}
 
-              {(hasMeaningfulText(block.content?.subtitle) || subtitleVisible[block.id]) && (
-                <RichTextEditor
-                  value={block.content?.subtitle || ""}
-                  onChange={(html) => updateBlockContent(block.id, { ...block.content, subtitle: html })}
-                  placeholder="Sous-titre (ex: Data Scientist)"
-                  singleLine
-                  style={{ maxWidth: "600px" }}
-                />
-              )}
+                    {hasMeaningfulText(periodValue) || periodVisible[block.id] ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const map = { ...periodVisible };
+                          delete map[block.id];
+                          setPeriodVisible(map);
+                          updateBlockContent(block.id, {
+                            ...subsectionContent,
+                            period: "",
+                          });
+                        }}
+                        style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
+                      >
+                        Supprimer date
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setPeriodVisible({ ...periodVisible, [block.id]: true })}
+                        style={{ padding: "4px 8px", fontSize: 12, border: "1px solid #d1d5db", borderRadius: 4, background: "#fff", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
+                      >
+                        + Date
+                      </button>
+                    )}
+                  </div>
 
-              {(hasMeaningfulText(block.content?.period) || periodVisible[block.id]) && (
-                <RichTextEditor
-                  value={block.content?.period || ""}
-                  onChange={(html) => updateBlockContent(block.id, { ...block.content, period: html })}
-                  placeholder="Période (ex: 11/2024 -- 05/2025)"
-                  singleLine
-                  style={{ fontStyle: "italic", maxWidth: "600px" }}
-                />
-              )}
-            </div>
+                  {(hasMeaningfulText(subtitleValue) || subtitleVisible[block.id]) && (
+                    <RichTextEditor
+                      value={subtitleValue}
+                      onChange={(html) =>
+                        updateBlockContent(block.id, {
+                          ...subsectionContent,
+                          subtitle: html,
+                        })
+                      }
+                      placeholder="Sous-titre (ex: Data Scientist)"
+                      singleLine
+                      style={{ maxWidth: "600px" }}
+                    />
+                  )}
+
+                  {(hasMeaningfulText(periodValue) || periodVisible[block.id]) && (
+                    <RichTextEditor
+                      value={periodValue}
+                      onChange={(html) =>
+                        updateBlockContent(block.id, {
+                          ...subsectionContent,
+                          period: html,
+                        })
+                      }
+                      placeholder="Période (ex: 11/2024 -- 05/2025)"
+                      singleLine
+                      style={{ fontStyle: "italic", maxWidth: "600px" }}
+                    />
+                  )}
+                </div>
+              );
+            })()
           ) : (
-            <RichTextEditor
-              value={(block.type === "header" || block.type === "section")
-                ? (block.content?.title || "")
-                : (typeof block.content === "string" ? block.content : "")}
-              onChange={(html) => {
-                if (block.type === "header" || block.type === "section") {
-                  updateBlockContent(block.id, { ...block.content, title: html });
-                } else {
-                  updateBlockContent(block.id, html);
-                }
-              }}
-              singleLine={block.type === "header"}
-              placeholder={block.type === "header" ? "Nom complet" : 
-                           block.type === "section" ? "Titre de section" : 
-                           "Contenu du texte..."}
-              style={{
-                fontSize: block.type === "header" ? 18 : 14,
-                maxWidth: isChildOfSubsection ? "560px" : "640px"
-              }}
-            />
+            (() => {
+              if (block.type === "header" || block.type === "section") {
+                const titleValue = typeof structuredContent.title === "string" ? structuredContent.title : "";
+
+                return (
+                  <RichTextEditor
+                    value={titleValue}
+                    onChange={(html) =>
+                      updateBlockContent(block.id, {
+                        ...structuredContent,
+                        title: html,
+                      })
+                    }
+                    singleLine={block.type === "header"}
+                    placeholder={block.type === "header" ? "Nom complet" : "Titre de section"}
+                    style={{
+                      fontSize: block.type === "header" ? 18 : 14,
+                      maxWidth: isChildOfSubsection ? "560px" : "640px",
+                    }}
+                  />
+                );
+              }
+
+              const textValue = typeof block.content === "string" ? block.content : "";
+              return (
+                <RichTextEditor
+                  value={textValue}
+                  onChange={(html) => updateBlockContent(block.id, html)}
+                  placeholder="Contenu du texte..."
+                  style={{
+                    fontSize: 14,
+                    maxWidth: isChildOfSubsection ? "560px" : "640px",
+                  }}
+                />
+              );
+            })()
           )}
         </div>
         )}

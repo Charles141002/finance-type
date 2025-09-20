@@ -479,6 +479,11 @@ var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
 ;
 ;
 ;
+const getStructuredContent = (content)=>content && typeof content === "object" && !Array.isArray(content) ? content : {};
+const getStringField = (content, key)=>{
+    const value = content[key];
+    return typeof value === "string" ? value : "";
+};
 const BLOCK_META = {
     header: {
         label: "En-tête",
@@ -687,7 +692,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         children: "B"
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                        lineNumber: 220,
+                        lineNumber: 230,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
@@ -698,7 +703,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         children: "I"
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                        lineNumber: 223,
+                        lineNumber: 233,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
@@ -709,7 +714,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         children: "U"
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                        lineNumber: 226,
+                        lineNumber: 236,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("span", {
@@ -718,7 +723,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         }
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                        lineNumber: 229,
+                        lineNumber: 239,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
@@ -730,7 +735,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         children: "•"
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                        lineNumber: 230,
+                        lineNumber: 240,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
@@ -742,7 +747,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         children: "1."
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                        lineNumber: 233,
+                        lineNumber: 243,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
@@ -754,7 +759,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         children: "→"
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                        lineNumber: 236,
+                        lineNumber: 246,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
@@ -766,7 +771,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         children: "←"
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                        lineNumber: 239,
+                        lineNumber: 249,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("span", {
@@ -775,7 +780,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         }
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                        lineNumber: 242,
+                        lineNumber: 252,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
@@ -787,7 +792,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         children: "–"
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                        lineNumber: 243,
+                        lineNumber: 253,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
@@ -799,13 +804,13 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                         children: "—"
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                        lineNumber: 244,
+                        lineNumber: 254,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                lineNumber: 219,
+                lineNumber: 229,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -833,7 +838,7 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
                 "data-placeholder": placeholder
             }, void 0, false, {
                 fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                lineNumber: 246,
+                lineNumber: 256,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("style", {
@@ -849,13 +854,13 @@ const RichTextEditor = ({ value, onChange, placeholder, singleLine, style })=>{
       `
             }, void 0, false, {
                 fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                lineNumber: 270,
+                lineNumber: 280,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-        lineNumber: 218,
+        lineNumber: 228,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -1274,6 +1279,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
             fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
             transition: "background-color 0.15s ease, color 0.15s ease"
         };
+        const structuredContent = getStructuredContent(block.content);
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
             "data-block-id": block.id,
             style: {
@@ -1327,7 +1333,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                     children: isCollapsed ? "▸" : "▾"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                    lineNumber: 745,
+                                    lineNumber: 757,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
                                     style: {
@@ -1336,7 +1342,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                    lineNumber: 770,
+                                    lineNumber: 782,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -1357,7 +1363,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                     children: "⋮⋮"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                    lineNumber: 772,
+                                    lineNumber: 784,
                                     columnNumber: 13
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -1382,7 +1388,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                                     children: meta.icon
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                                    lineNumber: 792,
+                                                    lineNumber: 804,
                                                     columnNumber: 17
                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("span", {
@@ -1397,13 +1403,13 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                                     children: meta.label
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                                    lineNumber: 795,
+                                                    lineNumber: 807,
                                                     columnNumber: 17
                                                 }, ("TURBOPACK compile-time value", void 0))
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                            lineNumber: 791,
+                                            lineNumber: 803,
                                             columnNumber: 15
                                         }, ("TURBOPACK compile-time value", void 0)),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("span", {
@@ -1415,19 +1421,19 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                             children: meta.description
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                            lineNumber: 808,
+                                            lineNumber: 820,
                                             columnNumber: 15
                                         }, ("TURBOPACK compile-time value", void 0))
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                    lineNumber: 790,
+                                    lineNumber: 802,
                                     columnNumber: 13
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                            lineNumber: 743,
+                            lineNumber: 755,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -1463,12 +1469,12 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                                     children: getBlockMeta(t).label
                                                 }, t, false, {
                                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                                    lineNumber: 841,
+                                                    lineNumber: 853,
                                                     columnNumber: 21
                                                 }, ("TURBOPACK compile-time value", void 0)))
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                            lineNumber: 823,
+                                            lineNumber: 835,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0)),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
@@ -1483,13 +1489,13 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                             children: "+ Ajouter"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                            lineNumber: 846,
+                                            lineNumber: 858,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0))
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                    lineNumber: 822,
+                                    lineNumber: 834,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
@@ -1503,13 +1509,13 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                             children: "Copier"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                            lineNumber: 868,
+                                            lineNumber: 880,
                                             columnNumber: 15
                                         }, ("TURBOPACK compile-time value", void 0))
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                    lineNumber: 861,
+                                    lineNumber: 873,
                                     columnNumber: 13
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
@@ -1525,19 +1531,19 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                     children: "✕"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                    lineNumber: 870,
+                                    lineNumber: 882,
                                     columnNumber: 13
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                            lineNumber: 820,
+                            lineNumber: 832,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0))
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                    lineNumber: 734,
+                    lineNumber: 746,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
                 !isCollapsed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -1552,10 +1558,13 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                         }
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                        lineNumber: 890,
+                        lineNumber: 902,
                         columnNumber: 13
                     }, ("TURBOPACK compile-time value", void 0)) : block.type === "contact" ? (()=>{
-                        const contactContent = block.content && typeof block.content === "object" ? block.content : {};
+                        const emailValue = getStringField(structuredContent, "email");
+                        const phoneValue = getStringField(structuredContent, "phone");
+                        const addressValue = getStringField(structuredContent, "address");
+                        const linkedinValue = getStringField(structuredContent, "linkedin");
                         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
                             style: {
                                 display: "flex",
@@ -1565,9 +1574,9 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("input", {
                                     placeholder: "Email",
-                                    value: contactContent.email || "",
+                                    value: emailValue,
                                     onChange: (e)=>updateBlockContent(block.id, {
-                                            ...contactContent,
+                                            ...structuredContent,
                                             email: e.target.value
                                         }),
                                     style: {
@@ -1581,14 +1590,14 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                     "data-contact-input": true
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                    lineNumber: 900,
+                                    lineNumber: 912,
                                     columnNumber: 19
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("input", {
                                     placeholder: "Téléphone",
-                                    value: contactContent.phone || "",
+                                    value: phoneValue,
                                     onChange: (e)=>updateBlockContent(block.id, {
-                                            ...contactContent,
+                                            ...structuredContent,
                                             phone: e.target.value
                                         }),
                                     style: {
@@ -1602,14 +1611,14 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                     "data-contact-input": true
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                    lineNumber: 919,
+                                    lineNumber: 931,
                                     columnNumber: 19
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("input", {
                                     placeholder: "Adresse",
-                                    value: contactContent.address || "",
+                                    value: addressValue,
                                     onChange: (e)=>updateBlockContent(block.id, {
-                                            ...contactContent,
+                                            ...structuredContent,
                                             address: e.target.value
                                         }),
                                     style: {
@@ -1623,14 +1632,14 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                     "data-contact-input": true
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                    lineNumber: 938,
+                                    lineNumber: 950,
                                     columnNumber: 19
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("input", {
                                     placeholder: "LinkedIn",
-                                    value: contactContent.linkedin || "",
+                                    value: linkedinValue,
                                     onChange: (e)=>updateBlockContent(block.id, {
-                                            ...contactContent,
+                                            ...structuredContent,
                                             linkedin: e.target.value
                                         }),
                                     style: {
@@ -1644,206 +1653,225 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                     "data-contact-input": true
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                    lineNumber: 957,
+                                    lineNumber: 969,
                                     columnNumber: 19
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                            lineNumber: 899,
+                            lineNumber: 911,
                             columnNumber: 17
                         }, ("TURBOPACK compile-time value", void 0));
-                    })() : block.type === "subsection" ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
-                        style: {
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 8
-                        },
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(RichTextEditor, {
-                                value: block.content?.title || "",
+                    })() : block.type === "subsection" ? (()=>{
+                        const subsectionContent = structuredContent;
+                        const titleValue = typeof subsectionContent.title === "string" ? subsectionContent.title : "";
+                        const subtitleValue = typeof subsectionContent.subtitle === "string" ? subsectionContent.subtitle : "";
+                        const periodValue = typeof subsectionContent.period === "string" ? subsectionContent.period : "";
+                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                            style: {
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 8
+                            },
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(RichTextEditor, {
+                                    value: titleValue,
+                                    onChange: (html)=>updateBlockContent(block.id, {
+                                            ...subsectionContent,
+                                            title: html
+                                        }),
+                                    placeholder: "Titre (ex: JCDecaux)",
+                                    singleLine: true,
+                                    style: {
+                                        maxWidth: "600px"
+                                    }
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
+                                    lineNumber: 1000,
+                                    columnNumber: 19
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
+                                    style: {
+                                        display: "flex",
+                                        gap: 8
+                                    },
+                                    children: [
+                                        hasMeaningfulText(subtitleValue) || subtitleVisible[block.id] ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                                            type: "button",
+                                            onClick: ()=>{
+                                                const map = {
+                                                    ...subtitleVisible
+                                                };
+                                                delete map[block.id];
+                                                setSubtitleVisible(map);
+                                                updateBlockContent(block.id, {
+                                                    ...subsectionContent,
+                                                    subtitle: ""
+                                                });
+                                            },
+                                            style: {
+                                                padding: "4px 8px",
+                                                fontSize: 12,
+                                                border: "1px solid #d1d5db",
+                                                borderRadius: 4,
+                                                background: "#fff",
+                                                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                            },
+                                            children: "Supprimer sous-titre"
+                                        }, void 0, false, {
+                                            fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
+                                            lineNumber: 1016,
+                                            columnNumber: 23
+                                        }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                                            type: "button",
+                                            onClick: ()=>setSubtitleVisible({
+                                                    ...subtitleVisible,
+                                                    [block.id]: true
+                                                }),
+                                            style: {
+                                                padding: "4px 8px",
+                                                fontSize: 12,
+                                                border: "1px solid #d1d5db",
+                                                borderRadius: 4,
+                                                background: "#fff",
+                                                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                            },
+                                            children: "+ Sous-titre"
+                                        }, void 0, false, {
+                                            fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
+                                            lineNumber: 1032,
+                                            columnNumber: 23
+                                        }, ("TURBOPACK compile-time value", void 0)),
+                                        hasMeaningfulText(periodValue) || periodVisible[block.id] ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                                            type: "button",
+                                            onClick: ()=>{
+                                                const map = {
+                                                    ...periodVisible
+                                                };
+                                                delete map[block.id];
+                                                setPeriodVisible(map);
+                                                updateBlockContent(block.id, {
+                                                    ...subsectionContent,
+                                                    period: ""
+                                                });
+                                            },
+                                            style: {
+                                                padding: "4px 8px",
+                                                fontSize: 12,
+                                                border: "1px solid #d1d5db",
+                                                borderRadius: 4,
+                                                background: "#fff",
+                                                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                            },
+                                            children: "Supprimer date"
+                                        }, void 0, false, {
+                                            fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
+                                            lineNumber: 1042,
+                                            columnNumber: 23
+                                        }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
+                                            type: "button",
+                                            onClick: ()=>setPeriodVisible({
+                                                    ...periodVisible,
+                                                    [block.id]: true
+                                                }),
+                                            style: {
+                                                padding: "4px 8px",
+                                                fontSize: 12,
+                                                border: "1px solid #d1d5db",
+                                                borderRadius: 4,
+                                                background: "#fff",
+                                                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+                                            },
+                                            children: "+ Date"
+                                        }, void 0, false, {
+                                            fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
+                                            lineNumber: 1058,
+                                            columnNumber: 23
+                                        }, ("TURBOPACK compile-time value", void 0))
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
+                                    lineNumber: 1014,
+                                    columnNumber: 19
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                (hasMeaningfulText(subtitleValue) || subtitleVisible[block.id]) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(RichTextEditor, {
+                                    value: subtitleValue,
+                                    onChange: (html)=>updateBlockContent(block.id, {
+                                            ...subsectionContent,
+                                            subtitle: html
+                                        }),
+                                    placeholder: "Sous-titre (ex: Data Scientist)",
+                                    singleLine: true,
+                                    style: {
+                                        maxWidth: "600px"
+                                    }
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
+                                    lineNumber: 1069,
+                                    columnNumber: 21
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                (hasMeaningfulText(periodValue) || periodVisible[block.id]) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(RichTextEditor, {
+                                    value: periodValue,
+                                    onChange: (html)=>updateBlockContent(block.id, {
+                                            ...subsectionContent,
+                                            period: html
+                                        }),
+                                    placeholder: "Période (ex: 11/2024 -- 05/2025)",
+                                    singleLine: true,
+                                    style: {
+                                        fontStyle: "italic",
+                                        maxWidth: "600px"
+                                    }
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
+                                    lineNumber: 1084,
+                                    columnNumber: 21
+                                }, ("TURBOPACK compile-time value", void 0))
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
+                            lineNumber: 999,
+                            columnNumber: 17
+                        }, ("TURBOPACK compile-time value", void 0));
+                    })() : (()=>{
+                        if (block.type === "header" || block.type === "section") {
+                            const titleValue = typeof structuredContent.title === "string" ? structuredContent.title : "";
+                            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(RichTextEditor, {
+                                value: titleValue,
                                 onChange: (html)=>updateBlockContent(block.id, {
-                                        ...block.content,
+                                        ...structuredContent,
                                         title: html
                                     }),
-                                placeholder: "Titre (ex: JCDecaux)",
-                                singleLine: true,
+                                singleLine: block.type === "header",
+                                placeholder: block.type === "header" ? "Nom complet" : "Titre de section",
                                 style: {
-                                    maxWidth: "600px"
+                                    fontSize: block.type === "header" ? 18 : 14,
+                                    maxWidth: isChildOfSubsection ? "560px" : "640px"
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                lineNumber: 981,
-                                columnNumber: 15
-                            }, ("TURBOPACK compile-time value", void 0)),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
-                                style: {
-                                    display: "flex",
-                                    gap: 8
-                                },
-                                children: [
-                                    hasMeaningfulText(block.content?.subtitle) || subtitleVisible[block.id] ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
-                                        type: "button",
-                                        onClick: ()=>{
-                                            const map = {
-                                                ...subtitleVisible
-                                            };
-                                            delete map[block.id];
-                                            setSubtitleVisible(map);
-                                            updateBlockContent(block.id, {
-                                                ...block.content,
-                                                subtitle: ""
-                                            });
-                                        },
-                                        style: {
-                                            padding: "4px 8px",
-                                            fontSize: 12,
-                                            border: "1px solid #d1d5db",
-                                            borderRadius: 4,
-                                            background: "#fff",
-                                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
-                                        },
-                                        children: "Supprimer sous-titre"
-                                    }, void 0, false, {
-                                        fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                        lineNumber: 992,
-                                        columnNumber: 19
-                                    }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
-                                        type: "button",
-                                        onClick: ()=>setSubtitleVisible({
-                                                ...subtitleVisible,
-                                                [block.id]: true
-                                            }),
-                                        style: {
-                                            padding: "4px 8px",
-                                            fontSize: 12,
-                                            border: "1px solid #d1d5db",
-                                            borderRadius: 4,
-                                            background: "#fff",
-                                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
-                                        },
-                                        children: "+ Sous-titre"
-                                    }, void 0, false, {
-                                        fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                        lineNumber: 1005,
-                                        columnNumber: 19
-                                    }, ("TURBOPACK compile-time value", void 0)),
-                                    hasMeaningfulText(block.content?.period) || periodVisible[block.id] ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
-                                        type: "button",
-                                        onClick: ()=>{
-                                            const map = {
-                                                ...periodVisible
-                                            };
-                                            delete map[block.id];
-                                            setPeriodVisible(map);
-                                            updateBlockContent(block.id, {
-                                                ...block.content,
-                                                period: ""
-                                            });
-                                        },
-                                        style: {
-                                            padding: "4px 8px",
-                                            fontSize: 12,
-                                            border: "1px solid #d1d5db",
-                                            borderRadius: 4,
-                                            background: "#fff",
-                                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
-                                        },
-                                        children: "Supprimer date"
-                                    }, void 0, false, {
-                                        fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                        lineNumber: 1015,
-                                        columnNumber: 19
-                                    }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("button", {
-                                        type: "button",
-                                        onClick: ()=>setPeriodVisible({
-                                                ...periodVisible,
-                                                [block.id]: true
-                                            }),
-                                        style: {
-                                            padding: "4px 8px",
-                                            fontSize: 12,
-                                            border: "1px solid #d1d5db",
-                                            borderRadius: 4,
-                                            background: "#fff",
-                                            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
-                                        },
-                                        children: "+ Date"
-                                    }, void 0, false, {
-                                        fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                        lineNumber: 1028,
-                                        columnNumber: 19
-                                    }, ("TURBOPACK compile-time value", void 0))
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                lineNumber: 990,
-                                columnNumber: 15
-                            }, ("TURBOPACK compile-time value", void 0)),
-                            (hasMeaningfulText(block.content?.subtitle) || subtitleVisible[block.id]) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(RichTextEditor, {
-                                value: block.content?.subtitle || "",
-                                onChange: (html)=>updateBlockContent(block.id, {
-                                        ...block.content,
-                                        subtitle: html
-                                    }),
-                                placeholder: "Sous-titre (ex: Data Scientist)",
-                                singleLine: true,
-                                style: {
-                                    maxWidth: "600px"
-                                }
-                            }, void 0, false, {
-                                fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                lineNumber: 1039,
-                                columnNumber: 17
-                            }, ("TURBOPACK compile-time value", void 0)),
-                            (hasMeaningfulText(block.content?.period) || periodVisible[block.id]) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(RichTextEditor, {
-                                value: block.content?.period || "",
-                                onChange: (html)=>updateBlockContent(block.id, {
-                                        ...block.content,
-                                        period: html
-                                    }),
-                                placeholder: "Période (ex: 11/2024 -- 05/2025)",
-                                singleLine: true,
-                                style: {
-                                    fontStyle: "italic",
-                                    maxWidth: "600px"
-                                }
-                            }, void 0, false, {
-                                fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                lineNumber: 1049,
-                                columnNumber: 17
-                            }, ("TURBOPACK compile-time value", void 0))
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                        lineNumber: 980,
-                        columnNumber: 13
-                    }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(RichTextEditor, {
-                        value: block.type === "header" || block.type === "section" ? block.content?.title || "" : typeof block.content === "string" ? block.content : "",
-                        onChange: (html)=>{
-                            if (block.type === "header" || block.type === "section") {
-                                updateBlockContent(block.id, {
-                                    ...block.content,
-                                    title: html
-                                });
-                            } else {
-                                updateBlockContent(block.id, html);
-                            }
-                        },
-                        singleLine: block.type === "header",
-                        placeholder: block.type === "header" ? "Nom complet" : block.type === "section" ? "Titre de section" : "Contenu du texte...",
-                        style: {
-                            fontSize: block.type === "header" ? 18 : 14,
-                            maxWidth: isChildOfSubsection ? "560px" : "640px"
+                                lineNumber: 1106,
+                                columnNumber: 19
+                            }, ("TURBOPACK compile-time value", void 0));
                         }
-                    }, void 0, false, {
-                        fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                        lineNumber: 1059,
-                        columnNumber: 13
-                    }, ("TURBOPACK compile-time value", void 0))
+                        const textValue = typeof block.content === "string" ? block.content : "";
+                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(RichTextEditor, {
+                            value: textValue,
+                            onChange: (html)=>updateBlockContent(block.id, html),
+                            placeholder: "Contenu du texte...",
+                            style: {
+                                fontSize: 14,
+                                maxWidth: isChildOfSubsection ? "560px" : "640px"
+                            }
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
+                            lineNumber: 1126,
+                            columnNumber: 17
+                        }, ("TURBOPACK compile-time value", void 0));
+                    })()
                 }, void 0, false, {
                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                    lineNumber: 888,
+                    lineNumber: 900,
                     columnNumber: 11
                 }, ("TURBOPACK compile-time value", void 0)),
                 canHaveChildren && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f40$hello$2d$pangea$2f$dnd__$5b$external$5d$__$2840$hello$2d$pangea$2f$dnd$2c$__cjs$29$__["Droppable"], {
@@ -1873,12 +1901,12 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                                 children: renderBlock(child, block.id, provided.dragHandleProps, snapshotChild.isDragging)
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                                lineNumber: 1111,
+                                                lineNumber: 1169,
                                                 columnNumber: 25
                                             }, ("TURBOPACK compile-time value", void 0))
                                     }, child.id, false, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                        lineNumber: 1109,
+                                        lineNumber: 1167,
                                         columnNumber: 21
                                     }, ("TURBOPACK compile-time value", void 0))),
                                 provided.placeholder,
@@ -1893,24 +1921,24 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                     children: "Contenu replié"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                    lineNumber: 1122,
+                                    lineNumber: 1180,
                                     columnNumber: 19
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                            lineNumber: 1093,
+                            lineNumber: 1151,
                             columnNumber: 15
                         }, ("TURBOPACK compile-time value", void 0))
                 }, void 0, false, {
                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                    lineNumber: 1085,
+                    lineNumber: 1143,
                     columnNumber: 11
                 }, ("TURBOPACK compile-time value", void 0))
             ]
         }, void 0, true, {
             fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-            lineNumber: 719,
+            lineNumber: 731,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0));
     };
@@ -1937,7 +1965,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                 children: dragError
             }, void 0, false, {
                 fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                lineNumber: 1148,
+                lineNumber: 1206,
                 columnNumber: 9
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("style", {
@@ -1957,7 +1985,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
       `
             }, void 0, false, {
                 fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                lineNumber: 1161,
+                lineNumber: 1219,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -1986,7 +2014,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                 children: "Compose ton CV bloc par bloc"
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                lineNumber: 1191,
+                                lineNumber: 1249,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("p", {
@@ -2000,13 +2028,13 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                 children: "Ajoute les sections dont tu as besoin puis glisse‑dépose pour tout réorganiser. Les placements impossibles sont automatiquement bloqués."
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                lineNumber: 1202,
+                                lineNumber: 1260,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                        lineNumber: 1190,
+                        lineNumber: 1248,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -2028,7 +2056,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                 children: "Ajouter un bloc rapidement"
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                lineNumber: 1222,
+                                lineNumber: 1280,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -2072,7 +2100,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                                 children: meta.icon
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                                lineNumber: 1270,
+                                                lineNumber: 1328,
                                                 columnNumber: 19
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("div", {
@@ -2086,7 +2114,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                                         children: meta.label
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                                        lineNumber: 1274,
+                                                        lineNumber: 1332,
                                                         columnNumber: 21
                                                     }, ("TURBOPACK compile-time value", void 0)),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])("p", {
@@ -2099,37 +2127,37 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                                         children: meta.description
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                                        lineNumber: 1283,
+                                                        lineNumber: 1341,
                                                         columnNumber: 21
                                                     }, ("TURBOPACK compile-time value", void 0))
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                                lineNumber: 1273,
+                                                lineNumber: 1331,
                                                 columnNumber: 19
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, type, true, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                        lineNumber: 1244,
+                                        lineNumber: 1302,
                                         columnNumber: 17
                                     }, ("TURBOPACK compile-time value", void 0));
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                lineNumber: 1234,
+                                lineNumber: 1292,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                        lineNumber: 1215,
+                        lineNumber: 1273,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                lineNumber: 1177,
+                lineNumber: 1235,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f40$hello$2d$pangea$2f$dnd__$5b$external$5d$__$2840$hello$2d$pangea$2f$dnd$2c$__cjs$29$__["DragDropContext"], {
@@ -2161,7 +2189,7 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                     children: "Aucun bloc. Ajoutez votre premier bloc pour commencer."
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                    lineNumber: 1318,
+                                    lineNumber: 1376,
                                     columnNumber: 17
                                 }, ("TURBOPACK compile-time value", void 0)) : blocks.map((block, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$externals$5d2f$react$2f$jsx$2d$dev$2d$runtime__$5b$external$5d$__$28$react$2f$jsx$2d$dev$2d$runtime$2c$__cjs$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$externals$5d2f40$hello$2d$pangea$2f$dnd__$5b$external$5d$__$2840$hello$2d$pangea$2f$dnd$2c$__cjs$29$__["Draggable"], {
                                         draggableId: block.id,
@@ -2176,12 +2204,12 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                                 children: renderBlock(block, undefined, provided.dragHandleProps, snapshot.isDragging)
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                                lineNumber: 1330,
+                                                lineNumber: 1388,
                                                 columnNumber: 23
                                             }, ("TURBOPACK compile-time value", void 0))
                                     }, block.id, false, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                        lineNumber: 1328,
+                                        lineNumber: 1386,
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0))),
                                 provided.placeholder,
@@ -2196,29 +2224,29 @@ const BlockEditor = ({ blocks, setBlocks, scrollContainerRef })=>{
                                     children: "Déposez le bloc ici"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                                    lineNumber: 1347,
+                                    lineNumber: 1405,
                                     columnNumber: 17
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                            lineNumber: 1305,
+                            lineNumber: 1363,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0))
                 }, void 0, false, {
                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                    lineNumber: 1303,
+                    lineNumber: 1361,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-                lineNumber: 1302,
+                lineNumber: 1360,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/Desktop/finance-type/my-cv-app/components/BlockEditor.tsx",
-        lineNumber: 1146,
+        lineNumber: 1204,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
