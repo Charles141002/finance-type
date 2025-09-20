@@ -25,7 +25,7 @@ export default function MesCvPage() {
     setIsLoading(true)
     setError(null)
     try {
-      const res = await fetch('/api/cv/list')
+      const res = await fetch('/api/cv/list?limit=0')
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
         throw new Error(typeof data.error === 'string' ? data.error : 'Impossible de charger les CV.')
@@ -145,6 +145,20 @@ export default function MesCvPage() {
               }}
             >
               Revenir à l&apos;éditeur
+            </Link>
+            <Link
+              href="/gestion-cv"
+              style={{
+                padding: '12px 20px',
+                borderRadius: '10px',
+                border: '1px solid rgba(148,163,184,0.35)',
+                color: '#cbd5f5',
+                textDecoration: 'none',
+                fontWeight: 600,
+                background: 'rgba(30, 41, 59, 0.5)',
+              }}
+            >
+              Gestion avancée
             </Link>
           </div>
           {error && (

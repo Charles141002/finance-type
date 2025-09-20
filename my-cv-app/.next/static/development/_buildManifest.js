@@ -11,8 +11,8 @@ self.__BUILD_MANIFEST = {
   "/cv": [
     "./static/chunks/pages/cv.js"
   ],
-  "/login": [
-    "./static/chunks/pages/login.js"
+  "/gestion-cv": [
+    "./static/chunks/pages/gestion-cv.js"
   ],
   "/mes-cv": [
     "./static/chunks/pages/mes-cv.js"
@@ -34,6 +34,7 @@ self.__BUILD_MANIFEST = {
     "/api/cv/save",
     "/api/generate-pdf",
     "/cv",
+    "/gestion-cv",
     "/login",
     "/mes-cv",
     "/reset-password"

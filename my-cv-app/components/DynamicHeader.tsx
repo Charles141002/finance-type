@@ -132,6 +132,21 @@ export default function DynamicHeader({ rightActions, variant = "default", scrol
               >
                 Générateur CV
               </Link>
+              {session?.user && (
+                <Link
+                  href="/gestion-cv"
+                  style={{
+                    textDecoration: "none",
+                    color: "#e2e8f0",
+                    fontWeight: 600,
+                    fontSize: "15px",
+                    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  Gestion CV
+                </Link>
+              )}
               <Link
                 href="/a-propos"
                 style={{

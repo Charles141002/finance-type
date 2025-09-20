@@ -642,6 +642,22 @@ function DynamicHeader(param) {
                                     lineNumber: 122,
                                     columnNumber: 15
                                 }, this),
+                                (session === null || session === void 0 ? void 0 : session.user) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "/gestion-cv",
+                                    style: {
+                                        textDecoration: "none",
+                                        color: "#e2e8f0",
+                                        fontWeight: 600,
+                                        fontSize: "15px",
+                                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                                        transition: "all 0.2s ease"
+                                    },
+                                    children: "Gestion CV"
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/finance-type/my-cv-app/components/DynamicHeader.tsx",
+                                    lineNumber: 136,
+                                    columnNumber: 17
+                                }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
                                     href: "/a-propos",
                                     style: {
@@ -655,7 +671,7 @@ function DynamicHeader(param) {
                                     children: "À propos"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/DynamicHeader.tsx",
-                                    lineNumber: 135,
+                                    lineNumber: 150,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
@@ -676,7 +692,7 @@ function DynamicHeader(param) {
                                     children: "Commencer"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/DynamicHeader.tsx",
-                                    lineNumber: 148,
+                                    lineNumber: 163,
                                     columnNumber: 15
                                 }, this),
                                 (session === null || session === void 0 ? void 0 : session.user) ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -698,7 +714,7 @@ function DynamicHeader(param) {
                                     children: "Se déconnecter"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/DynamicHeader.tsx",
-                                    lineNumber: 167,
+                                    lineNumber: 182,
                                     columnNumber: 17
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
                                     href: "/login",
@@ -718,7 +734,7 @@ function DynamicHeader(param) {
                                     children: "Se connecter"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/components/DynamicHeader.tsx",
-                                    lineNumber: 187,
+                                    lineNumber: 202,
                                     columnNumber: 17
                                 }, this)
                             ]
@@ -1005,7 +1021,7 @@ function MesCvPage() {
         setIsLoading(true);
         setError(null);
         try {
-            const res = await fetch('/api/cv/list');
+            const res = await fetch('/api/cv/list?limit=0');
             if (!res.ok) {
                 const data = await res.json().catch(()=>({}));
                 throw new Error(typeof data.error === 'string' ? data.error : 'Impossible de charger les CV.');
@@ -1189,6 +1205,23 @@ function MesCvPage() {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
                                         lineNumber: 136,
                                         columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                        href: "/gestion-cv",
+                                        style: {
+                                            padding: '12px 20px',
+                                            borderRadius: '10px',
+                                            border: '1px solid rgba(148,163,184,0.35)',
+                                            color: '#cbd5f5',
+                                            textDecoration: 'none',
+                                            fontWeight: 600,
+                                            background: 'rgba(30, 41, 59, 0.5)'
+                                        },
+                                        children: "Gestion avancée"
+                                    }, void 0, false, {
+                                        fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
+                                        lineNumber: 149,
+                                        columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
@@ -1208,7 +1241,7 @@ function MesCvPage() {
                                 children: error
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
-                                lineNumber: 151,
+                                lineNumber: 165,
                                 columnNumber: 13
                             }, this)
                         ]
@@ -1224,7 +1257,7 @@ function MesCvPage() {
                         children: "Chargement..."
                     }, void 0, false, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
-                        lineNumber: 158,
+                        lineNumber: 172,
                         columnNumber: 11
                     }, this) : cvs.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
@@ -1243,7 +1276,7 @@ function MesCvPage() {
                                 children: "Vous n'avez pas encore de CV sauvegardé."
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
-                                lineNumber: 161,
+                                lineNumber: 175,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1264,13 +1297,13 @@ function MesCvPage() {
                                 children: isCreating ? 'Création…' : 'Créer mon premier CV'
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
-                                lineNumber: 162,
+                                lineNumber: 176,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
-                        lineNumber: 160,
+                        lineNumber: 174,
                         columnNumber: 11
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
@@ -1320,7 +1353,7 @@ function MesCvPage() {
                                         children: "+ Créer un autre CV"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
-                                        lineNumber: 215,
+                                        lineNumber: 229,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1331,13 +1364,13 @@ function MesCvPage() {
                                         children: "Lance un nouveau CV vierge tout en conservant les précédents."
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
-                                        lineNumber: 216,
+                                        lineNumber: 230,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
-                                lineNumber: 183,
+                                lineNumber: 197,
                                 columnNumber: 13
                             }, this),
                             cvs.map((cv)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1388,7 +1421,7 @@ function MesCvPage() {
                                                     children: cv.title || 'CV sans titre'
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
-                                                    lineNumber: 251,
+                                                    lineNumber: 265,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1422,13 +1455,13 @@ function MesCvPage() {
                                                     children: deletingId === cv.id ? 'Suppression…' : 'Supprimer'
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
-                                                    lineNumber: 252,
+                                                    lineNumber: 266,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
-                                            lineNumber: 250,
+                                            lineNumber: 264,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1442,7 +1475,7 @@ function MesCvPage() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
-                                            lineNumber: 284,
+                                            lineNumber: 298,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$finance$2d$type$2f$my$2d$cv$2d$app$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1456,19 +1489,19 @@ function MesCvPage() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
-                                            lineNumber: 285,
+                                            lineNumber: 299,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, cv.id, true, {
                                     fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
-                                    lineNumber: 222,
+                                    lineNumber: 236,
                                     columnNumber: 15
                                 }, this))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/finance-type/my-cv-app/pages/mes-cv.tsx",
-                        lineNumber: 182,
+                        lineNumber: 196,
                         columnNumber: 11
                     }, this)
                 ]

@@ -1,0 +1,5 @@
+{
+  "/gestion-cv": [
+    "./static/chunks/pages/gestion-cv.js"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///Users/charlespelong/Desktop/finance-type/my-cv-app/pages/_document.tsx"],"sourcesContent":["import Document, { Html, Head, Main, NextScript } from 'next/document'\n\nexport default class MyDocument extends Document {\n  render() {\n    return (\n      <Html lang=\"fr\">\n        <Head>\n          <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\" />\n          <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossOrigin=\"\" />\n          <link\n            href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap\"\n            rel=\"stylesheet\"\n          />\n        </Head>\n        <body>\n          <Main />\n          <NextScript />\n        </body>\n      </Html>\n    )\n  }\n}\n"],"names":[],"mappings":";;;;;AAAA;;;AAEe,MAAM,mBAAmB,qLAAQ;IAC9C,SAAS;QACP,qBACE,qKAAC,kLAAI;YAAC,MAAK;;8BACT,qKAAC,kLAAI;;sCACH,qKAAC;4BAAK,KAAI;4BAAa,MAAK;;;;;;sCAC5B,qKAAC;4BAAK,KAAI;4BAAa,MAAK;4BAA4B,aAAY;;;;;;sCACpE,qKAAC;4BACC,MAAK;4BACL,KAAI;;;;;;;;;;;;8BAGR,qKAAC;;sCACC,qKAAC,kLAAI;;;;;sCACL,qKAAC,wLAAU;;;;;;;;;;;;;;;;;IAInB;AACF","debugId":null}}]
+}
